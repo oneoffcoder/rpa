@@ -25,12 +25,19 @@ Romanized Popular Alphabet, A Primer
 Preface
 =======
 
-This book is a tutorial for learning Romanized Popular Alphabet (RPA). RPA is a writing system developed for writing the Hmong language in the early 1900's. This book is a ``work-in-process`` and more information and learning content will be included in the future.
+This book is a tutorial for learning Romanized Popular Alphabet (RPA). RPA is a writing system, based on Latin alphabets, developed for writing the Hmong language in the early 1900's. This book is a ``work-in-process`` and more information and learning content will be included in the future.
 
 .. toctree::
    :maxdepth: 2
    :numbered:
    :caption: Contents
+
+   cvt
+   consonants
+   vowels
+   tones
+   syllables
+   enunciation
 
 
 Copyright
