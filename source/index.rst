@@ -41,6 +41,8 @@ This book is a tutorial for learning `Romanized Popular Alphabet <https://en.wik
    enunciation
    spelling
    grammar
+   counting
+   speaking
 
 
 Copyright
