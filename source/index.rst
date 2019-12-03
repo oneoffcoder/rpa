@@ -35,6 +35,7 @@ This book is a tutorial for learning Romanized Popular Alphabet (RPA). RPA is a 
    cvt
    syllables
    enunciation
+   spelling
 
 
 Copyright

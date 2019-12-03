@@ -35,4 +35,4 @@ Which roughly translates in English as follows.
 
     "Did Pao's Grandmother see the Lady Thorn toss a ball?"
 
-If you say the Hmong sentence enough time, you will respect that this alliteration has unmatched difficulty. Nevertheless, such sentence covers all 8 tones using the same ``CV`` permutation (``po``). It might be a good way to learn how tones change the enunciation of words.
+If you say the Hmong sentence enough time, you will respect that this alliteration has unmatched difficulty. Nevertheless, such sentence covers all 7 tones using the same ``CV`` permutation (``po``). It might be a good way to learn how tones change the enunciation of words.
