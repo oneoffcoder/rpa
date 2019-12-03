@@ -1,7 +1,7 @@
 Tones
 =====
 
-There are 8 tones in RPA. The Hmong language is sometimes called the `tonal champion` of East Asian languages for having so many tones. Compare the Hmong language with 8 tones to Madarin, which has 4 tones. The tones are as follows.
+There are 7 tones in RPA. The Hmong language is sometimes called the `tonal champion` of East Asian languages for having so many tones. Compare the Hmong language with 7 tones to Madarin, which has 4 tones. The tones are as follows.
 
 * j
 * s
