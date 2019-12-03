@@ -17,11 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'RPA'
+project = 'Romanized Popular Alphabet'
 copyright = '2019, Jee Vang, Ph.D.'
 author = 'Jee Vang, Ph.D.'
 
 # The full version, including alpha/beta/rc tags
+version = '0.0.1'
 release = '0.0.1'
 
 
@@ -31,6 +32,8 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinxcontrib.bibtex',
+    'sphinx.ext.mathjax'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -47,9 +50,36 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_show_sourcelink = False
+html_show_sphinx = False
+# html_logo = '_static/images/logo-small.png'
+# html_favicon = '_static/favicon.ico'
+html_css_files = ['css/override.css']
+html_last_updated_fmt = '%b %d, %Y, %X'
+
+html_theme_options = {
+    'canonical_url': '',
+    'analytics_id': '',
+    'logo_only': False,
+    'display_version': True,
+    'prev_next_buttons_location': 'bottom',
+    'style_external_links': False,
+    'style_nav_header_background': '#003594',
+    'collapse_navigation': False,
+    'sticky_navigation': True,
+    'navigation_depth': 4,
+    'includehidden': True,
+    'titles_only': False
+}
+
+mathjax_config = {
+    'TeX': {'equationNumbers': {'autoNumber': 'AMS', 'useLabelIds': True}},
+}
+
+nbsphinx_execute = 'never'
