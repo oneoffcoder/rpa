@@ -48,7 +48,7 @@ The best way to understand sentence structures is just to observe and study a va
 
 .. warning::
 
-    `Part-of-Speech <https://en.wikipedia.org/wiki/Part-of-speech_tagging>`_ ``POS`` tagging is a very difficult `machine learning <https://en.wikipedia.org/wiki/Machine_learning>`_ and `natural language processing <https://en.wikipedia.org/wiki/Natural_language_processing>`_ ``NLP`` task. There may be mistakes in tagging the parts of speech in these examples.
+    `Part-of-Speech <https://en.wikipedia.org/wiki/Part-of-speech_tagging>`_ ``POS`` tagging is a very difficult `machine learning <https://en.wikipedia.org/wiki/Machine_learning>`_ and `natural language processing <https://en.wikipedia.org/wiki/Natural_language_processing>`_ ``NLP`` task. There may be mistakes in tagging the parts of speech in these examples. As a human task, POS tagging is not any easier.
 
 Basic
 ^^^^^

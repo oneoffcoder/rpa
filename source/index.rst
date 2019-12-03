@@ -40,10 +40,10 @@ This book is a tutorial for learning `Romanized Popular Alphabet <https://en.wik
    syllables
    enunciation
    spelling
-   grammar
    counting
+   vocabulary
+   grammar
    speaking
-
 
 Copyright
 =========
