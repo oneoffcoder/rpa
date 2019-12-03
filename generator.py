@@ -23,13 +23,15 @@ T = [t.strip() for t in T.split(',')]
 
 print(f'C = {len(C)}, V = {len(V)}, T = {len(T)}')
 
-# CV = [f'{c}{v}' for c, v in itertools.product(C, V)]
-# for cv in CV:
-#     cvt = [f'{cv}{t}'.replace('_', '') for cv, t in itertools.product([cv], T)]
-#     cvt = ', '.join(cvt)
-#     print(cvt)
+CV = [f'{c}{v}' for c, v in itertools.product(C, V)]
+for cv in CV:
+    cvt = [f'{cv}{t}'.replace('_', '') for cv, t in itertools.product([cv], T)]
+    cvt = [f'`{i} <_static/mp3/{i}.mp3>`_' for i in cvt]
+    cvt = ', '.join(cvt)
+    print(cvt)
 
 for v in V:
     vt = [f'{v}{t}'.replace('_', '') for v, t in itertools.product([v], T)]
+    vt = [f'`{i} <_static/mp3/{i}.mp3>`_' for i in vt]
     vt =', '.join(vt)
     print(vt)

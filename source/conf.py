@@ -62,6 +62,7 @@ html_show_sphinx = False
 # html_favicon = '_static/favicon.ico'
 html_css_files = ['css/override.css']
 html_js_files = [
+    'js/howler.min.js',
     'js/custom.js',
 ]
 html_last_updated_fmt = '%b %d, %Y, %X'
