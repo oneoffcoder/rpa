@@ -35,7 +35,15 @@ Consonants, again, are the beggining of a sound (or word). In RPA, it is conveni
 * hml, hny, nch, nkh, nph, nqh, nrh, nth, nts, ntx, plh, tsh, txh
 * nplh, ntsh, ntxh
 
-In RPA, consonants are called ``tsiaj ntawv txiv``.
+In RPA, consonants are called ``tsiaj ntawv txiv``. The families of consonants and their English and Hmong names are shown below.
+
+.. csv-table::
+    :header: Number of Letters, English, Hmong
+
+    1, ``mono-consonants``, ``tsiaj ntawv txiv tab``
+    2, ``bi-consonants``, ``tsiaj ntawv txiv txooj``
+    3, ``tri-consonants``, ``tsiaj ntawv txiv cov peb tug``
+    4, ``quadra-consonants``, ``tsiaj ntawv txiv cov plaub tug``
 
 Vowels
 ------
@@ -47,22 +55,28 @@ Just as in Mandarin and English, all words have vowels. In RPA, all syllables (o
 
 In RPA, vowels are called ``tsiaj ntawv niam``.
 
-* Vowels with one letter are called ``tsiaj ntawv niam tab``.
-* Vowels with two letters are called ``tsiaj ntawv niam txooj``.
+.. csv-table::
+    :header: Number of Letters, English, Hmong
+
+    1, ``mono-vowels``, ``tsiaj ntawv niam tab``
+    2, ``bi-vowels``, ``tsiaj ntawv niam txooj``
 
 Tones
 -----
 
-There are 7 tones in RPA. The Hmong language is sometimes called the `tonal champion` of East Asian languages for having so many tones. Compare the Hmong language with 7 tones to Madarin, which has 4 tones. The tones are as follows.
+There are 7 tones in RPA. The Hmong language is sometimes called the `tonal champion` of East Asian languages for having so many tones. Compare the Hmong language with 7 tones to Mandarin, which has 4 tones. The tones are as follows.
 
-* j
-* s
-* v
-* m
-* g
-* b
-* _
+.. csv-table::
+    :header: Tone, Marker, Example
 
+    High falling, j, poj
+    Low, s, pos
+    Mid rising, v, pov
+    Creaky, m, pom
+    Low falling breathy, g, pog
+    High, b, pob
+    Mid, _, po
+    
 .. warning::
 
     The tone represented by the underscore ``_`` is really blank, but denoted here with an underscore to make it explicit. The underscore is never used to represent a tone and will be omitted later; the context will make it clear.

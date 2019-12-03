@@ -49,8 +49,8 @@ From this point onward, creating Hmong words should be fun, as it is as easy as 
 
     It might also help to have a geometric view of the space of possible syllables in RPA. By this, we mean, think of the ``X-Y-Z`` 3-dimensional (``3D``) Cartesian coordinate system. When you move along the ``X``, ``Y`` and ``Z`` axes and stop, you end up with a ``x-y-z`` coordinate in 3D space. Instead of ``X-Y-Z``, replace these axes with ``C-V-T``. Of course, there is no cardinality with the consonants, vowels or tones, but we may order them as we have been doing so along these axes. Traveling along these axes will also map to a ``c-v-t`` coordinate pointing to a unique syllable.
 
-Syllables with Single Letter Consonant Chart
---------------------------------------------
+Mono-consonant syllables
+------------------------
 
 Click on the syllables to hear what they sound like.
 
@@ -279,8 +279,8 @@ Click on the syllables to hear what they sound like.
     `zooj <_static/mp3/zooj.mp3>`_, `zoos <_static/mp3/zoos.mp3>`_, `zoov <_static/mp3/zoov.mp3>`_, `zoom <_static/mp3/zoom.mp3>`_, `zoog <_static/mp3/zoog.mp3>`_, `zoob <_static/mp3/zoob.mp3>`_, `zoo <_static/mp3/zoo.mp3>`_
     `zuaj <_static/mp3/zuaj.mp3>`_, `zuas <_static/mp3/zuas.mp3>`_, `zuav <_static/mp3/zuav.mp3>`_, `zuam <_static/mp3/zuam.mp3>`_, `zuag <_static/mp3/zuag.mp3>`_, `zuab <_static/mp3/zuab.mp3>`_, `zua <_static/mp3/zua.mp3>`_
 
-Syllables with Two Letter Consonant Chart
------------------------------------------
+Bi-consonant syllables
+----------------------
 
 Click on the syllables to hear what they sound like.
 
@@ -561,8 +561,8 @@ Click on the syllables to hear what they sound like.
     `xyooj <_static/mp3/xyooj.mp3>`_, `xyoos <_static/mp3/xyoos.mp3>`_, `xyoov <_static/mp3/xyoov.mp3>`_, `xyoom <_static/mp3/xyoom.mp3>`_, `xyoog <_static/mp3/xyoog.mp3>`_, `xyoob <_static/mp3/xyoob.mp3>`_, `xyoo <_static/mp3/xyoo.mp3>`_
     `xyuaj <_static/mp3/xyuaj.mp3>`_, `xyuas <_static/mp3/xyuas.mp3>`_, `xyuav <_static/mp3/xyuav.mp3>`_, `xyuam <_static/mp3/xyuam.mp3>`_, `xyuag <_static/mp3/xyuag.mp3>`_, `xyuab <_static/mp3/xyuab.mp3>`_, `xyua <_static/mp3/xyua.mp3>`_
 
-Syllables with Three Letter Consonant Chart
--------------------------------------------
+Tri-consonant syllables
+-----------------------
 
 Click on the syllables to hear what they sound like.
 
@@ -739,8 +739,8 @@ Click on the syllables to hear what they sound like.
     `txhooj <_static/mp3/txhooj.mp3>`_, `txhoos <_static/mp3/txhoos.mp3>`_, `txhoov <_static/mp3/txhoov.mp3>`_, `txhoom <_static/mp3/txhoom.mp3>`_, `txhoog <_static/mp3/txhoog.mp3>`_, `txhoob <_static/mp3/txhoob.mp3>`_, `txhoo <_static/mp3/txhoo.mp3>`_
     `txhuaj <_static/mp3/txhuaj.mp3>`_, `txhuas <_static/mp3/txhuas.mp3>`_, `txhuav <_static/mp3/txhuav.mp3>`_, `txhuam <_static/mp3/txhuam.mp3>`_, `txhuag <_static/mp3/txhuag.mp3>`_, `txhuab <_static/mp3/txhuab.mp3>`_, `txhua <_static/mp3/txhua.mp3>`_
 
-Syllables with Four Letter Consonant Chart
-------------------------------------------
+Quadra-consonant syllables
+--------------------------
 
 Click on the syllables to hear what they sound like.
 
