@@ -3,6 +3,18 @@ Vocabulary
 
 Here are some interesting and/or useful vocabularies.
 
+Greeting
+--------
+
+The following are ways to greet and part.
+
+.. csv-table::
+    :header: English, Hmong
+
+    hi, nyob zoo
+    bye, sib ntsib dua
+    safe travel, mus zoo koj
+
 Calendar
 --------
 
