@@ -24,3 +24,39 @@ Going further, some words are just vowels. So, actually, there are 5,012 (:math:
     The ``CVT`` mental model of Hmong syllables and/or words is so powerful that many other Hmong writing systems are modeled using this approach. For example, the famous ``Phaj Hauj`` script uses ``TCV`` (the tone comes first) to model writing syllables.
     
 Let's dive into the consonants, vowels and tones.
+
+Consonants
+----------
+
+Consonants, again, are the beggining of a sound (or word). In RPA, it is convenient to parition consonants into the number of letters that a consonants have.
+
+* c, d, f, h, k, l, m, n, p, q, r, s, t, v, x, y, z
+* ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ph, pl, qh, rh, th, ts, tx, xy
+* hml, hny, nch, nkh, nph, nqh, nrh, nth, nts, ntx, plh, tsh, txh
+* nplh, ntsh, ntxh
+
+Vowels
+------
+
+Just as in Mandarin and English, all words have vowels. In RPA, all syllables (or words) have one of the following vowels. Again, we group them into the number of letters that compose the vowels and list them alphabetically.
+
+* a, e, i, o, u, w
+* ai, au, aw, ee, ia, oo, ua
+
+Tones
+-----
+
+There are 7 tones in RPA. The Hmong language is sometimes called the `tonal champion` of East Asian languages for having so many tones. Compare the Hmong language with 7 tones to Madarin, which has 4 tones. The tones are as follows.
+
+* j
+* s
+* v
+* m
+* g
+* b
+* _
+
+.. warning::
+
+    The tone represented by the underscore ``_`` is really blank, but denoted here with an underscore to make it explicit. The underscore is never used to represent a tone and will be omitted later; the context will make it clear.
+
