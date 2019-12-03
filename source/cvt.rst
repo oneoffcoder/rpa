@@ -35,6 +35,8 @@ Consonants, again, are the beggining of a sound (or word). In RPA, it is conveni
 * hml, hny, nch, nkh, nph, nqh, nrh, nth, nts, ntx, plh, tsh, txh
 * nplh, ntsh, ntxh
 
+In RPA, consonants are called ``tsiaj ntawv txiv``.
+
 Vowels
 ------
 
@@ -42,6 +44,11 @@ Just as in Mandarin and English, all words have vowels. In RPA, all syllables (o
 
 * a, e, i, o, u, w
 * ai, au, aw, ee, ia, oo, ua
+
+In RPA, vowels are called ``tsiaj ntawv niam``.
+
+* Vowels with one letter are called ``tsiaj ntawv niam tab``.
+* Vowels with two letters are called ``tsiaj ntawv niam txooj``.
 
 Tones
 -----
@@ -63,3 +70,5 @@ There are 7 tones in RPA. The Hmong language is sometimes called the `tonal cham
 .. note::
 
     Sometimes ``d`` is also used as a tone!
+
+In RPA, tones are called ``tsiaj ntawv cim``.
