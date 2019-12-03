@@ -38,7 +38,7 @@ Consonants, again, are the beggining of a sound (or word). In RPA, it is conveni
 Vowels
 ------
 
-Just as in Mandarin and English, all words have vowels. In RPA, all syllables (or words) have one of the following vowels. Again, we group them into the number of letters that compose the vowels and list them alphabetically.
+Just as in Mandarin and English, all words have vowels. In RPA, all syllables (or words) have one of the following vowels. Again, we group them into the number of letters that composes the vowels and list them alphabetically.
 
 * a, e, i, o, u, w
 * ai, au, aw, ee, ia, oo, ua
