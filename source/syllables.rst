@@ -35,8 +35,12 @@ The spelling ``cag`` is a Hmong word, meaning **root** (as in tree roots) in Eng
 
 .. warning::
 
-    We stated previously that there are 5,012 total possible syllables in RPA, however, this number of permutations does not mean that there are only 5,012 total Hmong words. As we stated earlier, there are Hmong words that RPA cannot spell, and, additionally, some words are spelled exactly the same but are completely different words (``homonyms``). An example of a homonym is ``kab`` which may mean ``line`` (as a in straight line) or ``insect``.
+    We stated previously that there are 5,012 total possible syllables in RPA, however, this number of permutations does not mean that there are only 5,012 total Hmong words. RPA has limitations; there are Hmong words that RPA cannot spell; some words are spelled exactly the same but are completely different words (``homonyms``). An example of a homonym is ``kab`` which may mean ``line`` (as a in straight line) or ``insect``. Lastly, some Hmong words are multi-syllablic. 
     
+    Considering all these factors, with some very unrealistic and strong assumptions, the theoretical upperbound of Hmong words based on RPA alone, is huge: :math:`5012 + \binom{5012}{2} + \binom{5012}{3} + \binom{5012}{4}`. The dominating term :math:`\binom{5012}{4}` is already over 26,000,000,000,000 (26 trillion)!
+    
+.. warning::
+
     Sometimes we will state syllable or word, but the context should make the meaning clear.
 
 From this point onward, creating Hmong words should be fun, as it is as easy as mixing and matching elements from ``C``, ``V`` and ``T``.  The challenge, however, is enunciation, especially with respect to tones. 
@@ -47,6 +51,8 @@ From this point onward, creating Hmong words should be fun, as it is as easy as 
 
 Syllables with Single Letter Consonant Chart
 --------------------------------------------
+
+Click on the syllables to hear what they sound like.
 
 .. csv-table:: Syllables with Single Letter Consonant
     :header: j, s, v, m, g, b, _
@@ -275,6 +281,8 @@ Syllables with Single Letter Consonant Chart
 
 Syllables with Two Letter Consonant Chart
 -----------------------------------------
+
+Click on the syllables to hear what they sound like.
 
 .. csv-table:: Syllables with Two Letter Consonant
     :header: j, s, v, m, g, b, _
@@ -556,6 +564,8 @@ Syllables with Two Letter Consonant Chart
 Syllables with Three Letter Consonant Chart
 -------------------------------------------
 
+Click on the syllables to hear what they sound like.
+
 .. csv-table:: Syllables with Three Letter Consonant
     :header: j, s, v, m, g, b, _
 
@@ -732,6 +742,8 @@ Syllables with Three Letter Consonant Chart
 Syllables with Four Letter Consonant Chart
 ------------------------------------------
 
+Click on the syllables to hear what they sound like.
+
 .. csv-table:: Syllables with Four Letter Consonant
     :header: j, s, v, m, g, b, _
 
@@ -777,6 +789,8 @@ Syllables with Four Letter Consonant Chart
 
 Syllables without Consonants
 ----------------------------
+
+Click on the syllables to hear what they sound like.
 
 .. csv-table:: Syllables with Four Letter Consonant
     :header: j, s, v, m, g, b, _
