@@ -29,7 +29,7 @@ This book is a tutorial for learning `Romanized Popular Alphabet <https://en.wik
 
 .. warning::
 
-    This book is a ``work-in-process`` and more information and learning content will be included in the future.
+    This book is a ``work-in-process`` and more information and learning content will be included in the future. This book does not aim to be technically and languistically correct (though we try). It is meant to be a quick, but effective, way to learn how to read, write and speak Hmong using the RPA writing system.
 
 .. toctree::
    :maxdepth: 2
@@ -40,6 +40,7 @@ This book is a tutorial for learning `Romanized Popular Alphabet <https://en.wik
    syllables
    enunciation
    spelling
+   grammar
 
 
 Copyright
