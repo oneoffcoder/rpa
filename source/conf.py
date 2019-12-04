@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Romanized Popular Alphabet'
-copyright = '2019, Jee Vang, Ph.D.'
+copyright = '2019, One-Off Coder'
 author = 'Jee Vang, Ph.D.'
 
 # The full version, including alpha/beta/rc tags
