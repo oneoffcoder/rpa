@@ -38,6 +38,7 @@ This book is a tutorial for learning `Romanized Popular Alphabet <https://en.wik
 
    cvt
    syllables
+   viz
    enunciation
    spelling
    counting

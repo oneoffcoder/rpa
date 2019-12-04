@@ -62,8 +62,11 @@ html_show_sphinx = False
 # html_favicon = '_static/favicon.ico'
 html_css_files = ['css/override.css']
 html_js_files = [
+    'https://threejs.org/build/three.js',
+    'https://threejs.org/examples/js/controls/OrbitControls.js',
     'js/howler.min.js',
     'js/custom.js',
+    'js/viz.js'
 ]
 html_last_updated_fmt = '%b %d, %Y, %X'
 
