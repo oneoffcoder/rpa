@@ -8,7 +8,6 @@ $(document).ready(function(){
             .filter(item => item.length > 0);
 
         if (syllables.length < 1) {
-            console.log('no text');
             return;
         } else {
             console.log('got text');
@@ -25,7 +24,6 @@ $(document).ready(function(){
                 }
                 sounds[i].addEventListener('ended', play);
                 sounds[i].play();
-                console.log(sounds[i]);
             }
         }
     });
