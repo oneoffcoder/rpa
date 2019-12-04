@@ -2,21 +2,31 @@ $(document).ready(function(){
     console.log('ready');
     $('#play').click(function() {
         console.log('play clicked');
-        var sounds = [
-            new Audio('mp3/nyob.mp3'),
-            new Audio('mp3/zoo.mp3')
-        ];
+        const syllables = $('#rpa')
+            .val()
+            .split(' ')
+            .filter(item => item.length > 0);
 
-        let i = -1;
-        play();
-        function play() {
-            i++;
-            if (i == sounds.length) {
-                return;
+        if (syllables.length < 1) {
+            console.log('no text');
+            return;
+        } else {
+            console.log('got text');
+            const sounds = syllables
+                .map((item) => `mp3/${item}.mp3`)
+                .map((item) => new Audio(item));
+            
+            let i = -1;
+            play();
+            function play() {
+                i++;
+                if (i == sounds.length) {
+                    return;
+                }
+                sounds[i].addEventListener('ended', play);
+                sounds[i].play();
+                console.log(sounds[i]);
             }
-            sounds[i].addEventListener('ended', play);
-            sounds[i].play();
-            console.log(sounds[i]);
         }
     });
     console.log('done');
