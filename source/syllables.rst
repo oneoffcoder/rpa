@@ -3,13 +3,13 @@ Syllables
 
 Each word is composed of ``CVT``. We will list the consonants, vowels and tones here again.
 
-Consonants (54)
+Consonants (56)
 
 ::
 
     c, d, f, h, k, l, m, n, p, q, r, s, t, v, x, y, z
-    ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ph, pl, qh, rh, th, ts, tx, xy
-    hml, hny, nch, nkh, nph, nqh, nrh, nth, nts, ntx, plh, tsh, txh
+    ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ny, ph, pl, qh, rh, th, ts, tx, xy
+    hml, hny, nch, nkh, nph, npl, nqh, nrh, nth, nts, ntx, plh, tsh, txh
     nplh, ntsh, ntxh
 
 Vowels (13)
@@ -35,9 +35,9 @@ The spelling ``cag`` is a Hmong word, meaning **root** (as in tree roots) in Eng
 
 .. warning::
 
-    We stated previously that there are 5,018 total possible syllables in RPA, however, this number of permutations does not mean that there are only 5,018 total Hmong words. RPA has limitations; there are Hmong words that RPA cannot spell; some words are spelled exactly the same but are completely different words (``homonyms``). An example of a homonym is ``kab`` which may mean ``line`` (as a in straight line) or ``insect``. Lastly, some Hmong words are multi-syllablic. 
+    We stated previously that there are 5,200 total possible syllables in RPA, however, this number of permutations does not mean that there are only 5,200 total Hmong words. RPA has limitations; there are Hmong words that RPA cannot spell; some words are spelled exactly the same but are completely different words (``homonyms``). An example of a homonym is ``kab`` which may mean ``line`` (as a in straight line) or ``insect``. Lastly, some Hmong words are multi-syllablic. 
     
-    Considering all these factors, with some very unrealistic and strong assumptions, the theoretical upperbound of Hmong words based on RPA alone, is huge: :math:`5018 + \binom{5018}{2} + \binom{5018}{3} + \binom{5018}{4}`. The dominating term :math:`\binom{5018}{4}` is already over 26,000,000,000,000 (26 trillion)!
+    Considering all these factors, with some very unrealistic and strong assumptions, the theoretical upperbound of Hmong words based on RPA alone, is huge: :math:`5200 + \binom{5200}{2} + \binom{5200}{3} + \binom{5200}{4}`. The dominating term :math:`\binom{5200}{4}` is already over 30,000,000,000,000 (30 trillion)!
     
 .. warning::
 
@@ -273,11 +273,7 @@ Click on the syllables to hear what they sound like.
     `zwj <_static/mp3/zwj.mp3>`_, `zws <_static/mp3/zws.mp3>`_, `zwv <_static/mp3/zwv.mp3>`_, `zwm <_static/mp3/zwm.mp3>`_, `zwg <_static/mp3/zwg.mp3>`_, `zwb <_static/mp3/zwb.mp3>`_, `zw <_static/mp3/zw.mp3>`_
     `zaij <_static/mp3/zaij.mp3>`_, `zais <_static/mp3/zais.mp3>`_, `zaiv <_static/mp3/zaiv.mp3>`_, `zaim <_static/mp3/zaim.mp3>`_, `zaig <_static/mp3/zaig.mp3>`_, `zaib <_static/mp3/zaib.mp3>`_, `zai <_static/mp3/zai.mp3>`_
     `zauj <_static/mp3/zauj.mp3>`_, `zaus <_static/mp3/zaus.mp3>`_, `zauv <_static/mp3/zauv.mp3>`_, `zaum <_static/mp3/zaum.mp3>`_, `zaug <_static/mp3/zaug.mp3>`_, `zaub <_static/mp3/zaub.mp3>`_, `zau <_static/mp3/zau.mp3>`_
-    `zawj <_static/mp3/zawj.mp3>`_, `zaws <_static/mp3/zaws.mp3>`_, `zawv <_static/mp3/zawv.mp3>`_, `zawm <_static/mp3/zawm.mp3>`_, `zawg <_static/mp3/zawg.mp3>`_, `zawb <_static/mp3/zawb.mp3>`_, `zaw <_static/mp3/zaw.mp3>`_
-    `zeej <_static/mp3/zeej.mp3>`_, `zees <_static/mp3/zees.mp3>`_, `zeev <_static/mp3/zeev.mp3>`_, `zeem <_static/mp3/zeem.mp3>`_, `zeeg <_static/mp3/zeeg.mp3>`_, `zeeb <_static/mp3/zeeb.mp3>`_, `zee <_static/mp3/zee.mp3>`_
-    `ziaj <_static/mp3/ziaj.mp3>`_, `zias <_static/mp3/zias.mp3>`_, `ziav <_static/mp3/ziav.mp3>`_, `ziam <_static/mp3/ziam.mp3>`_, `ziag <_static/mp3/ziag.mp3>`_, `ziab <_static/mp3/ziab.mp3>`_, `zia <_static/mp3/zia.mp3>`_
-    `zooj <_static/mp3/zooj.mp3>`_, `zoos <_static/mp3/zoos.mp3>`_, `zoov <_static/mp3/zoov.mp3>`_, `zoom <_static/mp3/zoom.mp3>`_, `zoog <_static/mp3/zoog.mp3>`_, `zoob <_static/mp3/zoob.mp3>`_, `zoo <_static/mp3/zoo.mp3>`_
-    `zuaj <_static/mp3/zuaj.mp3>`_, `zuas <_static/mp3/zuas.mp3>`_, `zuav <_static/mp3/zuav.mp3>`_, `zuam <_static/mp3/zuam.mp3>`_, `zuag <_static/mp3/zuag.mp3>`_, `zuab <_static/mp3/zuab.mp3>`_, `zua <_static/mp3/zua.mp3>`_
+
 
 Bi-consonant syllables
 ----------------------
@@ -456,6 +452,19 @@ Click on the syllables to hear what they sound like.
     `ntiaj <_static/mp3/ntiaj.mp3>`_, `ntias <_static/mp3/ntias.mp3>`_, `ntiav <_static/mp3/ntiav.mp3>`_, `ntiam <_static/mp3/ntiam.mp3>`_, `ntiag <_static/mp3/ntiag.mp3>`_, `ntiab <_static/mp3/ntiab.mp3>`_, `ntia <_static/mp3/ntia.mp3>`_
     `ntooj <_static/mp3/ntooj.mp3>`_, `ntoos <_static/mp3/ntoos.mp3>`_, `ntoov <_static/mp3/ntoov.mp3>`_, `ntoom <_static/mp3/ntoom.mp3>`_, `ntoog <_static/mp3/ntoog.mp3>`_, `ntoob <_static/mp3/ntoob.mp3>`_, `ntoo <_static/mp3/ntoo.mp3>`_
     `ntuaj <_static/mp3/ntuaj.mp3>`_, `ntuas <_static/mp3/ntuas.mp3>`_, `ntuav <_static/mp3/ntuav.mp3>`_, `ntuam <_static/mp3/ntuam.mp3>`_, `ntuag <_static/mp3/ntuag.mp3>`_, `ntuab <_static/mp3/ntuab.mp3>`_, `ntua <_static/mp3/ntua.mp3>`_
+    `nyaj <_static/mp3/nyaj.mp3>`_, `nyas <_static/mp3/nyas.mp3>`_, `nyav <_static/mp3/nyav.mp3>`_, `nyam <_static/mp3/nyam.mp3>`_, `nyag <_static/mp3/nyag.mp3>`_, `nyab <_static/mp3/nyab.mp3>`_, `nya <_static/mp3/nya.mp3>`_
+    `nyej <_static/mp3/nyej.mp3>`_, `nyes <_static/mp3/nyes.mp3>`_, `nyev <_static/mp3/nyev.mp3>`_, `nyem <_static/mp3/nyem.mp3>`_, `nyeg <_static/mp3/nyeg.mp3>`_, `nyeb <_static/mp3/nyeb.mp3>`_, `nye <_static/mp3/nye.mp3>`_
+    `nyij <_static/mp3/nyij.mp3>`_, `nyis <_static/mp3/nyis.mp3>`_, `nyiv <_static/mp3/nyiv.mp3>`_, `nyim <_static/mp3/nyim.mp3>`_, `nyig <_static/mp3/nyig.mp3>`_, `nyib <_static/mp3/nyib.mp3>`_, `nyi <_static/mp3/nyi.mp3>`_
+    `nyoj <_static/mp3/nyoj.mp3>`_, `nyos <_static/mp3/nyos.mp3>`_, `nyov <_static/mp3/nyov.mp3>`_, `nyom <_static/mp3/nyom.mp3>`_, `nyog <_static/mp3/nyog.mp3>`_, `nyob <_static/mp3/nyob.mp3>`_, `nyo <_static/mp3/nyo.mp3>`_
+    `nyuj <_static/mp3/nyuj.mp3>`_, `nyus <_static/mp3/nyus.mp3>`_, `nyuv <_static/mp3/nyuv.mp3>`_, `nyum <_static/mp3/nyum.mp3>`_, `nyug <_static/mp3/nyug.mp3>`_, `nyub <_static/mp3/nyub.mp3>`_, `nyu <_static/mp3/nyu.mp3>`_
+    `nywj <_static/mp3/nywj.mp3>`_, `nyws <_static/mp3/nyws.mp3>`_, `nywv <_static/mp3/nywv.mp3>`_, `nywm <_static/mp3/nywm.mp3>`_, `nywg <_static/mp3/nywg.mp3>`_, `nywb <_static/mp3/nywb.mp3>`_, `nyw <_static/mp3/nyw.mp3>`_
+    `nyaij <_static/mp3/nyaij.mp3>`_, `nyais <_static/mp3/nyais.mp3>`_, `nyaiv <_static/mp3/nyaiv.mp3>`_, `nyaim <_static/mp3/nyaim.mp3>`_, `nyaig <_static/mp3/nyaig.mp3>`_, `nyaib <_static/mp3/nyaib.mp3>`_, `nyai <_static/mp3/nyai.mp3>`_
+    `nyauj <_static/mp3/nyauj.mp3>`_, `nyaus <_static/mp3/nyaus.mp3>`_, `nyauv <_static/mp3/nyauv.mp3>`_, `nyaum <_static/mp3/nyaum.mp3>`_, `nyaug <_static/mp3/nyaug.mp3>`_, `nyaub <_static/mp3/nyaub.mp3>`_, `nyau <_static/mp3/nyau.mp3>`_
+    `nyawj <_static/mp3/nyawj.mp3>`_, `nyaws <_static/mp3/nyaws.mp3>`_, `nyawv <_static/mp3/nyawv.mp3>`_, `nyawm <_static/mp3/nyawm.mp3>`_, `nyawg <_static/mp3/nyawg.mp3>`_, `nyawb <_static/mp3/nyawb.mp3>`_, `nyaw <_static/mp3/nyaw.mp3>`_
+    `nyeej <_static/mp3/nyeej.mp3>`_, `nyees <_static/mp3/nyees.mp3>`_, `nyeev <_static/mp3/nyeev.mp3>`_, `nyeem <_static/mp3/nyeem.mp3>`_, `nyeeg <_static/mp3/nyeeg.mp3>`_, `nyeeb <_static/mp3/nyeeb.mp3>`_, `nyee <_static/mp3/nyee.mp3>`_
+    `nyiaj <_static/mp3/nyiaj.mp3>`_, `nyias <_static/mp3/nyias.mp3>`_, `nyiav <_static/mp3/nyiav.mp3>`_, `nyiam <_static/mp3/nyiam.mp3>`_, `nyiag <_static/mp3/nyiag.mp3>`_, `nyiab <_static/mp3/nyiab.mp3>`_, `nyia <_static/mp3/nyia.mp3>`_
+    `nyooj <_static/mp3/nyooj.mp3>`_, `nyoos <_static/mp3/nyoos.mp3>`_, `nyoov <_static/mp3/nyoov.mp3>`_, `nyoom <_static/mp3/nyoom.mp3>`_, `nyoog <_static/mp3/nyoog.mp3>`_, `nyoob <_static/mp3/nyoob.mp3>`_, `nyoo <_static/mp3/nyoo.mp3>`_
+    `nyuaj <_static/mp3/nyuaj.mp3>`_, `nyuas <_static/mp3/nyuas.mp3>`_, `nyuav <_static/mp3/nyuav.mp3>`_, `nyuam <_static/mp3/nyuam.mp3>`_, `nyuag <_static/mp3/nyuag.mp3>`_, `nyuab <_static/mp3/nyuab.mp3>`_, `nyua <_static/mp3/nyua.mp3>`_
     `phaj <_static/mp3/phaj.mp3>`_, `phas <_static/mp3/phas.mp3>`_, `phav <_static/mp3/phav.mp3>`_, `pham <_static/mp3/pham.mp3>`_, `phag <_static/mp3/phag.mp3>`_, `phab <_static/mp3/phab.mp3>`_, `pha <_static/mp3/pha.mp3>`_
     `phej <_static/mp3/phej.mp3>`_, `phes <_static/mp3/phes.mp3>`_, `phev <_static/mp3/phev.mp3>`_, `phem <_static/mp3/phem.mp3>`_, `pheg <_static/mp3/pheg.mp3>`_, `pheb <_static/mp3/pheb.mp3>`_, `phe <_static/mp3/phe.mp3>`_
     `phij <_static/mp3/phij.mp3>`_, `phis <_static/mp3/phis.mp3>`_, `phiv <_static/mp3/phiv.mp3>`_, `phim <_static/mp3/phim.mp3>`_, `phig <_static/mp3/phig.mp3>`_, `phib <_static/mp3/phib.mp3>`_, `phi <_static/mp3/phi.mp3>`_
@@ -561,6 +570,7 @@ Click on the syllables to hear what they sound like.
     `xyooj <_static/mp3/xyooj.mp3>`_, `xyoos <_static/mp3/xyoos.mp3>`_, `xyoov <_static/mp3/xyoov.mp3>`_, `xyoom <_static/mp3/xyoom.mp3>`_, `xyoog <_static/mp3/xyoog.mp3>`_, `xyoob <_static/mp3/xyoob.mp3>`_, `xyoo <_static/mp3/xyoo.mp3>`_
     `xyuaj <_static/mp3/xyuaj.mp3>`_, `xyuas <_static/mp3/xyuas.mp3>`_, `xyuav <_static/mp3/xyuav.mp3>`_, `xyuam <_static/mp3/xyuam.mp3>`_, `xyuag <_static/mp3/xyuag.mp3>`_, `xyuab <_static/mp3/xyuab.mp3>`_, `xyua <_static/mp3/xyua.mp3>`_
 
+
 Tri-consonant syllables
 -----------------------
 
@@ -634,6 +644,19 @@ Click on the syllables to hear what they sound like.
     `nphiaj <_static/mp3/nphiaj.mp3>`_, `nphias <_static/mp3/nphias.mp3>`_, `nphiav <_static/mp3/nphiav.mp3>`_, `nphiam <_static/mp3/nphiam.mp3>`_, `nphiag <_static/mp3/nphiag.mp3>`_, `nphiab <_static/mp3/nphiab.mp3>`_, `nphia <_static/mp3/nphia.mp3>`_
     `nphooj <_static/mp3/nphooj.mp3>`_, `nphoos <_static/mp3/nphoos.mp3>`_, `nphoov <_static/mp3/nphoov.mp3>`_, `nphoom <_static/mp3/nphoom.mp3>`_, `nphoog <_static/mp3/nphoog.mp3>`_, `nphoob <_static/mp3/nphoob.mp3>`_, `nphoo <_static/mp3/nphoo.mp3>`_
     `nphuaj <_static/mp3/nphuaj.mp3>`_, `nphuas <_static/mp3/nphuas.mp3>`_, `nphuav <_static/mp3/nphuav.mp3>`_, `nphuam <_static/mp3/nphuam.mp3>`_, `nphuag <_static/mp3/nphuag.mp3>`_, `nphuab <_static/mp3/nphuab.mp3>`_, `nphua <_static/mp3/nphua.mp3>`_
+    `nplaj <_static/mp3/nplaj.mp3>`_, `nplas <_static/mp3/nplas.mp3>`_, `nplav <_static/mp3/nplav.mp3>`_, `nplam <_static/mp3/nplam.mp3>`_, `nplag <_static/mp3/nplag.mp3>`_, `nplab <_static/mp3/nplab.mp3>`_, `npla <_static/mp3/npla.mp3>`_
+    `nplej <_static/mp3/nplej.mp3>`_, `nples <_static/mp3/nples.mp3>`_, `nplev <_static/mp3/nplev.mp3>`_, `nplem <_static/mp3/nplem.mp3>`_, `npleg <_static/mp3/npleg.mp3>`_, `npleb <_static/mp3/npleb.mp3>`_, `nple <_static/mp3/nple.mp3>`_
+    `nplij <_static/mp3/nplij.mp3>`_, `nplis <_static/mp3/nplis.mp3>`_, `npliv <_static/mp3/npliv.mp3>`_, `nplim <_static/mp3/nplim.mp3>`_, `nplig <_static/mp3/nplig.mp3>`_, `nplib <_static/mp3/nplib.mp3>`_, `npli <_static/mp3/npli.mp3>`_
+    `nploj <_static/mp3/nploj.mp3>`_, `nplos <_static/mp3/nplos.mp3>`_, `nplov <_static/mp3/nplov.mp3>`_, `nplom <_static/mp3/nplom.mp3>`_, `nplog <_static/mp3/nplog.mp3>`_, `nplob <_static/mp3/nplob.mp3>`_, `nplo <_static/mp3/nplo.mp3>`_
+    `npluj <_static/mp3/npluj.mp3>`_, `nplus <_static/mp3/nplus.mp3>`_, `npluv <_static/mp3/npluv.mp3>`_, `nplum <_static/mp3/nplum.mp3>`_, `nplug <_static/mp3/nplug.mp3>`_, `nplub <_static/mp3/nplub.mp3>`_, `nplu <_static/mp3/nplu.mp3>`_
+    `nplwj <_static/mp3/nplwj.mp3>`_, `nplws <_static/mp3/nplws.mp3>`_, `nplwv <_static/mp3/nplwv.mp3>`_, `nplwm <_static/mp3/nplwm.mp3>`_, `nplwg <_static/mp3/nplwg.mp3>`_, `nplwb <_static/mp3/nplwb.mp3>`_, `nplw <_static/mp3/nplw.mp3>`_
+    `nplaij <_static/mp3/nplaij.mp3>`_, `nplais <_static/mp3/nplais.mp3>`_, `nplaiv <_static/mp3/nplaiv.mp3>`_, `nplaim <_static/mp3/nplaim.mp3>`_, `nplaig <_static/mp3/nplaig.mp3>`_, `nplaib <_static/mp3/nplaib.mp3>`_, `nplai <_static/mp3/nplai.mp3>`_
+    `nplauj <_static/mp3/nplauj.mp3>`_, `nplaus <_static/mp3/nplaus.mp3>`_, `nplauv <_static/mp3/nplauv.mp3>`_, `nplaum <_static/mp3/nplaum.mp3>`_, `nplaug <_static/mp3/nplaug.mp3>`_, `nplaub <_static/mp3/nplaub.mp3>`_, `nplau <_static/mp3/nplau.mp3>`_
+    `nplawj <_static/mp3/nplawj.mp3>`_, `nplaws <_static/mp3/nplaws.mp3>`_, `nplawv <_static/mp3/nplawv.mp3>`_, `nplawm <_static/mp3/nplawm.mp3>`_, `nplawg <_static/mp3/nplawg.mp3>`_, `nplawb <_static/mp3/nplawb.mp3>`_, `nplaw <_static/mp3/nplaw.mp3>`_
+    `npleej <_static/mp3/npleej.mp3>`_, `nplees <_static/mp3/nplees.mp3>`_, `npleev <_static/mp3/npleev.mp3>`_, `npleem <_static/mp3/npleem.mp3>`_, `npleeg <_static/mp3/npleeg.mp3>`_, `npleeb <_static/mp3/npleeb.mp3>`_, `nplee <_static/mp3/nplee.mp3>`_
+    `npliaj <_static/mp3/npliaj.mp3>`_, `nplias <_static/mp3/nplias.mp3>`_, `npliav <_static/mp3/npliav.mp3>`_, `npliam <_static/mp3/npliam.mp3>`_, `npliag <_static/mp3/npliag.mp3>`_, `npliab <_static/mp3/npliab.mp3>`_, `nplia <_static/mp3/nplia.mp3>`_
+    `nplooj <_static/mp3/nplooj.mp3>`_, `nploos <_static/mp3/nploos.mp3>`_, `nploov <_static/mp3/nploov.mp3>`_, `nploom <_static/mp3/nploom.mp3>`_, `nploog <_static/mp3/nploog.mp3>`_, `nploob <_static/mp3/nploob.mp3>`_, `nploo <_static/mp3/nploo.mp3>`_
+    `npluaj <_static/mp3/npluaj.mp3>`_, `npluas <_static/mp3/npluas.mp3>`_, `npluav <_static/mp3/npluav.mp3>`_, `npluam <_static/mp3/npluam.mp3>`_, `npluag <_static/mp3/npluag.mp3>`_, `npluab <_static/mp3/npluab.mp3>`_, `nplua <_static/mp3/nplua.mp3>`_
     `nqhaj <_static/mp3/nqhaj.mp3>`_, `nqhas <_static/mp3/nqhas.mp3>`_, `nqhav <_static/mp3/nqhav.mp3>`_, `nqham <_static/mp3/nqham.mp3>`_, `nqhag <_static/mp3/nqhag.mp3>`_, `nqhab <_static/mp3/nqhab.mp3>`_, `nqha <_static/mp3/nqha.mp3>`_
     `nqhej <_static/mp3/nqhej.mp3>`_, `nqhes <_static/mp3/nqhes.mp3>`_, `nqhev <_static/mp3/nqhev.mp3>`_, `nqhem <_static/mp3/nqhem.mp3>`_, `nqheg <_static/mp3/nqheg.mp3>`_, `nqheb <_static/mp3/nqheb.mp3>`_, `nqhe <_static/mp3/nqhe.mp3>`_
     `nqhij <_static/mp3/nqhij.mp3>`_, `nqhis <_static/mp3/nqhis.mp3>`_, `nqhiv <_static/mp3/nqhiv.mp3>`_, `nqhim <_static/mp3/nqhim.mp3>`_, `nqhig <_static/mp3/nqhig.mp3>`_, `nqhib <_static/mp3/nqhib.mp3>`_, `nqhi <_static/mp3/nqhi.mp3>`_

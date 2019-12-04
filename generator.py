@@ -3,8 +3,8 @@ import itertools
 
 C = """
 c, d, f, h, k, l, m, n, p, q, r, s, t, v, x, y, z,
-ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ph, pl, qh, rh, th, ts, tx, xy,
-hml, hny, nch, nkh, nph, nqh, nrh, nth, nts, ntx, plh, tsh, txh,
+ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ny, ph, pl, qh, rh, th, ts, tx, xy,
+hml, hny, nch, nkh, nph, npl, nqh, nrh, nth, nts, ntx, plh, tsh, txh,
 nplh, ntsh, ntxh
 """.strip()
 

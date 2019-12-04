@@ -5,19 +5,19 @@ The mental model of RPA is with understanding the so-called ``CVT`` (Consonant, 
 
 Back to ``CVT``. Simply stated, a ``consonant`` is the beggining of a word, a ``vowel`` is the middle of a word and a ``tone`` is the ending of a word. For more technical articles of these concepts, see the following `constant <https://en.wikipedia.org/wiki/Consonant>`_, `vowel <https://en.wikipedia.org/wiki/Vowel>`_ and `tone <https://en.wikipedia.org/wiki/Tone_(linguistics)>`_ articles. In RPA, there are only so many consonants, vowels and tones. In fact, there are 
 
-* 54 consonants,
+* 56 consonants,
 * 13 vowels, and
 * 7 tones.
 
-Mathematically, there are 4,914 (:math:`54 \times 13 \times 7`) possible permutations of syllables that may be created using these finite sets of consonants, vowels and tones.
+Mathematically, there are 5,096 (:math:`56 \times 13 \times 7`) possible permutations of syllables that may be created using these finite sets of consonants, vowels and tones.
 
 .. note::
 
     RPA's ``CVT`` approach to creating syllables is not perfect. There are sounds that cannot be spelled using the CVT approach. Such sounds include those used in rituals and/or religious activities.
 
-However, some words do not have a consonant. Meaning, we have 91 (:math:`13 \times 7`) possible syllables without a consonant. In all, there are 5,005 (:math:`4,914 + 91`) total possible syllables. 
+However, some words do not have a consonant. Meaning, we have 91 (:math:`13 \times 7`) possible syllables without a consonant. In all, there are 5,187 (:math:`5,096 + 91`) total possible syllables. 
 
-Going further, some words are just vowels. So, actually, there are 5,018 (:math:`5,005 + 13`) total possible syllables in RPA.
+Going further, some words are just vowels. So, actually, there are 5,200 (:math:`5,187 + 13`) total possible syllables in RPA.
 
 .. note::
 
@@ -31,8 +31,8 @@ Consonants
 Consonants, again, are the beggining of a sound (or word). In RPA, it is convenient to parition consonants into the number of letters that a consonants have.
 
 * c, d, f, h, k, l, m, n, p, q, r, s, t, v, x, y, z
-* ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ph, pl, qh, rh, th, ts, tx, xy
-* hml, hny, nch, nkh, nph, nqh, nrh, nth, nts, ntx, plh, tsh, txh
+* ch, dh, hl, hm, hn, kh, ml, nc, nk, np, nq, nr, nt, ny, ph, pl, qh, rh, th, ts, tx, xy
+* hml, hny, nch, nkh, nph, npl, nqh, nrh, nth, nts, ntx, plh, tsh, txh
 * nplh, ntsh, ntxh
 
 In RPA, consonants are called ``tsiaj ntawv txiv``. The families of consonants and their English and Hmong names are shown below.
