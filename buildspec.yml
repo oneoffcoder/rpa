@@ -16,5 +16,5 @@ phases:
       - make clean && make html
   post_build:
     commands:
-      - aws s3 sync build/html s3://rpa.oneoffcoder.com
+      - aws s3 sync build/html s3://rpa.oneoffcoder.com --quiet
       - echo Build completed on `date`
