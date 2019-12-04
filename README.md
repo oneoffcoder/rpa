@@ -4,7 +4,7 @@
 
 # Romanized Popular Alphabet
 
-A book to read, write and speak Hmong.
+A book to read, write and speak Hmong. The published site is at [http://rpa.oneoffcoder.com](http://rpa.oneoffcoder.com).
 
 # Copyright Stuff
 
