@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: "3.7"
+      python: "3.8"
     commands:
       - apt-get -qq install pandoc -y
       - pip install ipython sphinx sphinx_rtd_theme sphinxcontrib-bibtex sphinx-autobuild nbsphinx -q
