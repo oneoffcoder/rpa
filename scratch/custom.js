@@ -1,5 +1,15 @@
 $(document).ready(function(){ 
     console.log('ready');
+    let links = $('a[href ^= "dummy.html"]')
+        .map(function() {
+            return $(this).attr('href');
+        })
+        .map(function(i, v) {
+            const qIndex = v.indexOf('=');
+            return v.substring(qIndex + 1).split('+');
+        });
+    console.log(links);
+
     $('#play').click(function() {
         console.log('play clicked');
         const syllables = $('#rpa')
