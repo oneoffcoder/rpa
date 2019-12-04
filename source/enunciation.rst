@@ -12,11 +12,15 @@ When the consonants are too difficult to sound out, drop them and practice speak
 
     "Txiv, koj mus ua dab tsi os?"
 
+`Listen <generate.html?q=txiv+koj+mus+ua+dab+tsi+os>`_.
+
 You might find it enjoyable to say the above instead as follows.
 
 ::
 
     "iv, oj mus ua ab tsi os?"
+
+`Listen <generate.html?q=iv+oj+mus+ua+ab+tsi+os>`_.
 
 Why is this approach useful? It's exactly what toddlers do when they start learning to speak Hmong. In fact, saying words without consonants is considered infantile. Yet, it's the way all native speakers learn Hmong.
 
@@ -28,6 +32,8 @@ Take the following sentence.
 ::
 
     "Pov Pog pom Poj Pos pov pob po?"
+
+`Listen <generate.html?q=pov+pog+pom+poj+pos+pov+pob+po>`_.
 
 Which roughly translates in English as follows.
 
