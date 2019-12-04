@@ -61,7 +61,7 @@ Days of the week
 
 .. warning::
 
-    Saturday and Sunday are borrowed from Lao and transliterations thereof. ``Vas Xaum`` is a transliteration of ``vnaothid`` or ``ວັນອາທິດ`` and ``Vas Thiv`` of ``vansao`` or ``ວັນເສົາ``. There are no real way to say Monday through Friday in Hmong and the days of the week stated here have absolutely no support from the community or any known linguist. We are simply following convention with the months. 
+    Saturday and Sunday are borrowed from Lao and transliterations thereof. ``Vas Xaum`` is a transliteration of ``vansao`` or ``ວັນເສົາ`` and ``Vas Thiv`` of ``vnaothid`` or ``ວັນອາທິດ``. There are no real way to say Monday through Friday in Hmong and the days of the week stated here have absolutely no support from the community or any known linguist. We are simply following convention with the months. 
 
     A week in Hmong is ``as thiv`` which is borrowed from Lao ``athid`` or ``ອາທິດ``. Some speakers are also using ``lis paim`` for the word week, which is a transliteration of Mandarin word ``lǐ bài`` or ``礼拜``.
 
@@ -204,6 +204,6 @@ These are just some of many titles which you should refer to people related to y
 
 .. note::
 
-    What's the Hmong word for ``cousin``? There is no Hmong word for cousin. In the Hmong culture, we are all brothers and sisters.
+    What's the Hmong word for ``cousin``? The phrase ``tij yug kwv yug`` may be used to indicate that two people are cousins. ``Tij yug`` means descended from the older brother, and ``kwv yug`` means descended from the younger brother; meaning, the two people in question do not share the same parents. Sometimes, to clarify that two people are descended from the same parents, it is common to say ``niam txiv ib plab yug`` which means literally, ``mother-father one stomach descended`` (descended from a single set of parents). 
 
 If you have children, it is customary to refer to people as what your children refer to them as. For example, if you are a male, you refer to your sister's husband as ``yuam yij``. When you have children, your children will call your brother-in-law (their uncle) as ``yawg laus``, and you should do so as well. 
