@@ -58,8 +58,8 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_show_sourcelink = False
 html_show_sphinx = False
-# html_logo = '_static/images/logo-small.png'
-# html_favicon = '_static/favicon.ico'
+html_logo = '_static/images/logo-small.png'
+html_favicon = '_static/favicon.ico'
 html_css_files = ['css/override.css']
 html_js_files = [
     'https://threejs.org/build/three.js',
