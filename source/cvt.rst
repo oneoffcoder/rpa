@@ -17,7 +17,7 @@ Mathematically, there are 4,914 (:math:`54 \times 13 \times 7`) possible permuta
 
 However, some words do not have a consonant. Meaning, we have 91 (:math:`13 \times 7`) possible syllables without a consonant. In all, there are 5,005 (:math:`4,914 + 91`) total possible syllables. 
 
-Going further, some words are just vowels. So, actually, there are 5,012 (:math:`5,005 + 7`) total possible syllables in RPA.
+Going further, some words are just vowels. So, actually, there are 5,018 (:math:`5,005 + 13`) total possible syllables in RPA.
 
 .. note::
 

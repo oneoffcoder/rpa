@@ -11,6 +11,8 @@ Name
     Koj, lub, npe, hu, li cas, ?
     Your, <class>, name, called, how, ?
 
+`listen <generate.html?q=koj+lub+npe+hu+li+cas>`_
+
 .. csv-table:: My name is Pao.
 
     Kuv, lub, npe, hu, ua, Pov, .
