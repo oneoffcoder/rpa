@@ -6,14 +6,12 @@ Here are some useful things to learn how to say in Hmong.
 Name
 ----
 
-.. csv-table:: What is your name?
+.. csv-table:: What is your name? `[listen] <generate.html?q=koj+lub+npe+hu+li+cas>`_
 
     Koj, lub, npe, hu, li cas, ?
     Your, <class>, name, called, how, ?
 
-`listen <generate.html?q=koj+lub+npe+hu+li+cas>`_
-
-.. csv-table:: My name is Pao.
+.. csv-table:: My name is Pao. `[listen] <generate.html?q=kuv+lub+npe+hu+ua+pov>`_
 
     Kuv, lub, npe, hu, ua, Pov, .
     My, <class>, name, called, <preposition>, Pao, .
@@ -89,25 +87,25 @@ Here are some proposed English-to-Hmong female names.
 Age
 ---
 
-.. csv-table:: How old are you?
+.. csv-table:: How old are you? `[listen] <generate.html?q=koj+muaj+pes+tsawg+xyoo>`_
 
     Koj, muaj, pes tsawg, xyoo, ?
     You, have, how many, years, ?
 
-.. csv-table:: I am 41 years old.
+.. csv-table:: I am 41 years old. `[listen] <generate.html?q=kuv+muaj+plaub+caug+ib+xyoos>`_
 
-    Kuv, muaj, plaub caug ib, xyoo, .
+    Kuv, muaj, plaub caug ib, xyoos, .
     I, have, 41, years, .
 
 Residence
 ---------
 
-.. csv-table:: Where do you live?
+.. csv-table:: Where do you live? `[listen] <generate.html?q=koj+nyob+qhov+twg>`_
 
     Koj, nyob, qhov twg, ?
     You, live, where, ?
 
-.. csv-table:: I live in Washington, DC.
+.. csv-table:: I live in Washington, DC. `[listen] <generate.html?q=kuv+nyob+washington+dc>`_
 
     Kuv, nyob, "Washington, DC", .
     I, live, "Washington, DC", .
