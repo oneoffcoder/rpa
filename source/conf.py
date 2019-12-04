@@ -72,7 +72,7 @@ html_last_updated_fmt = '%b %d, %Y, %X'
 
 html_theme_options = {
     'canonical_url': '',
-    'analytics_id': '',
+    'analytics_id': 'UA-153859612-1',
     'logo_only': False,
     'display_version': True,
     'prev_next_buttons_location': 'bottom',
