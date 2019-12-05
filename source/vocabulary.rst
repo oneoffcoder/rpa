@@ -200,10 +200,20 @@ This table shows the titles of your aunts and uncles.
     aunt, mother's sister, niam tias hluas
     uncle, mother's sister's husband, yuam txiv
 
+This table shows the titles of your paternal grandfathers.
+
+.. csv-table:: Paternal Grandfathers
+    :header: English, Hmong
+
+    Grandfather, Yawg
+    Great-grandfather, Yawg Koob
+    Great-great-grandfather, Yawg Suab
+    Great-great-great-grandfather, Yawg Tsawb
+
 These are just some of many titles which you should refer to people related to yourself. 
 
 .. note::
 
-    What's the Hmong word for ``cousin``? The phrase ``tij yug kwv yug`` may be used to indicate that two people are cousins. ``Tij yug`` means descended from the older brother, and ``kwv yug`` means descended from the younger brother; meaning, the two people in question do not share the same parents. Sometimes, to clarify that two people are descended from the same parents, it is common to say ``niam txiv ib plab yug`` which means literally, ``mother-father one stomach descended`` (descended from a single set of parents). 
+    What's the Hmong word for ``cousin``? The phrase ``tij yug kwv yug`` may be used to indicate that two people are cousins. ``Tij yug`` means descended from the older brother, and ``kwv yug`` means descended from the younger brother; meaning, the two people in question do not share the same parents but are related still. Sometimes, to clarify that two people are descended from the same parents, it is common to say ``niam txiv ib plab yug`` which means literally, ``mother-father one stomach descended`` (descended from a single set of parents). 
 
 If you have children, it is customary to refer to people as what your children refer to them as. For example, if you are a male, you refer to your sister's husband as ``yuam yij``. When you have children, your children will call your brother-in-law (their uncle) as ``yawg laus``, and you should do so as well. 
