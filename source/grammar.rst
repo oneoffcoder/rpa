@@ -30,6 +30,7 @@ Classifiers are basically ``metrics``. For example, in the phrase, ``an ounce of
     daim, sheet or flat object
     tug, generic for living things
     zaj, "song, poem, instrumental"
+    qho, generic classifier with non-trivial usage
 
 .. note::
 
@@ -39,7 +40,11 @@ Classifiers are basically ``metrics``. For example, in the phrase, ``an ounce of
     * zaj qeej: reed pipe instrumental
     * zaj tshoob: wedding ceremonial song
     * zaj dab neeg: Hmong pre-history story
-    * zaj txiv xaiv: funeral ritual song
+    * zaj txiv xaiv: proverbial funeral ritual song
+
+.. note::
+
+    The ``qho`` or ``qhov`` classifier has non-trivial usage. In the simplest case, it can be used for hole-like things such as door ``qhov rooj``, eye ``qhov muag`` or ground holes ``qhov av``. In other cases, you can denote generic items in a list such as first item ``qhov ib``, second item ``qhov ob`` and so on.
 
 Sentence structures
 -------------------
@@ -153,6 +158,8 @@ Now, swap the adjective and noun positions. The following sentence translates to
     Nws, yog, noob, zoo
     He, is, seed, good
 
+If you are a ``noob zoo``, it does not necessarily mean you are a good person, just that you are from a good family. If you are a ``zoo noob``, it means you are a good person, but not necessarily from a good family.
+
 Adverbs
 ^^^^^^^
 
@@ -188,41 +195,99 @@ Let's have fun with classifiers. The following sentences translates to ``His amb
 
     A woman may have ``rab peev xwm`` or ``lub peev xwm`` (and likewise for a man). The classifier may genderize the noun, but it does not constrain the associated pronoun.
 
+Verbs in depth
+^^^^^^^^^^^^^^
+
+Verbs are well-behaved until you have to start describing how you wear clothes. In English, you 
+
+* wear a hat,
+* wear a scarf,
+* wear gloves,
+* wear shoes,
+* wear glasses,
+* wear a shirt,
+* wear a pants, and
+* wear shoes.
+
+No matter what you ``wear`` in English, you ``wear`` it. In Hmong, verbs used denote wearing clothing changes depending on the body part or clothing particle. Here are the right verbs to use when referring to wearing clothing.
+
+.. csv-table:: Wearing Verbs
+    :header: Items, Hmong Verb
+
+    hat, ntoo
+    "watch, bracelet, necklace, glasses, earrings", coj
+    "gloves, socks", looj
+    "belt, backpack", sia
+    "pants, shirt", hnav
+    shoes, rau
+
+Observe these verbs in action (no pun intended). Also, pay attention to the ``classifiers``.
+
+.. csv-table:: I wear a hat
+
+    Kuv, ntoo, ib, lub, kaus mom
+    I, wear, a, <class>, hat
+
+.. csv-table:: I wear two earrings
+
+    Kuv, coj, ob, lub, qhwv ntsej
+    I, wear, two, <class>, earrings
+
+.. csv-table:: You wear two socks
+
+    Koj, looj, ob, qho, thoom khwm
+    You, wear, two, <class>, socks
+
+.. csv-table:: You wear a belt
+
+    Koj, sia, ib, txoj, siv tawv
+    You, wear, a, <class>, belt
+
+.. csv-table:: She wears a pair of pants
+
+    Nws, hnav, ib, lub, ris
+    She, wears, a, <class>, pants
+
+.. csv-table:: They are wearing two shoes that are the same
+
+    Nkawv, rau, ob, nkawg, khau, ib yam
+    They, wear, two, <class>, shoes, the same
+
 Questions
 ^^^^^^^^^
 
 One way to ask questions is to simply present a choice and the negation of that choice. The word ``los`` means ``or`` in English; a longer form of ``los`` is ``los sis`` (and may be substituted).
 
-.. csv-table::
+.. csv-table:: Do you want to drink water?
 
     Koj, huas, los, tsis haus, dej, ?
     You, drink, or, not drink, water, ?
 
-.. csv-table::
+.. csv-table:: Do you want to go?
 
     Koj, mus, los, tsis mus, ?
     You, go, or, not go, ?
 
 Another way to ask these questions is to use ``puas`` (before the verb) which means ``will you``.
 
-.. csv-table::
+.. csv-table:: Do you want to drink water?
 
     Koj, puas, haus, dej, ?
     You, will, drink, water, ?
 
-.. csv-table::
+.. csv-table:: Do you want to go?
 
     Koj, puas, mus, ?
     You, will, go, ?
 
 The particles ``ma`` and ``ne`` may also be added to end of a sentence to make a question.
 
-.. csv-table::
+.. csv-table:: How much does it cost?
 
     Pes tsawg, ma, ?
     How much, <particle>, ?
     
-.. csv-table::
+.. csv-table:: And him?
 
     Nws, ne, ?
     Him, <particle>, ?
