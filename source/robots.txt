@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://rpa.oneoffcoder.com/docs/sitemap.xml
