@@ -155,7 +155,7 @@ $(document).ready(function() {
       return M;
     }
 
-    function start() {
+    function start(callback) {
       const container = document.getElementById('viz-canvas');
       
       var renderer = new THREE.WebGLRenderer();
@@ -199,8 +199,12 @@ $(document).ready(function() {
         
         const sMeshes = getSMeshes(font, matLite, width);
         sMeshes.forEach(m => scene.add(m));
-          
+        
         console.log('done');
+        if (callback) {
+          callback();
+        }
+        
       });
       
       function animate() {
@@ -219,7 +223,21 @@ $(document).ready(function() {
 
     const canvas = $('#viz-canvas');
     if (canvas.length > 0) {
-      console.log('starting viz now');
-      start();
+      const btn = $('#viz-btn');
+      const msg = $('#viz-msg');
+      
+      btn.click(() => {
+        console.log('starting viz now');
+        msg.css('visibility', 'visible');
+
+        start(() => {
+          console.log('callback');
+          btn.toggle();
+          msg.toggle();
+        });
+      });
     }
+    
+    
+    
 });
