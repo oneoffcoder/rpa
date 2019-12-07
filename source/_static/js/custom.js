@@ -87,13 +87,13 @@ $(document).ready(function() {
             });
         
         $(anchors).each(function(index, value) {
-            const href = $(this).attr('href');
-            const sounds = href.substring('generate.html?q='.length)
-                        .split('+')
-                        .filter(v => syllables.includes(v))
-                        .map(v => `_static/mp3/${v}.mp3`)
-                        .map(v => new Audio(v));
             $(this).click(function() {
+                const href = $(this).attr('href');
+                const sounds = href.substring('generate.html?q='.length)
+                            .split('+')
+                            .filter(v => syllables.includes(v))
+                            .map(v => `_static/mp3/${v}.mp3`)
+                            .map(v => new Audio(v));
                 if (lock === false && sounds.length > 0) {
                     acquireLock();
                     let i = -1;
