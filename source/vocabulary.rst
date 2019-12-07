@@ -171,8 +171,8 @@ For example, note that there are many ways to say sister. If you are a boy, you 
 
     grandmother (father's side), pog
     grandfather (father's side), yawg
-    grandmother (mother's side), yuam txiv
-    grandfather (mother's side), niam tais
+    grandmother (mother's side), niam tais
+    grandfather (mother's side), yuam txiv
     mom, niam
     dad, txiv
     older brother, tij laug
