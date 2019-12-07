@@ -109,7 +109,7 @@ Cite this book as follows.::
     @misc{oneoffcoder_rpa_2019, 
     title={Romanized Popular Alphabet, A Primer}, 
     url={https://rpa.oneoffcoder.com}, 
-    author={One-Off Coder}, 
+    author={Jee Vang}, 
     year={2019}, 
     month={Dec}}
 
