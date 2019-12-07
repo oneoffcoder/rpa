@@ -109,7 +109,7 @@ Here are some arbitrary counting examples.
 Ordinal Counting
 ----------------
 
-Ordinal counting in Hmong is shown below.
+Ordinal counting in Hmong is shown below. Observe the similarity with Mandarin counting.
 
 .. csv-table:: Ordinal Counting
     :header: English, Hmong, Mandarin
