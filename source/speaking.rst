@@ -402,11 +402,10 @@ Here are some proverbs. In Hmong, proverbs are called, ``Niaj Txhis Piv Txoj Lus
 * `Xav xav plag ntshav. <generate.html?q=xav+xav+plag+ntshav>`_
 * `Xyeej npluag tsis xyeej noob, xyeej tsawg tsis xyeej coob. <generate.html?q=xyeej+npluag+tsis+xyeej+noob+xyeej+tsawg+tsis+xyeej+coob>`_
 * `Xyoob loj tsis cuag ntoo, muaj zog tsis cuag muaj hmoo. <generate.html?q=xyoob+loj+tsis+cuag+ntoo+muaj+zog+tsis+cuag+muaj+hmoo>`_
-* `Yog yus txhiaj tsis se, yog tub tsis tuag. <generate.html?q=yog+yus+txhiaj+tsis+se+yog+tub+tsis+tuag>`_
+* `Yog yus txhiaj tsis se, yog yus tub tsis tuag. <generate.html?q=yog+yus+txhiaj+tsis+se+yog+yus+tub+tsis+tuag>`_
 * `Yuav nkauj mog los ua poj niam, yam nkaus li muab kav tsawb los ua ko riam. <generate.html?q=yuav+nkauj+mog+los+ua+poj+niam+yam+nkaus+li+muab+kav+tsawb+los+ua+ko+riam>`_
 * `Yuav tub hluas ua hau, yam nkaus li muab quav kws los ua ko hlau. <generate.html?q=yuav+tub+hluas+ua+hau+yam+nkaus+li+muab+quav+kws+los+ua+ko+hlau>`_
 * `Yug tub yug kiv los npaj laug, npaj qoob npaj loo tseg thiaj tau noj tau haus. <generate.html?q=yug+tub+yug+kiv+los+npaj+laug+npaj+qoob+npaj+loo+tseg+thiaj+tau+noj+tau+haus>`_
 * `Zais nyiaj txiag txhob zais nruab tiag, zais nyiaj kub txhob zais ntawm ntus cub. <generate.html?q=zais+nyiaj+txiag+txhob+zais+nruab+tiag+zais+nyiaj+kub+txhob+zais+ntawm+ntus+cub>`_
 * `Zaj tuag los vim zaj lub pov, raub ris tuag los vim lub qhov. <generate.html?q=zaj+tuag+los+vim+zaj+lub+pov+raub+ris+tuag+los+vim+lub+qhov>`_
 * `Zom zeb mob tes; tuav cos mob taws; ris dej mob nruab quam; noj mov nkaus diav maum. <generate.html?q=zom+zeb+mob+tes+tuav+cos+mob+taws+ris+dej+mob+nruab+quam+noj+mov+nkaus+diav+maum>`_
-

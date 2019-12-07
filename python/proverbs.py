@@ -287,7 +287,7 @@ Xav taug qhov zoo los kawg tau phem; xav taug txoj kev ncaj los kawg tau qhov ke
 Xav xav plag ntshav.
 Xyeej npluag tsis xyeej noob, xyeej tsawg tsis xyeej coob.
 Xyoob loj tsis cuag ntoo, muaj zog tsis cuag muaj hmoo.
-Yog yus txhiaj tsis se, yog tub tsis tuag.
+Yog yus txhiaj tsis se, yog yus tub tsis tuag.
 Yuav nkauj mog los ua poj niam, yam nkaus li muab kav tsawb los ua ko riam.
 Yuav tub hluas ua hau, yam nkaus li muab quav kws los ua ko hlau.
 Yug tub yug kiv los npaj laug, npaj qoob npaj loo tseg thiaj tau noj tau haus.
