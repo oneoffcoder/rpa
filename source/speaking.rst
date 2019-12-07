@@ -317,7 +317,7 @@ Here are some proverbs. In Hmong, proverbs are called, ``Niaj Txhis Piv Txoj Lus
 * `Thaum muaj ces muab noj ntau, thaum tas ces ua tsov tshaib tsov tsau. <generate.html?q=thaum+muaj+ces+muab+noj+ntau+thaum+tas+ces+ua+tsov+tshaib+tsov+tsau>`_
 * `Thaum pib ua yuav tsum tuav xam, ua tau los thiaj li tsis plam. <generate.html?q=thaum+pib+ua+yuav+tsum+tuav+xam+ua+tau+los+thiaj+li+tsis+plam>`_
 * `Thaum siav tu ces luag tias tuag; thaum nyiaj tu ces luag tias pluag.  <generate.html?q=thaum+siav+tu+ces+luag+tias+tuag+thaum+nyiaj+tu+ces+luag+tias+pluag>`_
-* `Thaum siav tus ces luag tias tuag, thaum nyiaj tu ces luag tias pluag. <generate.html?q=thaum+siav+tus+ces+luag+tias+tuag+thaum+nyiaj+tu+ces+luag+tias+pluag>`_
+* `Thaum siav tu ces luag tias tuag, thaum nyiaj tu ces luag tias pluag. <generate.html?q=thaum+siav+tu+ces+luag+tias+tuag+thaum+nyiaj+tu+ces+luag+tias+pluag>`_
 * `Thaum zoo ces hais tias "mog mog", thaum phem ces cuag dev sib tog. <generate.html?q=thaum+zoo+ces+hais+tias+mog+mog+thaum+phem+ces+cuag+dev+sib+tog>`_
 * `Thaum zoo siab ces sib tawb, thaum tsiv siab tuaj ces ua miv sib khawb. <generate.html?q=thaum+zoo+siab+ces+sib+tawb+thaum+tsiv+siab+tuaj+ces+ua+miv+sib+khawb>`_
 * `Tij viv tam niam txiv, niam txiv tam rooj ntug. <generate.html?q=tij+viv+tam+niam+txiv+niam+txiv+tam+rooj+ntug>`_

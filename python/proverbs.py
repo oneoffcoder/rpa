@@ -202,7 +202,7 @@ Thaum mos mas mos cuag ntaub tsuj, thaum ntxhib mas ntxhib cuag plab nyuj.
 Thaum muaj ces muab noj ntau, thaum tas ces ua tsov tshaib tsov tsau.
 Thaum pib ua yuav tsum tuav xam, ua tau los thiaj li tsis plam.
 Thaum siav tu ces luag tias tuag; thaum nyiaj tu ces luag tias pluag. 
-Thaum siav tus ces luag tias tuag, thaum nyiaj tu ces luag tias pluag.
+Thaum siav tu ces luag tias tuag, thaum nyiaj tu ces luag tias pluag.
 Thaum zoo ces hais tias "mog mog", thaum phem ces cuag dev sib tog.
 Thaum zoo siab ces sib tawb, thaum tsiv siab tuaj ces ua miv sib khawb.
 Tij viv tam niam txiv, niam txiv tam rooj ntug.
