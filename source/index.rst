@@ -117,3 +117,13 @@ Author
 ======
 
 Jee Vang, Ph.D.
+
+Logo Design
+-----------
+
+Sheng Xiong
+
+Dedication
+----------
+
+This book is dedicated to my father, Nyiaj Yis Vaj. 
