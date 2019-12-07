@@ -114,13 +114,13 @@ Ordinal counting in Hmong is shown below.
 .. csv-table:: Ordinal Counting
     :header: English, Hmong, Mandarin
 
-    First, Tuam, Da
-    Second, Lwm, Liang
-    Third, Xab, San
-    Fourth, Xwm, Si
-    Fifth, Vwb, Wu
-    Sixth, Lwj, Liu
-    Seventh, Txhij, Qi
-    Eight, Pej, Ba
-    Ninth, Cawb, Jiu
-    Tenth, Sij, Shi
+    First, Tuam, Dà
+    Second, Lwm, Liǎng
+    Third, Xab, Sān
+    Fourth, Xwm, Sì
+    Fifth, Vwb, Wǔ
+    Sixth, Lwj, Liù
+    Seventh, Txhij, Qī
+    Eight, Pej, Bā
+    Ninth, Cawb, Jiǔ
+    Tenth, Sij, Shí
