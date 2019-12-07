@@ -109,18 +109,18 @@ Here are some arbitrary counting examples.
 Ordinal Counting
 ----------------
 
-Ordinal counting in Hmong is shown below.
+Ordinal counting in Hmong is shown below. Observe the similarity with Mandarin counting.
 
 .. csv-table:: Ordinal Counting
-    :header: English, Hmong
+    :header: English, Hmong, Mandarin
 
-    First, Tuam
-    Second, Lwm
-    Third, Xab
-    Fourth, Xwm
-    Fifth, Vwb
-    Sixth, Luj
-    Seventh, Chij
-    Eight, Paj
-    Ninth, Cwj
-    Tenth, Xwj
+    First, Tuam, Dà
+    Second, Lwm, Liǎng
+    Third, Xab, Sān
+    Fourth, Xwm, Sì
+    Fifth, Vwb, Wǔ
+    Sixth, Lwj, Liù
+    Seventh, Txhij, Qī
+    Eight, Pej, Bā
+    Ninth, Cawb, Jiǔ
+    Tenth, Sij, Shí

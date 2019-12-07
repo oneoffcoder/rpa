@@ -217,3 +217,43 @@ These are just some of many titles which you should refer to people related to y
     What's the Hmong word for ``cousin``? The phrase ``tij yug kwv yug`` may be used to indicate that two people are cousins. ``Tij yug`` means descended from the older brother, and ``kwv yug`` means descended from the younger brother; meaning, the two people in question do not share the same parents but are related still. Sometimes, to clarify that two people are descended from the same parents, it is common to say ``niam txiv ib plab yug`` which means literally, ``mother-father one stomach descended`` (descended from a single set of parents). 
 
 If you have children, it is customary to refer to people as what your children refer to them as. For example, if you are a male, you refer to your sister's husband as ``yuam yij``. When you have children, your children will call your brother-in-law (their uncle) as ``yawg laus``, and you should do so as well. 
+
+More
+----
+
+Here are some advanced to intermediate words you should learn.
+
+.. csv-table:: Phrases
+    :header: Hmong, English Definition
+
+    choj txhwj, a hoe to till the land
+    civ feeb civ tob, to be in a state of apathy without knowing oneself
+    duab tiv txwv, under the water where sand and water touches
+    keeb puam, "story (not history, very recent history)"
+    kob huam, a state of financial ruins
+    kob xwb, a person of wealth and high intelligence
+    koom tshaj, communism
+    kws lij choj, a lawyer
+    liam moj, being extremely naughty
+    luab sab, satire
+    ntxhi noog, to investigate
+    peem tsheej, how one comes to be or how one becomes
+    plhom moj, naughty
+    plhob les, apathy
+    qauj les, not old and not new
+    quaj muaj tsuag, resurrection plant
+    ras dheev, state of being awakened or enlightened
+    rhawv, to create
+    sam fwm, officially reporting something
+    soj ntsuam, officially investigating
+    thiaj txiv yawg, a state of wisdom
+    thwj tim, a student of a master (apprentice)
+    tsis tsug, "your turn (as in, your turn to speak or do something)"
+    tuam txhob, hoe used to dig small hole
+    tub tshuaj xyuam, covert investigator
+    tub tshuaj xwm, investigator
+    txhoj pob, naughty
+    xau, event of tremendous excitement and attraction
+    tuam yim, optimistic but reckless
+    voom, wood dragged by ox to till the land
+    zwm, to report
