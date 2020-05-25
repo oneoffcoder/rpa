@@ -226,6 +226,7 @@ Here are some advanced to intermediate words you should learn.
 .. csv-table:: Phrases
     :header: Hmong, English Definition
 
+    com viab, blaming or finding faults in others
     choj txhwj, a hoe to till the land
     civ feeb civ tob, to be in a state of apathy without knowing oneself
     duab tiv txwv, under the water where sand and water touches
