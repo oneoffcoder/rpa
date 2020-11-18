@@ -1,6 +1,24 @@
 CVT
 ===
 
+.. blockdiag::
+
+   diagram {
+      default_shape = roundedbox
+      span_width = 32
+      span_height = 20
+      default_fontsize = 11
+      edge_layout = normal
+      orientation = landscape
+
+      C [label = "c", color = "#f55f36", shape = circle, textcolor = white]
+      V [label = "v", color = "#15d649", shape = circle, textcolor = white]
+      T [label = "t", color = "#365cf5", shape = circle, textcolor = white]
+      S [label = "Syllable", color = "#e0e0e0"]
+
+      C, V, T -> S
+   }
+
 The mental model of RPA is with understanding the so-called ``CVT`` (Consonant, Vowel, Tone) composition of a ``syllable``. For all intents and purposes, a syllable is simply a sound. Hmong is a language, like Mandarin, that is largely mono-syllabic; meaning, one sound is one word. Of course, there are multi-syllable words in Hmong too, but, these words themselves are composed of the elementary mono-syllables. After you learn the mono-syllables, this achievement paves the way to learning compound words in Hmong. 
 
 Back to ``CVT``. Simply stated, a ``consonant`` is the beggining of a word, a ``vowel`` is the middle of a word and a ``tone`` is the ending of a word. For more technical articles of these concepts, see the following `constant <https://en.wikipedia.org/wiki/Consonant>`_, `vowel <https://en.wikipedia.org/wiki/Vowel>`_ and `tone <https://en.wikipedia.org/wiki/Tone_(linguistics)>`_ articles. In RPA, there are only so many consonants, vowels and tones. In fact, there are 

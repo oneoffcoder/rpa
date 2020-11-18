@@ -5,9 +5,9 @@ Here's a 3D visualization of the CVT space. Hold the ``shift`` key while pressin
 
 .. raw:: html
 
-    <div>
+    <div style="margin: 10px;">
         <button id="viz-btn">Load</button>
         <span id="viz-msg" style="color:red;visibility:hidden;">loading...</span>
     </div>
 
-    <div id="viz-canvas"></div>
+    <div id="viz-canvas" style="margin: 10px;"></div>

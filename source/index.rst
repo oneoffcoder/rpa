@@ -25,6 +25,24 @@ Romanized Popular Alphabet, A Primer
 Preface
 =======
 
+.. blockdiag::
+
+   diagram {
+      default_shape = roundedbox
+      span_width = 32
+      span_height = 20
+      default_fontsize = 11
+      edge_layout = normal
+      orientation = landscape
+
+      C [label = "c", color = "#f55f36", shape = circle, textcolor = white]
+      V [label = "v", color = "#15d649", shape = circle, textcolor = white]
+      T [label = "t", color = "#365cf5", shape = circle, textcolor = white]
+      S [label = "Syllable", color = "#e0e0e0"]
+
+      C, V, T -> S
+   }
+
 This book is a tutorial for learning `Romanized Popular Alphabet <https://en.wikipedia.org/wiki/Romanized_Popular_Alphabet>`_ ``RPA``. RPA is a writing system, based on Latin alphabets, developed for writing the Hmong language in the early 1950's. The creators of RPA were Christian missionaries Father Yves Bertrais, Dr. Linwood Barney and Dr. William Smalley. Father Bertrais developed and taught RPA in the ``Guars Mountains`` or ``Roob Nyuj Qus``, in the `Xiangkhouang Province <https://en.wikipedia.org/wiki/Xiangkhouang_Province>`_ within the `Kingdom of Laos <https://en.wikipedia.org/wiki/Kingdom_of_Laos>`_. The intended audience of this book are English speakers who want to be literate in Hmong using the RPA writing system. The RPA writing system is called ``Ntawv Las Tees`` (Latin Script) in Hmong.
 
 .. warning::
@@ -117,6 +135,12 @@ Author
 ======
 
 Jee Vang, Ph.D.
+
+- |Patreon_Link|
+
+.. |Patreon_Link| raw:: html
+
+   <a href="https://www.patreon.com/vangj" target="_blank">Patreon</a>
 
 Logo Design
 -----------
