@@ -34,7 +34,8 @@ release = '0.0.1'
 extensions = [
     'sphinxcontrib.bibtex',
     'sphinx.ext.mathjax',
-    'sphinx_sitemap'
+    'sphinx_sitemap',
+    'sphinxcontrib.blockdiag'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
