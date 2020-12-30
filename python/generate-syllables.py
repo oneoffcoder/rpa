@@ -14,7 +14,7 @@ ai, au, aw, ee, ia, oo, ua
 """.strip()
 
 T = """
-j, s, v, m, g, b, _
+j, s, v, m, g, b
 """.strip()
 
 C = [c.strip() for c in C.split(',')]
@@ -23,13 +23,14 @@ T = [t.strip() for t in T.split(',')]
 
 print(f'C = {len(C)}, V = {len(V)}, T = {len(T)}')
 
-CV = [f'{c}{v}' for c, v in itertools.product(C, V)]
-for cv in CV:
-    cvt = [f'{cv}{t}'.replace('_', '') for cv, t in itertools.product([cv], T)]
-    cvt = ', '.join(cvt)
-    print(cvt)
+c_frag = '|'.join([f"'{c}'" for c in C])
+v_frag = '|'.join([f"'{c}'" for c in V])
+t_frag = '|'.join([f"'{c}'" for c in T])
 
-for v in V:
-    vt = [f'{v}{t}'.replace('_', '') for v, t in itertools.product([v], T)]
-    vt =', '.join(vt)
-    print(vt)
+c_frag = f'({c_frag})'
+v_frag = f'({v_frag})'
+t_frag = f'({t_frag})'
+
+print(c_frag)
+print(v_frag)
+print(t_frag)
