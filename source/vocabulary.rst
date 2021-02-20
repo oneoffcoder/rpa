@@ -238,7 +238,7 @@ Here are some advanced to intermediate words you should learn.
     liam moj, being extremely naughty
     luab sab, satire
     ntxhi noog, to investigate
-    peem tsheej, how one comes to be or how one becomes
+    peem tsheej, how one comes to be or how one becomes (perseverance to become)
     plhom moj, naughty
     plhob les, apathy
     qauj les, not old and not new
