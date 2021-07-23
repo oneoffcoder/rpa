@@ -175,8 +175,12 @@ For example, note that there are many ways to say sister. If you are a boy, you 
     grandfather (mother's side), yuam txiv
     mom, niam
     dad, txiv
+    wife, tab zag
+    husband, tub rooj
     older brother, tij laug
+    older brother's wife, niam tij
     younger brother, kwv
+    younger brother's wife, niam ncaus
     brother (to a sister), nus
     brothers, kwv tij
     sister (to a brother), muam
@@ -238,7 +242,7 @@ Here are some advanced to intermediate words you should learn.
     liam moj, being extremely naughty
     luab sab, satire
     ntxhi noog, to investigate
-    peem tsheej, how one comes to be or how one becomes
+    peem tsheej, how one comes to be or how one becomes (perseverance to become)
     plhom moj, naughty
     plhob les, apathy
     qauj les, not old and not new
@@ -246,6 +250,7 @@ Here are some advanced to intermediate words you should learn.
     ras dheev, state of being awakened or enlightened
     rhawv, to create
     sam fwm, officially reporting something
+    sim xeeb, destiny
     soj ntsuam, officially investigating
     thiaj txiv yawg, a state of wisdom
     thwj tim, a student of a master (apprentice)
