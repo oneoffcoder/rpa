@@ -7,7 +7,8 @@ phases:
     commands:
       - apt-get update
       - apt-get -qq install pandoc -y
-      - pip install ipython sphinx sphinx_rtd_theme sphinxcontrib-bibtex sphinxcontrib-blockdiag sphinx-autobuild sphinx-sitemap nbsphinx -q
+      # blockdiag still uses Pillow's ImageDraw.textsize, removed in Pillow 10.
+      - pip install ipython sphinx sphinx_rtd_theme sphinxcontrib-bibtex sphinxcontrib-blockdiag sphinx-autobuild sphinx-sitemap nbsphinx 'Pillow<10' -q
   pre_build:
     commands:
       - python --version
