@@ -10,7 +10,7 @@ import unittest
 import wave
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 
 import numpy as np
 
@@ -192,7 +192,16 @@ class MLXBackendTests(unittest.TestCase):
         runtime, _, wrapper = self.fake_runtime()
         with patch.object(backend, "_load_runtime", return_value=runtime):
             backend.train(self.manifest, self.out, steps=1)
+            sampling = MagicMock()
+            sampling.attach_mock(wrapper.load_adapter, "load")
+            sampling.attach_mock(runtime.mx.random.seed, "seed")
+            sampling.attach_mock(wrapper.full_model.generate, "generate")
             metadata = backend.synthesize(self.out / "adapters", "kuv", self.root / "kuv.wav")
+        self.assertEqual(sampling.mock_calls, [
+            call.load(str((self.out / "adapters").resolve())),
+            call.seed(3407),
+            call.generate(text="kuv", lang_code="auto", max_tokens=128, stream=False),
+        ])
         runtime.snapshot_download.assert_called_with(repo_id=backend.DEFAULT_MODEL, revision="a" * 40)
         runtime.FastTTSModel.get_peft_model.assert_called_with(
             wrapper, r=16, lora_alpha=16, lora_dropout=0.0, target_modules=["q_proj", "v_proj"]

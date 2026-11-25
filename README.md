@@ -15,8 +15,10 @@ experiment; natural sentence speech still needs separate evaluation and data.
 
 The new `rpa-tts` Python package audits and prepares the corpus, provides a
 recording-concatenation baseline, and includes an **experimental Qwen3-TTS 0.6B
-LoRA workflow for Apple Silicon**. The data pipeline has been executed on the
-complete corpus. Neural training has not yet been executed on a Mac.
+LoRA workflow for Apple Silicon**. The complete corpus has been prepared. A 64-recording canary
+and a separate six-syllable memorization experiment ran on an Apple M4 Pro.
+The [six-syllable listening set](docs/tts/memorization-six) includes original,
+codec-reconstructed, base-model and adapted-model WAVs.
 
 Start from the repository root with Python 3.11 or newer, [uv](https://docs.astral.sh/uv/),
 and FFmpeg installed:

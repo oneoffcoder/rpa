@@ -1,8 +1,7 @@
 """Experimental Hmong Qwen3-TTS LoRA canary on Apple Silicon.
 
-The data tools and this module import without MLX. Training is a real call to
-mlx-tune, but must still be validated on an Apple Silicon Mac before describing
-this project as a tested Hmong TTS model.
+The data tools and this module import without MLX. The measured Apple Silicon runs
+and listening results are recorded in docs/tts/README.md.
 
 APIs inspected at:
   https://github.com/ARahim3/mlx-tune/commit/9690fe1fed19c72f0810902b9c188d9a2625eb5b
@@ -351,6 +350,57 @@ def train(
         raise
 
 
+def _read_adapter_run(adapter_dir: Path) -> dict[str, Any]:
+    run = json.loads((adapter_dir.parent / "run.json").read_text())
+    if run.get("status") != "trained":
+        raise ValueError("The adapter does not belong to a completed training run")
+    for name in ("adapter_config.json", "adapters.safetensors"):
+        if _digest(adapter_dir / name) != run.get("adapter_sha256", {}).get(name):
+            raise ValueError(f"Adapter {name} does not match the completed run")
+    return run
+
+
+def _apply_adapter(rt: SimpleNamespace, model: Any, adapter_dir: Path) -> None:
+    config = json.loads((adapter_dir / "adapter_config.json").read_text())
+    lora = config["lora_parameters"]
+    rt.FastTTSModel.get_peft_model(
+        model, r=lora["rank"], lora_alpha=lora["alpha"], lora_dropout=lora.get("dropout", 0.0),
+        target_modules=lora.get("keys") or None,
+    )
+    model.load_adapter(str(adapter_dir))
+    rt.FastTTSModel.for_inference(model)
+    model.full_model.eval()
+
+
+def _generate_audio(rt: SimpleNamespace, model: Any, text: str, max_tokens: int, seed: int) -> Any:
+    # LoRA initialization consumes random numbers, even when loading saved weights.
+    # Start the sampling stream here so the same seed pairs base and adapted renders.
+    rt.mx.random.seed(seed)
+    chunks = []
+    for result in model.full_model.generate(text=text, lang_code="auto", max_tokens=max_tokens,
+                                            stream=False):
+        if result.sample_rate != SAMPLE_RATE:
+            raise RuntimeError("Unexpected generated sample rate")
+        chunks.append(rt.np.asarray(result.audio, dtype=rt.np.float32).reshape(-1))
+    if not chunks or not sum(chunk.size for chunk in chunks):
+        raise RuntimeError("The model generated no audio")
+    return rt.np.concatenate(chunks)
+
+
+def _write_waveform(output: Path, audio: Any, np: Any) -> int:
+    if not np.isfinite(audio).all():
+        raise RuntimeError("Waveform contains non-finite audio")
+    clipped = int(np.count_nonzero((audio < -1.0) | (audio > 1.0)))
+    pcm = np.rint(np.clip(audio, -1.0, 32767 / 32768) * 32768).astype("<i2")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(output), "wb") as stream:
+        stream.setnchannels(1)
+        stream.setsampwidth(2)
+        stream.setframerate(SAMPLE_RATE)
+        stream.writeframes(pcm.tobytes())
+    return clipped
+
+
 def synthesize(
     adapter_dir: Path | str, text: str, output: Path | str, *, max_tokens: int = 128, seed: int = 3407
 ) -> dict[str, Any]:
@@ -367,43 +417,13 @@ def synthesize(
     sidecar = output.with_suffix(output.suffix + ".json")
     if output.exists() or sidecar.exists():
         raise FileExistsError(f"Choose a new output filename: {output}")
-    run = json.loads((adapter_dir.parent / "run.json").read_text())
-    if run.get("status") != "trained":
-        raise ValueError("The adapter does not belong to a completed training run")
-    for name in ("adapter_config.json", "adapters.safetensors"):
-        if _digest(adapter_dir / name) != run.get("adapter_sha256", {}).get(name):
-            raise ValueError(f"Adapter {name} does not match the completed run")
-    config = json.loads((adapter_dir / "adapter_config.json").read_text())
-    lora = config["lora_parameters"]
+    run = _read_adapter_run(adapter_dir)
     rt = _load_runtime()
-    rt.mx.random.seed(seed)
     start = time.perf_counter()
     model, _, revision, _ = _model(rt, run["model_name"], run["model_revision"])
-    model = rt.FastTTSModel.get_peft_model(model, r=lora["rank"], lora_alpha=lora["alpha"],
-                                         lora_dropout=lora.get("dropout", 0.0),
-                                         target_modules=lora.get("keys") or None)
-    model.load_adapter(str(adapter_dir))
-    rt.FastTTSModel.for_inference(model)
-    model.full_model.eval()
-    chunks = []
-    for result in model.full_model.generate(text=text, lang_code="auto", max_tokens=max_tokens,
-                                            stream=False):
-        if result.sample_rate != SAMPLE_RATE:
-            raise RuntimeError("Unexpected generated sample rate")
-        chunks.append(rt.np.asarray(result.audio, dtype=rt.np.float32).reshape(-1))
-    if not chunks or not sum(chunk.size for chunk in chunks):
-        raise RuntimeError("The model generated no audio")
-    audio = rt.np.concatenate(chunks)
-    if not rt.np.isfinite(audio).all():
-        raise RuntimeError("The model generated non-finite audio")
-    clipped = int(rt.np.count_nonzero((audio < -1.0) | (audio > 1.0)))
-    pcm = rt.np.rint(rt.np.clip(audio, -1.0, 32767 / 32768) * 32768).astype("<i2")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with wave.open(str(output), "wb") as stream:
-        stream.setnchannels(1)
-        stream.setsampwidth(2)
-        stream.setframerate(SAMPLE_RATE)
-        stream.writeframes(pcm.tobytes())
+    _apply_adapter(rt, model, adapter_dir)
+    audio = _generate_audio(rt, model, text, max_tokens, seed)
+    clipped = _write_waveform(output, audio, rt.np)
     metadata = {
         "text": text, "adapter_dir": str(adapter_dir), "model_name": run["model_name"],
         "model_revision": revision, "conditioning": "auto_without_reference", "seed": seed,

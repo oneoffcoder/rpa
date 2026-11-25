@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hmong syllable listening set</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 2rem auto; max-width: 76rem; padding: 0 1rem; background: #f8f8f5; color: #182529; font: 1rem/1.45 system-ui, sans-serif; }
+    h1 { font: bold clamp(1.8rem, 5vw, 3rem)/1.1 Georgia, serif; margin-bottom: .7rem; }
+    header p { max-width: 72ch; }
+    section { border-top: 1px solid #bdc8c2; padding: 1rem 0 1.2rem; }
+    h2 { margin: 0 0 .5rem; font-size: 1.3rem; }
+    .players { display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    a { color: #10564a; }
+    audio { display: block; width: 100%; margin-top: .25rem; }
+    @media (max-width: 52rem) { .players { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 30rem) { .players { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>Hmong syllable listening set</h1>
+      <p>Compare the original recording with its passage through the speech codec. Then listen to the base and adapted models reading the same text. Listen for the consonant, vowel and tone.</p>
+    </header>
+    <section><h2 lang="hmn">kuv</h2><div class="players">
+      <div><a href="audio/kuv-original.wav">Original recording</a><audio controls preload="metadata" src="audio/kuv-original.wav" aria-label="kuv, original recording"></audio></div>
+      <div><a href="audio/kuv-reconstructed.wav">Codec reconstruction</a><audio controls preload="metadata" src="audio/kuv-reconstructed.wav" aria-label="kuv, codec reconstruction"></audio></div>
+      <div><a href="audio/kuv-base.wav">Base model</a><audio controls preload="metadata" src="audio/kuv-base.wav" aria-label="kuv, base model"></audio></div>
+      <div><a href="audio/kuv-adapted.wav">Adapted model</a><audio controls preload="metadata" src="audio/kuv-adapted.wav" aria-label="kuv, adapted model"></audio></div>
+    </div></section>
+    <section><h2 lang="hmn">yog</h2><div class="players">
+      <div><a href="audio/yog-original.wav">Original recording</a><audio controls preload="metadata" src="audio/yog-original.wav" aria-label="yog, original recording"></audio></div>
+      <div><a href="audio/yog-reconstructed.wav">Codec reconstruction</a><audio controls preload="metadata" src="audio/yog-reconstructed.wav" aria-label="yog, codec reconstruction"></audio></div>
+      <div><a href="audio/yog-base.wav">Base model</a><audio controls preload="metadata" src="audio/yog-base.wav" aria-label="yog, base model"></audio></div>
+      <div><a href="audio/yog-adapted.wav">Adapted model</a><audio controls preload="metadata" src="audio/yog-adapted.wav" aria-label="yog, adapted model"></audio></div>
+    </div></section>
+    <section><h2 lang="hmn">hmoob</h2><div class="players">
+      <div><a href="audio/hmoob-original.wav">Original recording</a><audio controls preload="metadata" src="audio/hmoob-original.wav" aria-label="hmoob, original recording"></audio></div>
+      <div><a href="audio/hmoob-reconstructed.wav">Codec reconstruction</a><audio controls preload="metadata" src="audio/hmoob-reconstructed.wav" aria-label="hmoob, codec reconstruction"></audio></div>
+      <div><a href="audio/hmoob-base.wav">Base model</a><audio controls preload="metadata" src="audio/hmoob-base.wav" aria-label="hmoob, base model"></audio></div>
+      <div><a href="audio/hmoob-adapted.wav">Adapted model</a><audio controls preload="metadata" src="audio/hmoob-adapted.wav" aria-label="hmoob, adapted model"></audio></div>
+    </div></section>
+    <section><h2 lang="hmn">po</h2><div class="players">
+      <div><a href="audio/po-original.wav">Original recording</a><audio controls preload="metadata" src="audio/po-original.wav" aria-label="po, original recording"></audio></div>
+      <div><a href="audio/po-reconstructed.wav">Codec reconstruction</a><audio controls preload="metadata" src="audio/po-reconstructed.wav" aria-label="po, codec reconstruction"></audio></div>
+      <div><a href="audio/po-base.wav">Base model</a><audio controls preload="metadata" src="audio/po-base.wav" aria-label="po, base model"></audio></div>
+      <div><a href="audio/po-adapted.wav">Adapted model</a><audio controls preload="metadata" src="audio/po-adapted.wav" aria-label="po, adapted model"></audio></div>
+    </div></section>
+    <section><h2 lang="hmn">poj</h2><div class="players">
+      <div><a href="audio/poj-original.wav">Original recording</a><audio controls preload="metadata" src="audio/poj-original.wav" aria-label="poj, original recording"></audio></div>
+      <div><a href="audio/poj-reconstructed.wav">Codec reconstruction</a><audio controls preload="metadata" src="audio/poj-reconstructed.wav" aria-label="poj, codec reconstruction"></audio></div>
+      <div><a href="audio/poj-base.wav">Base model</a><audio controls preload="metadata" src="audio/poj-base.wav" aria-label="poj, base model"></audio></div>
+      <div><a href="audio/poj-adapted.wav">Adapted model</a><audio controls preload="metadata" src="audio/poj-adapted.wav" aria-label="poj, adapted model"></audio></div>
+    </div></section>
+    <section><h2 lang="hmn">pos</h2><div class="players">
+      <div><a href="audio/pos-original.wav">Original recording</a><audio controls preload="metadata" src="audio/pos-original.wav" aria-label="pos, original recording"></audio></div>
+      <div><a href="audio/pos-reconstructed.wav">Codec reconstruction</a><audio controls preload="metadata" src="audio/pos-reconstructed.wav" aria-label="pos, codec reconstruction"></audio></div>
+      <div><a href="audio/pos-base.wav">Base model</a><audio controls preload="metadata" src="audio/pos-base.wav" aria-label="pos, base model"></audio></div>
+      <div><a href="audio/pos-adapted.wav">Adapted model</a><audio controls preload="metadata" src="audio/pos-adapted.wav" aria-label="pos, adapted model"></audio></div>
+    </div></section>
+  </main>
+</body>
+</html>

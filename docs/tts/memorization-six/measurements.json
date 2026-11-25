@@ -1,0 +1,560 @@
+{
+  "adapter_sha256": {
+    "adapter_config.json": "b7ba90e9e07afeef187cfd624c8a7ec2615a175f045355ad45e27678f357a19d",
+    "adapters.safetensors": "6e50542e4c7d4df8b77fd03afcc99bfaf30f9ddac95968b5b69c64956dd7f248"
+  },
+  "canary_adapter_sha256": "04a49d746f4f20595a6c22cc65199182e750b45c8213a8d861a3246a9b14a86e",
+  "canary_probe": {
+    "hmoob": {
+      "adapted_top1": 1342,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 9.359375
+    },
+    "kuv": {
+      "adapted_top1": 1459,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 9.5625
+    },
+    "po": {
+      "adapted_top1": 932,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 7.578125
+    },
+    "poj": {
+      "adapted_top1": 932,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 7.578125
+    },
+    "pos": {
+      "adapted_top1": 932,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 6.953125
+    },
+    "yog": {
+      "adapted_top1": 279,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 13.0703125
+    }
+  },
+  "config": {
+    "alpha": 16,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "learning_rate": 0.0001,
+    "max_samples": 0,
+    "max_seq_length": 2048,
+    "rank": 16,
+    "seed": 3407,
+    "steps": 150
+  },
+  "max_tokens": 128,
+  "memorization_probe": {
+    "hmoob": {
+      "adapted_top1": 404,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 21.5
+    },
+    "kuv": {
+      "adapted_top1": 932,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 27.8125
+    },
+    "po": {
+      "adapted_top1": 574,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 28.75
+    },
+    "poj": {
+      "adapted_top1": 574,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 28.75
+    },
+    "pos": {
+      "adapted_top1": 574,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 30.125
+    },
+    "yog": {
+      "adapted_top1": 29,
+      "base_top1": 1995,
+      "max_abs_logit_delta": 27.625
+    }
+  },
+  "model_name": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+  "model_revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+  "optimizer_updates": 150,
+  "packages": {
+    "huggingface-hub": "2.4.0",
+    "mlx": "0.32.4",
+    "mlx-audio": "0.4.2",
+    "mlx-lm": "0.31.1",
+    "mlx-tune": "0.6.0",
+    "numpy": "2.3.5"
+  },
+  "sample_rate": 24000,
+  "source_revisions": {
+    "mlx-audio": "91caeb9ed95b3839c7c08bfc58ee8e7d6216dea8",
+    "mlx-tune": "9690fe1fed19c72f0810902b9c188d9a2625eb5b"
+  },
+  "source_train_manifest_sha256": "5f140e6689ee20c876217203e66976c9d7c8588b8e0d5c88fb0d1a16b2024010",
+  "subset_manifest_sha256": "0bbd3954c7c645efafc310f35f34ca99b6e31822a80e4b9378ba73c82ffc8965",
+  "syllables": {
+    "hmoob": {
+      "adapted": {
+        "clipped_samples": 0,
+        "file": "audio/hmoob-adapted.wav",
+        "first_divergence_replay": {
+          "frame_index": 1,
+          "reference": 566,
+          "sampled": 1334,
+          "top1_generated_history": 1334,
+          "top1_reference_history": 566
+        },
+        "frames": 17280,
+        "generated_code0": [
+          404,
+          1334,
+          1749,
+          1744,
+          1150,
+          173,
+          173,
+          355,
+          1382
+        ],
+        "sha256": "0be87928f252a21aecb3822bb193712b28c0c7f97740cc72b709cc6a6803d958",
+        "teacher_forced_code0_and_eos_correct": 7,
+        "teacher_forced_targets": 7
+      },
+      "base": {
+        "clipped_samples": 0,
+        "file": "audio/hmoob-base.wav",
+        "first_divergence_replay": null,
+        "frames": 24960,
+        "generated_code0": [
+          1995,
+          215,
+          1521,
+          690,
+          690,
+          1225,
+          1191,
+          123,
+          923,
+          826,
+          184,
+          106,
+          571
+        ],
+        "sha256": "ccaf77704e348356e58645225b9bac2ccbcacd955125fc73cf1044052a3dd286",
+        "teacher_forced_code0_and_eos_correct": 1,
+        "teacher_forced_targets": 7
+      },
+      "codebooks": 16,
+      "original": {
+        "file": "audio/hmoob-original.wav",
+        "frames": 10057,
+        "sha256": "8e1efcd0d36ca0fe43a9574d4c512665e214a2888be3c8dbd1d3aea1360cb576"
+      },
+      "reconstructed": {
+        "file": "audio/hmoob-reconstructed.wav",
+        "frames": 11520,
+        "sha256": "43edb0694465e3b0e8bd166293671b0413e9c299ef7d11665fdb15787e8709e1"
+      },
+      "reconstruction_clipped_samples": 0,
+      "reference_code0": [
+        404,
+        566,
+        1873,
+        1744,
+        1150,
+        173
+      ],
+      "same_time_waveform_correlation": 0.9472889590565957
+    },
+    "kuv": {
+      "adapted": {
+        "clipped_samples": 0,
+        "file": "audio/kuv-adapted.wav",
+        "first_divergence_replay": {
+          "frame_index": 2,
+          "reference": 1086,
+          "sampled": 1878,
+          "top1_generated_history": 1831,
+          "top1_reference_history": 1086
+        },
+        "frames": 13440,
+        "generated_code0": [
+          932,
+          456,
+          1878,
+          764,
+          764,
+          764,
+          1558
+        ],
+        "sha256": "cbcd2a923bc1c255c4b9a98b28cd3e6e20d7ae60d96fbc14eb4f774b03343f1d",
+        "teacher_forced_code0_and_eos_correct": 6,
+        "teacher_forced_targets": 6
+      },
+      "base": {
+        "clipped_samples": 0,
+        "file": "audio/kuv-base.wav",
+        "first_divergence_replay": null,
+        "frames": 34560,
+        "generated_code0": [
+          1995,
+          215,
+          1521,
+          690,
+          690,
+          1068,
+          1068,
+          763,
+          1790,
+          1710,
+          734,
+          1320,
+          1463,
+          585,
+          1047,
+          880,
+          845,
+          1159
+        ],
+        "sha256": "59495037e7efe1b9f7e2f23833e2ba28c0b161dfbfa86535799942de2cd7256f",
+        "teacher_forced_code0_and_eos_correct": 2,
+        "teacher_forced_targets": 6
+      },
+      "codebooks": 16,
+      "original": {
+        "file": "audio/kuv-original.wav",
+        "frames": 8803,
+        "sha256": "56e098f1e4d0fe9cffa18063ba48910bc23833f5b79ff88fbecedc7a53c512ee"
+      },
+      "reconstructed": {
+        "file": "audio/kuv-reconstructed.wav",
+        "frames": 9600,
+        "sha256": "83be30c815dea0fa399626255de306423412cffbc22a396613046bfebb0fa850"
+      },
+      "reconstruction_clipped_samples": 0,
+      "reference_code0": [
+        932,
+        456,
+        1086,
+        764,
+        876
+      ],
+      "same_time_waveform_correlation": 0.940388358488192
+    },
+    "po": {
+      "adapted": {
+        "clipped_samples": 0,
+        "file": "audio/po-adapted.wav",
+        "first_divergence_replay": {
+          "frame_index": 1,
+          "reference": 2023,
+          "sampled": 574,
+          "top1_generated_history": 574,
+          "top1_reference_history": 2023
+        },
+        "frames": 15360,
+        "generated_code0": [
+          574,
+          574,
+          855,
+          933,
+          933,
+          1948,
+          1558,
+          1487
+        ],
+        "sha256": "9241275e8886a60123e834434776060d4932b3f676e108567e371f4e33d68d87",
+        "teacher_forced_code0_and_eos_correct": 6,
+        "teacher_forced_targets": 6
+      },
+      "base": {
+        "clipped_samples": 0,
+        "file": "audio/po-base.wav",
+        "first_divergence_replay": null,
+        "frames": 15360,
+        "generated_code0": [
+          1995,
+          215,
+          1494,
+          1609,
+          991,
+          764,
+          184,
+          571
+        ],
+        "sha256": "b210123ca2d672fe313b8eb21775284e6d70cfc030f5b6ea1d85c10c58a8adfd",
+        "teacher_forced_code0_and_eos_correct": 2,
+        "teacher_forced_targets": 6
+      },
+      "codebooks": 16,
+      "original": {
+        "file": "audio/po-original.wav",
+        "frames": 9430,
+        "sha256": "4f4a8918abcc0ca3bceabdb4bf77ffbffd4d73b80b070ce7a7c6dc2e2de49763"
+      },
+      "reconstructed": {
+        "file": "audio/po-reconstructed.wav",
+        "frames": 9600,
+        "sha256": "93f5b450080e8e1a72ab5c1c3414642323b53c173187861373f385330b36763b"
+      },
+      "reconstruction_clipped_samples": 0,
+      "reference_code0": [
+        574,
+        2023,
+        2023,
+        2006,
+        1948
+      ],
+      "same_time_waveform_correlation": 0.920918443701377
+    },
+    "poj": {
+      "adapted": {
+        "clipped_samples": 0,
+        "file": "audio/poj-adapted.wav",
+        "first_divergence_replay": {
+          "frame_index": 2,
+          "reference": 1558,
+          "sampled": 1600,
+          "top1_generated_history": 866,
+          "top1_reference_history": 1558
+        },
+        "frames": 15360,
+        "generated_code0": [
+          574,
+          574,
+          1600,
+          1719,
+          1601,
+          827,
+          286,
+          1289
+        ],
+        "sha256": "8338a23bc425609a80940c89f51648ef55fd50f880f4972b244b267f24d6ae31",
+        "teacher_forced_code0_and_eos_correct": 6,
+        "teacher_forced_targets": 6
+      },
+      "base": {
+        "clipped_samples": 0,
+        "file": "audio/poj-base.wav",
+        "first_divergence_replay": null,
+        "frames": 15360,
+        "generated_code0": [
+          1995,
+          215,
+          1494,
+          603,
+          828,
+          1234,
+          1177,
+          136
+        ],
+        "sha256": "b8a6c7c6ada548f969bb2249fd2f7d5d97800a9d774b2a8e44bf4fd47799efe9",
+        "teacher_forced_code0_and_eos_correct": 1,
+        "teacher_forced_targets": 6
+      },
+      "codebooks": 16,
+      "original": {
+        "file": "audio/poj-original.wav",
+        "frames": 8176,
+        "sha256": "c10ccb6cb31c5bbb7b701b588d9ed0ffbb0bde172384ca4e0275ccf794b0e71e"
+      },
+      "reconstructed": {
+        "file": "audio/poj-reconstructed.wav",
+        "frames": 9600,
+        "sha256": "214be81ff963ba75412444096a288a576b9f54a2220554fb621b631e4edac1ce"
+      },
+      "reconstruction_clipped_samples": 0,
+      "reference_code0": [
+        574,
+        574,
+        1558,
+        1941,
+        2047
+      ],
+      "same_time_waveform_correlation": 0.8945467883164461
+    },
+    "pos": {
+      "adapted": {
+        "clipped_samples": 0,
+        "file": "audio/pos-adapted.wav",
+        "first_divergence_replay": {
+          "frame_index": 3,
+          "reference": 2006,
+          "sampled": 933,
+          "top1_generated_history": 933,
+          "top1_reference_history": 2006
+        },
+        "frames": 17280,
+        "generated_code0": [
+          574,
+          574,
+          933,
+          933,
+          2006,
+          2006,
+          696,
+          48,
+          1945
+        ],
+        "sha256": "1b61ed747fff4172c2cf01aff272755e1e765bd306149dac6f07e87f17fa2993",
+        "teacher_forced_code0_and_eos_correct": 6,
+        "teacher_forced_targets": 6
+      },
+      "base": {
+        "clipped_samples": 0,
+        "file": "audio/pos-base.wav",
+        "first_divergence_replay": null,
+        "frames": 38400,
+        "generated_code0": [
+          1995,
+          215,
+          1521,
+          690,
+          1985,
+          1985,
+          628,
+          1623,
+          1747,
+          1418,
+          403,
+          260,
+          135,
+          737,
+          1118,
+          468,
+          716,
+          1540,
+          1540,
+          1540
+        ],
+        "sha256": "c24fda944f53bf06bc4db3ffd7b34579558e4ceb498d9d843d105fc56ec9f8a0",
+        "teacher_forced_code0_and_eos_correct": 2,
+        "teacher_forced_targets": 6
+      },
+      "codebooks": 16,
+      "original": {
+        "file": "audio/pos-original.wav",
+        "frames": 8803,
+        "sha256": "afc56e5168c72473d90881206ba1b888cc66cbda1f6d0235bb74089cd25f7c98"
+      },
+      "reconstructed": {
+        "file": "audio/pos-reconstructed.wav",
+        "frames": 9600,
+        "sha256": "30677943bdd22d245bd0600d3154a44c07b1667ce8eb89dd079ba01d632f4138"
+      },
+      "reconstruction_clipped_samples": 0,
+      "reference_code0": [
+        574,
+        574,
+        933,
+        2006,
+        1558
+      ],
+      "same_time_waveform_correlation": 0.8638811766860652
+    },
+    "yog": {
+      "adapted": {
+        "clipped_samples": 0,
+        "file": "audio/yog-adapted.wav",
+        "first_divergence_replay": {
+          "frame_index": 2,
+          "reference": 1164,
+          "sampled": 855,
+          "top1_generated_history": 855,
+          "top1_reference_history": 1164
+        },
+        "frames": 30720,
+        "generated_code0": [
+          29,
+          1630,
+          855,
+          1418,
+          933,
+          2006,
+          1558,
+          1570,
+          1892,
+          1791,
+          1224,
+          553,
+          553,
+          125,
+          125,
+          1318
+        ],
+        "sha256": "802cc0f438d84e284ba277c7c47eab164341d70f5d6f29355c472a34f0cbe801",
+        "teacher_forced_code0_and_eos_correct": 7,
+        "teacher_forced_targets": 7
+      },
+      "base": {
+        "clipped_samples": 0,
+        "file": "audio/yog-base.wav",
+        "first_divergence_replay": null,
+        "frames": 21120,
+        "generated_code0": [
+          1995,
+          215,
+          1521,
+          690,
+          251,
+          333,
+          145,
+          1245,
+          1878,
+          1213,
+          1016
+        ],
+        "sha256": "4c2fc998e4b82f2e5df8183445a05c0c02587b044e725548ab11675c95bf44c5",
+        "teacher_forced_code0_and_eos_correct": 3,
+        "teacher_forced_targets": 7
+      },
+      "codebooks": 16,
+      "original": {
+        "file": "audio/yog-original.wav",
+        "frames": 10057,
+        "sha256": "4df8bba248284b5a012018ff0bbd9c44a90bb67b00b6406aec0b6c1779328989"
+      },
+      "reconstructed": {
+        "file": "audio/yog-reconstructed.wav",
+        "frames": 11520,
+        "sha256": "cd4088bd14e7f68cd172d8eccba2179775a9d4698b6c7a77099c6c44e49b2f8a"
+      },
+      "reconstruction_clipped_samples": 0,
+      "reference_code0": [
+        29,
+        1630,
+        1164,
+        1558,
+        1558,
+        119
+      ],
+      "same_time_waveform_correlation": 0.910978805004934
+    }
+  },
+  "synthesis_seed": 3407,
+  "train_loss": 0.0560799507300059,
+  "training_audio_sha256": {
+    "hmoob": "8e1efcd0d36ca0fe43a9574d4c512665e214a2888be3c8dbd1d3aea1360cb576",
+    "kuv": "56e098f1e4d0fe9cffa18063ba48910bc23833f5b79ff88fbecedc7a53c512ee",
+    "po": "4f4a8918abcc0ca3bceabdb4bf77ffbffd4d73b80b070ce7a7c6dc2e2de49763",
+    "poj": "c10ccb6cb31c5bbb7b701b588d9ed0ffbb0bde172384ca4e0275ccf794b0e71e",
+    "pos": "afc56e5168c72473d90881206ba1b888cc66cbda1f6d0235bb74089cd25f7c98",
+    "yog": "4df8bba248284b5a012018ff0bbd9c44a90bb67b00b6406aec0b6c1779328989"
+  },
+  "training_duration_seconds": 2.3052500000000005,
+  "training_ids": [
+    "hmoob",
+    "pos",
+    "poj",
+    "yog",
+    "po",
+    "kuv"
+  ],
+  "training_runtime_seconds": 32.14121524989605
+}

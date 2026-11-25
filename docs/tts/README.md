@@ -12,6 +12,11 @@ The [Apple Silicon canary](#measured-mac-canary) completed 100 optimizer updates
 on 64 recordings and produced six WAVs from the saved adapter. The generated
 phrase “Kuv yog Hmoob.” failed the initial listening check.
 
+A separate [six-syllable memorization experiment](memorization-six/README.md)
+provides 24 labeled WAVs for listening. With the preceding recorded audio
+supplied, the adapted talker predicted all 38 targets. During generation it
+departed from each recorded token sequence by the fourth frame.
+
 The initial model is
 [`mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16`](https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16).
 Hmong is outside [Qwen3-TTS's documented supported languages](https://github.com/QwenLM/Qwen3-TTS#introduction).
