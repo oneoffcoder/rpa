@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rpa-tts"
+version = "0.1.0"
+description = "Reproducible Hmong RPA corpus preparation and Apple Silicon TTS experiments"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26,<3"]
+
+[project.optional-dependencies]
+mlx = [
+  "mlx-tune[audio] @ git+https://github.com/ARahim3/mlx-tune.git@9690fe1fed19c72f0810902b9c188d9a2625eb5b ; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "mlx-audio @ git+https://github.com/Neywa-Labs/mlx-audio.git@91caeb9ed95b3839c7c08bfc58ee8e7d6216dea8 ; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+
+[project.scripts]
+rpa-tts = "rpa_tts.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rpa_tts"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv]
+required-version = ">=0.8"

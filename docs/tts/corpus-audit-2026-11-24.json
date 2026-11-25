@@ -1,0 +1,58 @@
+{
+  "channels": {
+    "1": 5187
+  },
+  "codecs": {
+    "mp3": 5187
+  },
+  "corpus_sha256": "c942a7feb9b6a1de43ebf79ae899ce6f275bffd7601893f9a312a478e7299ddd",
+  "coverage": {
+    "consonants": 56,
+    "duplicate_labels": {},
+    "expected": 5187,
+    "missing": [],
+    "onsets_including_empty": 57,
+    "present": 5187,
+    "tones": 7,
+    "unknown": [],
+    "vowels": 13
+  },
+  "duplicate_groups": {
+    "pcm": [],
+    "source": []
+  },
+  "duration": {
+    "max_seconds": 1.3333106575963718,
+    "median_seconds": 0.4451473922902494,
+    "min_seconds": 0.15780045351473923,
+    "p05_seconds": 0.31453514739229027,
+    "p95_seconds": 0.5757596371882087,
+    "total_seconds": 2309.5803401360545
+  },
+  "error_count": 0,
+  "errors": [],
+  "files": 5187,
+  "flagged_files": 8,
+  "manifest_sha256": "42f2b4eea43f1c3aacc2807e8ff00586c58e078086654fc9c95b09e950c234be",
+  "ok": true,
+  "provenance": {
+    "audio_directory": "source/_static/mp3",
+    "audio_tree_sha": "d88ccd9e54240e76c347d46d987e64615c5633bd",
+    "decoder": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "dialect_verified": false,
+    "git_commit": "cb0401e0c38652f998ca1b3bfe49d2084a279be7",
+    "license_notice": "README.md: Creative Commons Attribution 4.0 International, One-Off Coder",
+    "repository": "https://github.com/oneoffcoder/rpa",
+    "speaker_id": "rpa_recordings",
+    "speaker_identity_verified": false
+  },
+  "quality_flag_counts": {
+    "near_full_scale_review": 8
+  },
+  "sample_rates": {
+    "44100": 5187
+  },
+  "schema_version": 1,
+  "source_bytes": 20825424,
+  "valid_files": 5187
+}

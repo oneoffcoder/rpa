@@ -35,9 +35,7 @@ The spelling ``cag`` is a Hmong word, meaning **root** (as in tree roots) in Eng
 
 .. warning::
 
-    We stated previously that there are 5,200 total possible syllables in RPA, however, this number of permutations does not mean that there are only 5,200 total Hmong words. RPA has limitations; there are Hmong words that RPA cannot spell; some words are spelled exactly the same but are completely different words (``homonyms``). An example of a homonym is ``kab`` which may mean ``line`` (as a in straight line) or ``insect``. Lastly, some Hmong words are multi-syllablic. 
-    
-    Considering all these factors, with some very unrealistic and strong assumptions, the theoretical upperbound of `permutations <https://en.wikipedia.org/wiki/Permutation>`_ of Hmong words based on RPA alone, is huge: :math:`5200 + ^{5200}P_{2} + ^{5200}P_{3} + ^{5200}P_{4}`. The dominating term :math:`^{5200}P_{4}` is already over 730,000,000,000,000 (730 trillion)!
+    This repository enumerates 5,187 unique syllable spellings, including consonant-free forms. This is an inventory of combinations, not a count of Hmong words. Some combinations may not be lexical words; some words are spelled exactly the same but have different meanings (``homonyms``). An example is ``kab``, which may mean ``line`` (as in a straight line) or ``insect``. Some Hmong words are multi-syllabic, and this seven-tone inventory does not cover every Hmong spelling convention.
     
 .. warning::
 

@@ -6,6 +6,42 @@
 
 A book to read, write and speak Hmong. The published site is at [http://rpa.oneoffcoder.com](http://rpa.oneoffcoder.com).
 
+## Hmong text-to-speech research
+
+The repository contains **5,187 isolated-syllable MP3 recordings**, covering its
+56 consonants plus an empty onset, 13 vowels, and seven tones. A complete decode
+audit found **38.49 minutes of audio**. The recordings support a pronunciation
+experiment; natural sentence speech still needs separate evaluation and data.
+
+The new `rpa-tts` Python package audits and prepares the corpus, provides a
+recording-concatenation baseline, and includes an **experimental Qwen3-TTS 0.6B
+LoRA workflow for Apple Silicon**. The data pipeline has been executed on the
+complete corpus. Neural training has not yet been executed on a Mac.
+
+Start from the repository root with Python 3.11 or newer, [uv](https://docs.astral.sh/uv/),
+and FFmpeg installed:
+
+```bash
+uv sync --locked
+uv run rpa-tts audit
+uv run rpa-tts prepare
+uv run rpa-tts baseline --text "Kuv yog Hmoob." --output build/tts/baseline.wav
+```
+
+On an Apple Silicon Mac, the first small training experiment is:
+
+```bash
+uv sync --locked --extra mlx
+uv run --extra mlx rpa-tts doctor --manifest build/tts/data/train.jsonl
+uv run --extra mlx rpa-tts train
+```
+
+The default is a **100-update canary using 64 training recordings**, not a full
+training run. It downloads the pretrained model on first use. See the
+[Mac runbook and research limitations](docs/tts/README.md), the
+[measured corpus audit](docs/tts/corpus-audit-2026-11-24.md), and the
+[reproducible preparation summary](docs/tts/preparation-2026-11-24.json).
+
 # Copyright Stuff
 
 ![One-Off Coder Logo](logo.png "One-Off Coder")

@@ -1,0 +1,51 @@
+{
+  "channels": 1,
+  "duration_seconds_by_split": {
+    "test": 231.377042,
+    "train": 1850.579958,
+    "valid": 227.694042
+  },
+  "format": "PCM_16",
+  "interpretation": "Unseen recorded syllable combinations; no evidence about unseen speakers or natural sentence prosody.",
+  "manifest_sha256": {
+    "test": "31dafb3bb5c6919fccf8c21835047fee8377cebfc2c483d92db5abe939d19d40",
+    "train": "f3e0961710c59054beea674db3d0186e7347da692cf74c63ea80886572e75bc6",
+    "valid": "0a457f70ce0240c24d1e0bfdf3fc9c17df6d0472bc10524aa4f55eb68afe6b91"
+  },
+  "pcm16_saturated_files": [
+    "nyag",
+    "nyaj",
+    "nyauj",
+    "nyiab",
+    "nyiaj",
+    "nyoj"
+  ],
+  "pcm16_saturated_samples": 60,
+  "processing": "ffmpeg mono resampling and PCM16 quantization with saturation; no trimming, denoising, gain normalization, or duration filter",
+  "sample_rate": 24000,
+  "schema_version": 1,
+  "source_manifest_sha256": "42f2b4eea43f1c3aacc2807e8ff00586c58e078086654fc9c95b09e950c234be",
+  "split": {
+    "all_observed_components_in_train": true,
+    "component_coverage_repairs": [],
+    "group_counts": {
+      "test": 518,
+      "train": 4151,
+      "valid": 518
+    },
+    "grouping": [
+      "normalized_text",
+      "source_sha256",
+      "native_pcm_sha256"
+    ],
+    "recording_counts": {
+      "test": 518,
+      "train": 4151,
+      "valid": 518
+    },
+    "requested_test_fraction": 0.1,
+    "requested_valid_fraction": 0.1,
+    "seed": 3407,
+    "split_unit": "syllable"
+  }
+}
