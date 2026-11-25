@@ -1,6 +1,6 @@
 # Orpheus whole-sentence and phrase comparison
 
-**Revision 1.2 primary run, November 25, 2026.** Orpheus remains the active research model following the earlier listener's preference on short Hmong sentences. F5 and Qwen are deferred. The frozen policy produced eight listening clips. The family-sentence assembly contains a diagnostic recovery from an invalid model emission and fails the technical gate. Word coverage, tones, voice, pauses and naturalness await native assessment. All four whole-request WAVs exactly match the previous audit.
+**Revision 1.2 primary run, November 25, 2026.** Orpheus remains the active research model following the earlier listener's preference on short Hmong sentences. F5 and Qwen are deferred. The frozen policy produced eight listening clips. The family-sentence assembly contains a diagnostic recovery from an invalid model emission and fails the technical gate. Jee listened to two of the eight clips and judged both bad. The other six are unjudged. All four whole-request WAVs exactly match the previous audit.
 
 ## Listening on the Mac
 
@@ -35,7 +35,9 @@ The runner kept each complete decoded sample in its raw WAV. The join rule measu
 
 The measured model-call and decode time totaled **128.18 seconds**, including the failed call and recovery decoding. Setup across the two processes took **20.21 seconds**. The maximum sampled macOS physical footprint was **11.21 GiB** with 250 ms polling, within the 30-minute and 32-GiB bounds. New model downloads were unnecessary. PyTorch 2.8.0 on MPS used the original BF16 weights, SDPA, the historical tokenizer and speaker-free prompt, and the CPU SNAC decoder at 24 kHz.
 
-**Decision at handoff.** The full primary policy cannot qualify for opt-in integration, because one long assembly required a decoder recovery. Whether the clean long pair shows a useful improvement awaits native responses. Repeats at seeds 3408/3409, fresh balanced development passages, product integration, F5 timing trials and training were not run. If a native listener finds a useful change, retain the technical failure when deciding whether to repeat. The six fresh passages require a passing policy. Neither a familiar sentence nor an identical short control establishes generalization.
+**Partial native listening result.** Jee clarified in chat, “i only listened to 2 of them they are bad”. The chat verdict did not identify either clip or assign a specific pronunciation, tone, voice or pause defect. The local panel separately recorded one first response and zero ratings at the time of the update. The saved response is part of the same audit and is not counted as a third clip. There is insufficient paired listening evidence to attribute either judgment to segmentation or to compare the two arms.
+
+**Decision.** The full primary policy cannot qualify for opt-in integration, because one long assembly required a decoder recovery. Whether the clean long pair shows a useful improvement awaits native responses. Repeats at seeds 3408/3409, fresh balanced development passages, product integration, F5 timing trials and training were not run. If a native listener finds a useful change, retain the technical failure when deciding whether to repeat. The six fresh passages require a passing policy. Neither a familiar sentence nor an identical short control establishes generalization.
 
 ## Reproduce and verify
 
