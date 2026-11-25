@@ -9,8 +9,8 @@ duplicates. The measured audio duration is **38.49 minutes**, not the earlier
 rough estimate of one to two hours.
 
 The [Apple Silicon canary](#measured-mac-canary) completed 100 optimizer updates
-on 64 recordings and produced six WAVs from the saved adapter. Hmong
-pronunciation, tone accuracy and connected-speech naturalness remain unverified.
+on 64 recordings and produced six WAVs from the saved adapter. The generated
+phrase “Kuv yog Hmoob.” failed the initial listening check.
 
 The initial model is
 [`mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16`](https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16).
@@ -258,9 +258,10 @@ split and outside the 64 sampled recordings. `uab` was in the validation split.
 The recording-based phrase reference is `build/tts/baseline.wav`.
 
 All six generated WAVs were non-silent 24 kHz mono PCM16 with matching
-sidecar checksums and zero clipped samples. These checks establish that the
-saved adapter reloads and generates audio. Native-listener transcription and
-ratings are still needed to assess Hmong consonants, vowels, tones and prosody.
+sidecar checksums and zero clipped samples. The project listener found the
+neural rendition of “Kuv yog Hmoob.” incorrect. The 64 sampled training
+recordings include none of the three syllables in that phrase. Isolated-syllable
+pronunciation and tone accuracy still need a listening assessment.
 
 ## Source references
 
