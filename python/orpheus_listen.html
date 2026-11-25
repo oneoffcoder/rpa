@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Orpheus listening comparison</title>
+<style>*{box-sizing:border-box}body{font:17px/1.5 system-ui;color:#163435;background:#f6f8f4;margin:0}main{max-width:46rem;margin:2rem auto;padding:1.5rem}h1{font-size:1.8rem}label{display:block;margin:.7rem 0}input,select,textarea,button{font:inherit;padding:.45rem;border-radius:.35rem;border:1px solid #789188}input,textarea{width:100%}select{margin-left:.5rem}button{background:#164c44;color:white;margin-top:1rem;padding:.55rem 1rem;cursor:pointer}audio{width:100%}small{color:#395752}#error{color:#a22}.details{background:white;padding:1rem}fieldset{border:0;padding:0}pre{white-space:pre-wrap}</style></head>
+<body><main><h1>Orpheus listening comparison</h1><p id="status" aria-live="polite"></p><audio controls hidden></audio><form></form><p id="error" role="alert"></p></main>
+<script>
+const form=document.querySelector('form'), player=document.querySelector('audio'), statusText=document.querySelector('#status'), error=document.querySelector('#error');
+const storage='orpheus-12-session',session=localStorage.getItem(storage)||crypto.randomUUID();
+localStorage.setItem(storage,session);
+let current;
+async function request(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session,...body})});if(!r.ok)throw Error('Could not save or load this item. Reload to resume.');return r.json()}
+function add(tag,text,parent=form){const n=document.createElement(tag);n.textContent=text;parent.append(n);return n}
+function field(name,title,choices,initial=''){const label=add('label',title);const el=document.createElement(choices?'select':name==='transcription'||name==='notes'?'textarea':'input');el.name=name;el.required=name!=='notes';if(choices){for(const v of ['',...choices])el.add(new Option(v||'Choose…',v))}el.value=initial;label.append(el)}
+function show(s){current=s;form.replaceChildren();error.textContent='';player.hidden=s.phase==='done';
+if(s.phase==='done'){statusText.textContent='All first transcriptions and ratings have been saved on this Mac.';for(const r of s.results){add('h3',r.text);add('p',(r.arm==='whole'?'Whole request':'Phrase assembly')+' · Your transcription: '+r.first.transcription+' · Naturalness '+r.rating.naturalness+'/5');if(r.status==='diagnostic_only')add('p','Diagnostic clip. Orpheus emitted a malformed audio frame; this reading cannot pass the primary gate.');r.chunks.forEach((c,i)=>{add('small','Raw phrase '+(i+1));const a=add('audio','');a.controls=true;a.src='/audio/'+c.id+'.wav';});}return}
+player.src='/audio/'+s.id+'.wav';player.setAttribute('aria-label','Listen to sample '+s.position);
+statusText.textContent=(s.phase==='first'?'Blind transcription':'Score against the target')+' · '+s.position+' of '+s.total;
+if(s.phase==='first'){add('p','Listen and type what you hear, or enter “uncertain” or “unintelligible.” Your first answer locks when saved. Target text appears after all transcriptions.');
+for(const [name,title] of [['listener','Listener name or alias'],['dialect','Hmong variety or dialect (or unknown)'],['exposure','Prior exposure to these phrases or earlier renders']])field(name,title,null,localStorage.getItem(storage+name)||'');
+field('transcription','What did you hear?');field('confidence','Confidence',['high','medium','low','uncertain']);}
+else{add('h2',s.text);add('p','Your first transcription: '+s.first);add('p','For naturalness and continuity, 1 = unintelligible, 2 = severely strained, 3 = understandable but awkward, 4 = natural with minor defects, 5 = fully natural.');
+const labels={words_in_order:'Words in order',voice:'Voice consistency',phonation:'Breathy, creaky or other voice quality'};for(const [k,v] of Object.entries(s.ratings))field(k,labels[k]||k[0].toUpperCase()+k.slice(1),v);field('notes','Optional words, tones or joins that sounded wrong');}
+const b=add('button',s.phase==='first'?'Save first response':'Save ratings');b.type='submit';}
+form.onsubmit=async e=>{e.preventDefault();const answers=Object.fromEntries(new FormData(form));form.querySelector('button').disabled=true;if(current.phase==='first')for(const k of ['listener','dialect','exposure'])localStorage.setItem(storage+k,answers[k]);try{show(await request('/submit',{id:current.id,phase:current.phase,answers}))}catch(ex){error.textContent=ex.message;form.querySelector('button').disabled=false}};
+request('/state',{}).then(show).catch(ex=>error.textContent=ex.message)
+</script></body></html>

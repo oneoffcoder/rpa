@@ -1,0 +1,569 @@
+{
+  "base_commit": "6b94dbbfabf95ce7367724a22fa233c530e53991",
+  "unreported_fields": "unknown unless present in the indexed artifacts",
+  "runs": {
+    "corpus_baseline": {
+      "record": {
+        "path": "build/tts/baseline.wav",
+        "sha256": "4658cd19734856848fab0984db3827d283a1529a9f761049cadbce98cefa85b4"
+      },
+      "additional": [
+        {
+          "path": "docs/tts/corpus-audit-2026-11-24.json",
+          "sha256": "bb7e2416fdcbcf8c7aae41e0e7d906c060aeb84c5eb6134a5701b300c1e6e27e"
+        }
+      ]
+    },
+    "qwen_canary": {
+      "record": {
+        "path": "build/tts/runs/canary-001/run.json",
+        "sha256": "b634efd6480394826ae9209499e4c11e7466e267c8e429f591ec7c582093eadd"
+      },
+      "additional": [],
+      "model_name": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+      "model_revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+      "optimizer_updates": 100,
+      "packages": {
+        "huggingface-hub": "2.4.0",
+        "mlx": "0.32.4",
+        "mlx-audio": "0.4.2",
+        "mlx-lm": "0.31.1",
+        "mlx-tune": "0.6.0",
+        "numpy": "2.3.5"
+      },
+      "source_revisions": {
+        "mlx-audio": "91caeb9ed95b3839c7c08bfc58ee8e7d6216dea8",
+        "mlx-tune": "9690fe1fed19c72f0810902b9c188d9a2625eb5b"
+      },
+      "peak_memory_bytes": 2992435892,
+      "training_runtime_seconds": 28.22310824971646,
+      "runtime_seconds": 29.25033495761454,
+      "adapter_sha256": {
+        "adapter_config.json": "b7ba90e9e07afeef187cfd624c8a7ec2615a175f045355ad45e27678f357a19d",
+        "adapters.safetensors": "04a49d746f4f20595a6c22cc65199182e750b45c8213a8d861a3246a9b14a86e"
+      },
+      "training_duration_seconds": 29.32612499999999,
+      "renders": [
+        {
+          "text": "Kuv yog Hmoob.",
+          "seed": 3407,
+          "runtime_seconds": 0.958636749535799,
+          "duration_seconds": 1.36,
+          "audio_sha256": "956c94d353ec915dc1091f1d2beeacfc998ac06e5f40553e3e3e814431f0ac08",
+          "max_tokens": 128
+        },
+        {
+          "text": "ntxwj",
+          "seed": 3407,
+          "runtime_seconds": 0.7792127495631576,
+          "duration_seconds": 0.96,
+          "audio_sha256": "63fb47a38b2197761c44bdb6607f2cf9a2c33ad9d545a74dc05171cea365efcb",
+          "max_tokens": 128
+        },
+        {
+          "text": "po",
+          "seed": 3407,
+          "runtime_seconds": 3.687852166593075,
+          "duration_seconds": 1.28,
+          "audio_sha256": "ab851a70c9c32e95650cfea3eff3792b78fda7e966c7bdca95e25b23d95e50cf",
+          "max_tokens": 128
+        },
+        {
+          "text": "poj",
+          "seed": 3407,
+          "runtime_seconds": 0.6837356667965651,
+          "duration_seconds": 0.88,
+          "audio_sha256": "3b0093e8a254557f48ef45e2189040e3b8d1787cdab4490af70184c3e2a75a35",
+          "max_tokens": 128
+        },
+        {
+          "text": "pos",
+          "seed": 3407,
+          "runtime_seconds": 0.6506295409053564,
+          "duration_seconds": 0.72,
+          "audio_sha256": "389d37f28018211091ca4d447fe14174174469bbd83d27c38bf478b099dfa404",
+          "max_tokens": 128
+        },
+        {
+          "text": "uab",
+          "seed": 3407,
+          "runtime_seconds": 0.9062527501955628,
+          "duration_seconds": 0.8,
+          "audio_sha256": "081fd92ea16604fd622eab5e98f975d0b50f10abd5af5afa0e72f12c29fc8f18",
+          "max_tokens": 128
+        }
+      ],
+      "stop": "unknown in historical audio sidecars"
+    },
+    "qwen_first_stream": {
+      "record": {
+        "path": "build/tts/runs/memorization-six/measurements.json",
+        "sha256": "65908870c10070f1cf241c288c038c017a2c76a5a7b350260bc4dcdddd911dff"
+      },
+      "additional": [
+        {
+          "path": "build/tts/runs/memorization-six/train-six.jsonl",
+          "sha256": "0bbd3954c7c645efafc310f35f34ca99b6e31822a80e4b9378ba73c82ffc8965"
+        }
+      ],
+      "model_name": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+      "model_revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+      "optimizer_updates": 150,
+      "packages": {
+        "huggingface-hub": "2.4.0",
+        "mlx": "0.32.4",
+        "mlx-audio": "0.4.2",
+        "mlx-lm": "0.31.1",
+        "mlx-tune": "0.6.0",
+        "numpy": "2.3.5"
+      },
+      "source_revisions": {
+        "mlx-audio": "91caeb9ed95b3839c7c08bfc58ee8e7d6216dea8",
+        "mlx-tune": "9690fe1fed19c72f0810902b9c188d9a2625eb5b"
+      },
+      "training_runtime_seconds": 32.14121524989605,
+      "synthesis_seed": 3407,
+      "adapter_sha256": {
+        "adapter_config.json": "b7ba90e9e07afeef187cfd624c8a7ec2615a175f045355ad45e27678f357a19d",
+        "adapters.safetensors": "6e50542e4c7d4df8b77fd03afcc99bfaf30f9ddac95968b5b69c64956dd7f248"
+      },
+      "training_duration_seconds": 2.3052500000000005
+    },
+    "qwen_joint": {
+      "record": {
+        "path": "build/tts/runs/joint-six/step-150/run.json",
+        "sha256": "354cfc1a830229547c28b56856aca8cd54c08f58b82dddf9c32157b47c5d7c10"
+      },
+      "additional": [
+        {
+          "path": "build/tts/runs/joint-six/listening/results.json",
+          "sha256": "fd7e7f9e6c02d69928d94899ec1c6094869e26601cb6b7bc0ffc9bfc34564676"
+        },
+        {
+          "path": "build/tts/runs/joint-six/train-six.jsonl",
+          "sha256": "0bbd3954c7c645efafc310f35f34ca99b6e31822a80e4b9378ba73c82ffc8965"
+        }
+      ],
+      "model_name": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+      "model_revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+      "optimizer_updates": 150,
+      "packages": {
+        "huggingface-hub": "2.4.0",
+        "mlx": "0.32.4",
+        "mlx-audio": "0.4.2",
+        "mlx-lm": "0.31.1",
+        "mlx-tune": "0.6.0",
+        "numpy": "2.3.5"
+      },
+      "source_revisions": {
+        "mlx-audio": "91caeb9ed95b3839c7c08bfc58ee8e7d6216dea8",
+        "mlx-tune": "9690fe1fed19c72f0810902b9c188d9a2625eb5b"
+      },
+      "elapsed_seconds": 32.05485012475401,
+      "seed": 3407,
+      "adapter_sha256": {
+        "adapter_config.json": "6ed8bd86e166e7578fb2b705eb8a165d8bf14e8a3bd10a78a4b4eedb872ed7f7",
+        "adapters.safetensors": "2951133372a5ca332a8b86233a6bfb3b04d8a851647a7f1e8a65c1638900bb28"
+      },
+      "codec_sha256": "5adcbd95f79f03a840c9d0bac991084835d340645c5c73eca8c1f35b2fc3529f"
+    },
+    "qwen_codec": {
+      "record": {
+        "path": "build/tts/phrase-codec-check/comparison.json",
+        "sha256": "a83627315a86d27170ea939c2030b84fd4e31ce6f01ffe47e184109b70b5b28f"
+      },
+      "additional": [],
+      "model": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+      "revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+      "codec_sha256": "5adcbd95f79f03a840c9d0bac991084835d340645c5c73eca8c1f35b2fc3529f",
+      "source_sha256": "2a8009928f1b4dd2605bb47f59a9487d5f86db04a39d5d3455e5f28079b9b646",
+      "measurements": {
+        "audio_rate": 24000,
+        "codebooks": 16,
+        "codec_frames": 24,
+        "codec_sha256": "5adcbd95f79f03a840c9d0bac991084835d340645c5c73eca8c1f35b2fc3529f",
+        "input_clipped_samples": 0,
+        "input_duration_seconds": 1.8973333333333333,
+        "input_samples": 45536,
+        "model": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+        "reconstructed_samples": 46080,
+        "reconstruction_clipped_samples": 0,
+        "reconstruction_duration_seconds": 1.92,
+        "revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+        "same_time_correlation": 0.9060413992916208,
+        "source_file": "kuv_yog_hmoob.m4a",
+        "source_sha256": "2a8009928f1b4dd2605bb47f59a9487d5f86db04a39d5d3455e5f28079b9b646",
+        "tts_duration_seconds": 0.96,
+        "waveform_sha256": {
+          "150-update-tts.wav": "19ed1b221f43d79ad6a81212831d0aaba8b64ea951c96cf252ee82191a188687",
+          "codec-input.wav": "ff36f5fbae8ac4b08b616ec7bf2fa69282309e8e284899751ca772a02999268a",
+          "codec-reconstruction.wav": "12cdf52608911cf96c45d0c3a285e6bc98d36e1b86b14bae272af804611e6817"
+        }
+      }
+    },
+    "qwen_connected": {
+      "record": {
+        "path": "build/tts/connected-five/step-150/run.json",
+        "sha256": "3364e35bcab5e657383e77f8c34e26de172ae5031b424021289b11b23c554f76"
+      },
+      "additional": [
+        {
+          "path": "build/tts/connected-five/train-five.jsonl",
+          "sha256": "3732bc6492344fdb0b190dd1ec668b6035f1857bc0469b0d68d0fdb83f9b0102"
+        },
+        {
+          "path": "build/tts/connected-five/listening/results.json",
+          "sha256": "aaff8be4bf001cb2c97d87e34ca6d0b925f93e7c8fc3ae2206c3d714d442fffd"
+        },
+        {
+          "path": "build/tts/connected-five/run_experiment.py",
+          "sha256": "f26a4456fe6b8ca564c92b57b63f33612eeb443edb727b0de5596c8f1acc838c"
+        },
+        {
+          "path": "build/tts/connected-five/render.py",
+          "sha256": "b9e8cb99f99563d3556c2f0f8e6bc84dedf68f4a2a6747f87c3c74e3576d1d6c"
+        }
+      ],
+      "model_name": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16",
+      "model_revision": "1eccf1cb2519b5a4e8a95b5f0544f3303568164f",
+      "optimizer_updates": 150,
+      "elapsed_seconds": 78.29036774951965,
+      "seed": 3407,
+      "adapter_sha256": {
+        "adapter_config.json": "6ed8bd86e166e7578fb2b705eb8a165d8bf14e8a3bd10a78a4b4eedb872ed7f7",
+        "adapters.safetensors": "75a7b20cd270fe315f5f8c259e27a206dbe2f814dd4cd91d2cc8d7242a103550"
+      },
+      "codec_sha256": "5adcbd95f79f03a840c9d0bac991084835d340645c5c73eca8c1f35b2fc3529f",
+      "training_manifest_sha256": "3732bc6492344fdb0b190dd1ec668b6035f1857bc0469b0d68d0fdb83f9b0102",
+      "prompts": {
+        "decoding": {
+          "lang_code": "auto",
+          "max_tokens": 128,
+          "repetition_penalty": 1.05,
+          "stream": false,
+          "temperature": 0.9,
+          "top_k": 50,
+          "top_p": 1.0
+        },
+        "earlier": {
+          "clipped_samples": 0,
+          "codec_frames": 12,
+          "duration_seconds": 0.96,
+          "file": "audio/phrase-joint-150.wav",
+          "frames": 23040,
+          "hit_limit": false,
+          "sampling_iterations": 13,
+          "sha256": "19ed1b221f43d79ad6a81212831d0aaba8b64ea951c96cf252ee82191a188687",
+          "stop": "EOS",
+          "tokens_sha256": "7ecb3086924455b436b46eac84117249bb2b7ca944cb984a520e9379e4442867"
+        },
+        "held_out": {
+          "clipped_samples": 0,
+          "codec_frames": 34,
+          "duration_seconds": 2.72,
+          "hit_limit": false,
+          "sampling_iterations": 35,
+          "sha256": "e32a3970f988dfb84b78f87c30edd5aa5a9669c1b68e7a875d8774109134626b",
+          "stop": "EOS",
+          "tokens_sha256": "2e06291f6102ccb90dcc94b04b46867381c999affcb44e967d22349b164623b7"
+        },
+        "seed": 3407,
+        "training_prompt": {
+          "clipped_samples": 0,
+          "codec_frames": 35,
+          "duration_seconds": 2.8,
+          "hit_limit": false,
+          "sampling_iterations": 36,
+          "sha256": "ab11445432ab524733620b70f78e05b4500cf760b788ecfc99f78eddf1cba5cf",
+          "stop": "EOS",
+          "tokens_sha256": "ee3185c7973e2fb48d4c31dff4f4cb2db68b445c7788a12c3b1b715bf65783d1"
+        }
+      },
+      "references": [
+        {
+          "text": "kuv noj mov",
+          "id": "kuv_noj_mov",
+          "source_sha256": "8c29e573a8de59d83fec1b3c0bc052bbb4ee8645895899743de5f614dee441e9",
+          "audio_sha256": "3e6bf560acbddc83e03db6e2a3d16c770ce237953a38561515d9f094f0cb3fe1",
+          "duration_seconds": 1.7906666666666666
+        },
+        {
+          "text": "kuv mus kawm ntawv",
+          "id": "kuv_mus_kawm_ntawv",
+          "source_sha256": "04471bdf42eb41ec6dd75a0ef7277ff577769521e3d321a3aaa5f61cdcef5fa6",
+          "audio_sha256": "f0d9388624092f2dae4b2d68e7fd8645393cb5aba40dde65969e1308158f5b9b",
+          "duration_seconds": 2.7506666666666666
+        },
+        {
+          "text": "kuv hlub kuv niam kuv txiv thiab kuv tej me nyuam",
+          "id": "kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam",
+          "source_sha256": "0e5528d852d12ecced16ffff16a6a0479b476fa50d62b55ebbb01c6a7fd69b51",
+          "audio_sha256": "d1480b630859624d58e304ac518a028ad4cc9890629d058350171d7f319d967b",
+          "duration_seconds": 4.6706666666666665
+        },
+        {
+          "text": "hmoob chiv keeb huam yuaj los ntawm teb chaws suav",
+          "id": "hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav",
+          "source_sha256": "a987013752b487ba7dccd42c6d8952b15b834c3918c34141b9f16e5d34d7c65b",
+          "audio_sha256": "69c16d32b106d832a734207db01c99061191fd752b1dd5519c6a383ea289e4ba",
+          "duration_seconds": 4.478666666666666
+        },
+        {
+          "text": "nyuj ua rau nyuj thauj nees ua rau nees ris",
+          "id": "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris",
+          "source_sha256": "07ac76f58ba776750d95a6d58979596e3e61304db00f335a6e04ca8f6af8f431",
+          "audio_sha256": "1e114de843359ffde590c140c1f6e0965124852107637ed97f7eb9ca2c7f7440",
+          "duration_seconds": 4.521333333333334
+        }
+      ]
+    },
+    "orpheus": {
+      "snapshot": "464d34449a778b1a6d9506bc10bd4e00f752c5c8",
+      "repo": "Pakorn2112/Orpheus-TTS-hmong-3b",
+      "files": {
+        "chat_template.jinja": "5816fce10444e03c2e9ee1ef8a4a1ea61ae7e69e438613f3b17b69d0426223a4",
+        "config.json": "1b46eb2dcf651a9898496f51c5e2b3992dd9c10baa325332ec72225fb0a35a31",
+        "model-00001-of-00002.safetensors": "33a806b0f9f9e2b84d80f94495859441ab82da4bcac39b224919e700f997c968",
+        "model-00002-of-00002.safetensors": "87e338a35a18715a5b4cc21495e8106cd15b22a19d9487eb9b5d99b77dbf00aa",
+        "model.safetensors.index.json": "38b3093cc8266199752dbd76dda1ccd5bc0702d0d6b75f25a2286536f709163a",
+        "tokenizer.json": "fc3fecb199b4170636dbfab986d25f628157268d37b861f9cadaca60b1353bce",
+        "tokenizer_config.json": "33ae1a7d34b9c7f2155b978128a6bb86b579feac2d299e383464b8942cbeabaf"
+      },
+      "script": {
+        "path": "build/tts/hmong-model-audit/render_orpheus.py",
+        "sha256": "c21f91f48a0bf99700f975016f51326ed1078faa6c151db1e4240aa827e4ddcc"
+      },
+      "render_records": [
+        {
+          "seed": 3411,
+          "generated_tokens": 402,
+          "codec_frames": 57,
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.1,
+          "ended_on_speech_eos": true,
+          "text": "Hmoob chiv keeb huam yuaj los ntawm teb chaws Suav.",
+          "seconds": 4.864,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "dce72a156c19746d00641144be8477a6d63e334616a81047c6c24b006d823999",
+          "file": "orpheus/hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav.wav",
+          "reference_input": null
+        },
+        {
+          "seed": 3410,
+          "generated_tokens": 367,
+          "codec_frames": 52,
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.1,
+          "ended_on_speech_eos": true,
+          "text": "Kuv hlub kuv niam kuv txiv thiab kuv tej me nyuam.",
+          "seconds": 4.4373,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "5d216c0d391487afd51b2a131cc3df4374fc09f34b6fb532d3f7c95cd9207bf3",
+          "file": "orpheus/kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam.wav",
+          "reference_input": null
+        },
+        {
+          "seed": 3409,
+          "generated_tokens": 185,
+          "codec_frames": 26,
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.1,
+          "ended_on_speech_eos": true,
+          "text": "Kuv mus kawm ntawv.",
+          "seconds": 2.2187,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "dba05bed0452adbf08643ace02eac33d14da9687310f5ec4fbbaadf97ae1e4e3",
+          "file": "orpheus/kuv_mus_kawm_ntawv.wav",
+          "reference_input": null
+        },
+        {
+          "seed": 3408,
+          "generated_tokens": 129,
+          "codec_frames": 18,
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.1,
+          "ended_on_speech_eos": true,
+          "text": "Kuv noj mov.",
+          "seconds": 1.536,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "a3294483a6ef0d574cd3783195e6f66353901d7c6568e1c0fd98750faff8819b",
+          "file": "orpheus/kuv_noj_mov.wav",
+          "reference_input": null
+        },
+        {
+          "seed": 3407,
+          "generated_tokens": 115,
+          "codec_frames": 16,
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.1,
+          "ended_on_speech_eos": true,
+          "text": "Kuv yog Hmoob.",
+          "seconds": 1.3653,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "46884ec1c057194eabe663a876be4dca260030b4efcc0272daef83af8ab0efc8",
+          "file": "orpheus/kuv_yog_hmoob.wav",
+          "reference_input": null
+        },
+        {
+          "seed": 3412,
+          "generated_tokens": 416,
+          "codec_frames": 59,
+          "temperature": 0.6,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.1,
+          "ended_on_speech_eos": true,
+          "text": "Nyuj ua rau nyuj thauj nees ua rau nees ris.",
+          "seconds": 5.0347,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "4cf1f0147a4441928869fc0f5bf1c0563bccc03b1ac70972239e5ea60f26e1d3",
+          "file": "orpheus/nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris.wav",
+          "reference_input": null
+        }
+      ],
+      "time_and_peak_memory": "unknown in historical comparison",
+      "snac_pin": "d73ad176a12188fcf4f360ba3bf2c2fbbe8f58ec"
+    },
+    "f5": {
+      "snapshot": "c50fc0cc991bc0c4f22d86c7a6152730c667c0d5",
+      "repo": "Pakorn2112/F5TTS-Hmong",
+      "files": {
+        "model_159952.safetensors": "0b5e23fd6c9c1519f38195cbe0fdca3402beb75026b22ace483886529add3288",
+        "vocab.txt": "2a05f992e00af9b0bd3800a8d23e78d520dbd705284ed2eedb5f4bd29398fa3c"
+      },
+      "script": {
+        "path": "build/tts/hmong-model-audit/render_f5.py",
+        "sha256": "f33f002d993f05d78f9f406048503f120860dccf574b1b023aaa588b0e77d5f2"
+      },
+      "render_records": [
+        {
+          "reference": "kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam",
+          "seed": 3411,
+          "steps": 32,
+          "speed": 0.9,
+          "guidance": 2.0,
+          "text": "Hmoob chiv keeb huam yuaj los ntawm teb chaws Suav.",
+          "seconds": 3.0187,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "cfbf0bbd6a815e1404c73a47546f5d503cfa9981445e83ff244ed83b54df10e8",
+          "file": "f5/hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav.wav",
+          "reference_input": {
+            "path": "~/Downloads/hmong-tts-audit/original/kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam.m4a",
+            "sha256": "0e5528d852d12ecced16ffff16a6a0479b476fa50d62b55ebbb01c6a7fd69b51"
+          }
+        },
+        {
+          "reference": "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris",
+          "seed": 3410,
+          "steps": 32,
+          "speed": 0.9,
+          "guidance": 2.0,
+          "text": "Kuv hlub kuv niam kuv txiv thiab kuv tej me nyuam.",
+          "seconds": 3.7547,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "7e547652fcf5b4aa8f93eb8d4793ad40b9a42e4c820de1e0723f79e5b119eaf4",
+          "file": "f5/kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam.wav",
+          "reference_input": {
+            "path": "~/Downloads/hmong-tts-audit/original/nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris.m4a",
+            "sha256": "07ac76f58ba776750d95a6d58979596e3e61304db00f335a6e04ca8f6af8f431"
+          }
+        },
+        {
+          "reference": "hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav",
+          "seed": 3409,
+          "steps": 32,
+          "speed": 0.9,
+          "guidance": 2.0,
+          "text": "Kuv mus kawm ntawv.",
+          "seconds": 1.1413,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "31db1355030b830b57a344a6d66fc07407fbeb5cd77b861d71eedd9ea6616839",
+          "file": "f5/kuv_mus_kawm_ntawv.wav",
+          "reference_input": {
+            "path": "~/Downloads/hmong-tts-audit/original/hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav.m4a",
+            "sha256": "a987013752b487ba7dccd42c6d8952b15b834c3918c34141b9f16e5d34d7c65b"
+          }
+        },
+        {
+          "reference": "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris",
+          "seed": 3408,
+          "steps": 32,
+          "speed": 0.9,
+          "guidance": 2.0,
+          "text": "Kuv noj mov.",
+          "seconds": 0.8853,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "7b602abf25427fcfcc036be200cf4a349e7225f61a3b02c7f1b2a0d7f806e6b1",
+          "file": "f5/kuv_noj_mov.wav",
+          "reference_input": {
+            "path": "~/Downloads/hmong-tts-audit/original/nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris.m4a",
+            "sha256": "07ac76f58ba776750d95a6d58979596e3e61304db00f335a6e04ca8f6af8f431"
+          }
+        },
+        {
+          "reference": "kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam",
+          "seed": 3407,
+          "steps": 32,
+          "speed": 0.9,
+          "guidance": 2.0,
+          "text": "Kuv yog Hmoob.",
+          "seconds": 0.8213,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "12df16beba01f19b0a06542b20405b28c0e837ca6dc9f082b7497c2c2b558c03",
+          "file": "f5/kuv_yog_hmoob.wav",
+          "reference_input": {
+            "path": "~/Downloads/hmong-tts-audit/original/kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam.m4a",
+            "sha256": "0e5528d852d12ecced16ffff16a6a0479b476fa50d62b55ebbb01c6a7fd69b51"
+          }
+        },
+        {
+          "reference": "hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav",
+          "seed": 3412,
+          "steps": 32,
+          "speed": 0.9,
+          "guidance": 2.0,
+          "text": "Nyuj ua rau nyuj thauj nees ua rau nees ris.",
+          "seconds": 2.6667,
+          "sample_rate": 24000,
+          "export_gain": 1.0,
+          "sha256": "6bc5549b6e7532bb4771d351586acf1f769f35f0f488813fbe21e126e738910d",
+          "file": "f5/nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris.wav",
+          "reference_input": {
+            "path": "~/Downloads/hmong-tts-audit/original/hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav.m4a",
+            "sha256": "a987013752b487ba7dccd42c6d8952b15b834c3918c34141b9f16e5d34d7c65b"
+          }
+        }
+      ],
+      "time_and_peak_memory": "unknown in historical comparison",
+      "vocoder": {
+        "repo": "charactr/vocos-mel-24khz",
+        "snapshot": "0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21",
+        "files": {
+          "config.yaml": "da9033922f969a47f0c160010226919e59f27761fd5066f3828d46de6650b0fc",
+          "pytorch_model.bin": "97ec976ad1fd67a33ab2682d29c0ac7df85234fae875aefcc5fb215681a91b2a"
+        }
+      }
+    }
+  }
+}

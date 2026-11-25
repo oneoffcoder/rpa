@@ -1,0 +1,14 @@
+{
+  "policy": "1.2-primary",
+  "rule": "Keep known short utterances whole. For long utterances split at parallel clauses or before a coordinated phrase, aiming for 3–5 written syllables and allowing 6 to keep a meaningful group intact. Preserve exact spelling and case. Append a period to a nonfinal phrase for sentence delivery. Never cut inside a word or silently truncate text. An unfamiliar boundary needs review before rendering.",
+  "selection": "Two short controls bracket the previously accepted 3–4 syllable range. Two long probes have interpretable coordination or parallel clauses. The remaining long item has an uncertain internal boundary and was excluded before synthesis.",
+  "join": "Keep every PCM sample. Count contiguous edge samples below -50 dBFS on each side. Top up the combined quiet interval to 120 ms at the declared phrase boundary if needed. Never shorten an existing pause, crossfade, or add a gap between units of a short control.",
+  "seed_rule": "Primary whole and first chunk use the historical seed of that passage. Subsequent chunks add their zero-based index. Conditional repeats use 3408 and 3409 as the whole/first-chunk seed across prompts; count coincident seeds once.",
+  "gate": "Blind first transcription. All B items complete, correct words and tones in order, no additions or repeats. Short controls retain quality. Every B long assembly needs naturalness and continuity >=4/5. Record uncertainty and assess both arms. Repeats only on a useful primary result; fresh passages only after pass.",
+  "prompts": [
+    {"id":"kuv_yog_hmoob","kind":"short","seed":3407,"text":"Kuv yog Hmoob.","chunks":["Kuv yog Hmoob."]},
+    {"id":"kuv_mus_kawm_ntawv","kind":"short","seed":3409,"text":"Kuv mus kawm ntawv.","chunks":["Kuv mus kawm ntawv."]},
+    {"id":"kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam","kind":"long","seed":3410,"text":"Kuv hlub kuv niam kuv txiv thiab kuv tej me nyuam.","chunks":["Kuv hlub kuv niam kuv txiv","thiab kuv tej me nyuam."]},
+    {"id":"nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris","kind":"long","seed":3412,"text":"Nyuj ua rau nyuj thauj nees ua rau nees ris.","chunks":["Nyuj ua rau nyuj thauj","nees ua rau nees ris."]}
+  ]
+}
