@@ -197,7 +197,7 @@ class MLXBackendTests(unittest.TestCase):
         runtime.FastTTSModel.get_peft_model.assert_called_with(
             wrapper, r=16, lora_alpha=16, lora_dropout=0.0, target_modules=["q_proj", "v_proj"]
         )
-        wrapper.load_adapter.assert_called_once_with(str(self.out / "adapters"))
+        wrapper.load_adapter.assert_called_once_with(str((self.out / "adapters").resolve()))
         wrapper.full_model.generate.assert_called_once_with(
             text="kuv", lang_code="auto", max_tokens=128, stream=False
         )

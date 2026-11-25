@@ -8,10 +8,9 @@ expected filenames are present and there are no exact source-byte or decoded-PCM
 duplicates. The measured audio duration is **38.49 minutes**, not the earlier
 rough estimate of one to two hours.
 
-**Apple Silicon training and neural synthesis have not yet been executed.**
-The MLX adapter code is grounded in pinned upstream source and covered by CPU
-orchestration tests; those tests are not an Apple GPU benchmark or evidence of
-Hmong pronunciation quality. This checkout was validated on Linux.
+The [Apple Silicon canary](#measured-mac-canary) completed 100 optimizer updates
+on 64 recordings and produced six WAVs from the saved adapter. Hmong
+pronunciation, tone accuracy and connected-speech naturalness remain unverified.
 
 The initial model is
 [`mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16`](https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16).
@@ -142,9 +141,18 @@ The optional dependencies are pinned to these inspected source revisions:
 
 `uv.lock` resolves the full dependency graph. A newer mlx-audio 0.6.8 revision
 was rejected during setup because its fsspec requirement conflicts with
-mlx-tune's datasets constraint; the pinned older pair resolves without dependency
-overrides. Resolving dependencies on Linux still does not establish a successful
-Mac installation or GPU run.
+mlx-tune's datasets constraint. The locked revisions installed on native arm64
+Python 3.11.14 and ran on Metal with MLX 0.32.4.
+
+If the configured Hugging Face cache points to an unavailable drive, set a
+writable cache for this checkout before running training or synthesis. Use the
+same cache for both commands.
+
+```bash
+export HF_HOME="$PWD/build/tts/cache/huggingface"
+export HF_HUB_CACHE="$HF_HOME/hub"
+export HF_XET_CACHE="$HF_HOME/xet"
+```
 
 ## 6. Run a small training canary
 
@@ -152,7 +160,8 @@ Mac installation or GPU run.
 uv run --extra mlx rpa-tts train \
   --manifest build/tts/data/train.jsonl \
   --output build/tts/runs/canary-001 \
-  --steps 100 --max-samples 64
+  --steps 100 --max-samples 64 \
+  --model-revision 1eccf1cb2519b5a4e8a95b5f0544f3303568164f
 ```
 
 This downloads the pretrained Base BF16 model on first use, resolves its model
@@ -160,8 +169,7 @@ revision to an immutable Hugging Face snapshot, selects and shuffles 64 training
 recordings with a fixed seed, and performs 100 optimizer updates. Defaults are
 microbatch 1, gradient accumulation 4, LoRA rank/alpha 16, and learning rate
 `1e-4`. The trainer repeats examples as needed. `--steps` counts optimizer
-updates, not individual recordings. No measured throughput or memory-fit claim
-is made until this has run on the target Mac.
+updates, not individual recordings.
 
 The current upstream implementation trains LoRA parameters in the talker using
 the first codec stream. Text embeddings, the speech codec and the remaining
@@ -222,12 +230,37 @@ groups, including empty onsets. Keep validation for experiment choices and reser
 test until the recipe is fixed. Sentence listening is an exploratory check until
 real sentence recordings and a sentence test set exist.
 
-The next evidence-driven milestone is a completed Mac canary with memory, timing,
-loss and saved speech, followed by a listening assessment. If adaptation preserves
-the speaker but mispronounces Hmong, increasing LoRA steps alone is not established
-as a solution: investigate tokenizer/codec reconstruction, broader trainable
-components, or a smaller Hmong-specific model. Phrase and sentence recordings are
-needed to study coarticulation, rhythm and natural prosody.
+## Measured Mac canary
+
+The canary ran on November 25, 2026 on an Apple M4 Pro with 48 GiB of unified
+memory and macOS 27.0.1. The local audit decoded all 5,187 MP3s with FFmpeg
+9.0.2 and found zero errors. The prepared split contained 4,151 training, 518
+validation and 518 test recordings.
+
+| Measurement | Result |
+| --- | ---: |
+| Optimizer updates / recordings sampled | 100 / 64 |
+| Trainer elapsed time | 28.22 s |
+| Training command wall time with the model cached | 31.10 s |
+| Peak MLX allocated memory | 2,992,435,892 bytes (2.79 GiB) |
+| macOS peak process memory footprint (`time -l`) | 4,150,152,672 bytes (3.87 GiB) |
+| Mean training loss | 0.803044 |
+| Last update loss (trainer log) | 0.0830 |
+
+Run metadata and adapter weights are in
+`build/tts/runs/canary-001/run.json` and
+`build/tts/runs/canary-001/adapters/adapters.safetensors`. Neural synthesis
+reloaded that checkpoint and produced `po.wav`, `poj.wav`, `pos.wav`,
+`ntxwj.wav`, `uab.wav` and `kuv-yog-hmoob.wav` under
+`build/tts/runs/canary-001/audio/`. Each file has a JSON sidecar.
+`ntxwj` was in the canary sample. The three `po` forms were in the training
+split and outside the 64 sampled recordings. `uab` was in the validation split.
+The recording-based phrase reference is `build/tts/baseline.wav`.
+
+All six generated WAVs were non-silent 24 kHz mono PCM16 with matching
+sidecar checksums and zero clipped samples. These checks establish that the
+saved adapter reloads and generates audio. Native-listener transcription and
+ratings are still needed to assess Hmong consonants, vowels, tones and prosody.
 
 ## Source references
 
