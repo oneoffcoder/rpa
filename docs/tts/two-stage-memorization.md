@@ -3,8 +3,11 @@
 At synthesis seed 3407 the two-stage adapter generated **five of six training
 syllables exactly as the codec reconstructed them**. The previous adapter at
 `588bd57` matched zero. The exception, **`poj`, produced the exact `po` WAV**.
-The user rejected the previous adapter in listening. Pronunciation, tone fidelity
-of the codec, and the new phrase still await listening.
+The listener found most isolated syllables recognizable with the two-stage
+adapter. The 150-update phrase **failed the listening test**. Only the first
+two syllables were audible to the listener, who described the delivery as
+unnaturally pinched and nasal. The codec reconstructions have yet to receive
+a separate listening judgment.
 
 ```sh
 open /Users/super/git/oneoffcoder/rpa/build/tts/runs/joint-six/listening/listen.html
@@ -20,7 +23,7 @@ open /Users/super/git/oneoffcoder/rpa/build/tts/runs/joint-six/listening/listen.
 | po | 0.64 s | 0.40 s | po reconstruction |
 | poj | 0.64 s | 0.40 s | **po reconstruction** |
 | pos | 0.72 s | 0.40 s | pos reconstruction |
-| Kuv yog Hmoob. | 2.08 s | 0.96 s | Exploratory, no connected recording to compare |
+| Kuv yog Hmoob. | 2.08 s | 0.96 s | Listener heard only the first two syllables |
 
 All 14 model renders emitted EOS within the 128-frame limit. Each WAV contains
 the complete decoder output. Both adapters used automatic language, temperature
@@ -28,6 +31,14 @@ the complete decoder output. Both adapters used automatic language, temperature
 reproduced the published baseline. Seven independent runs of the synthesis CLI
 reproduced every new WAV with reference-audio and corpus paths blocked to Python
 file opens.
+
+Replaying the exact phrase reproduced its saved codec-token hash. All seven text
+tokens, including the whole spelling of “Hmoob,” had reached the talker before
+it emitted EOS after 12 audio frames. The first four frames matched the isolated
+`kuv` recording in all 16 codebooks. With the same seed, lowercase
+`kuv yog hmoob` stopped after five frames (0.40 s), with or without the period.
+The training set contains six isolated utterances and no examples of continuing
+from one Hmong syllable into the next. The cause of the nasal quality is unresolved.
 
 The initial text embedding is identical for `po` (token 5368) and `poj` (tokens
 5368, 73). The extra token first enters after the model has generated a whole
