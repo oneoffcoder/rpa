@@ -17,6 +17,10 @@ provides 24 labeled WAVs for listening. With the preceding recorded audio
 supplied, the adapted talker predicted all 38 targets. During generation it
 departed from each recorded token sequence by the fourth frame.
 
+The listener rejected that adapter. A [two-stage follow-up](two-stage-memorization.md)
+trained the residual predictor alongside the talker. Generated audio matched five
+of six codec reconstructions byte for byte, with `poj` rendered as `po`.
+
 The initial model is
 [`mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16`](https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16).
 Hmong is outside [Qwen3-TTS's documented supported languages](https://github.com/QwenLM/Qwen3-TTS#introduction).

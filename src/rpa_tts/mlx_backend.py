@@ -363,6 +363,12 @@ def _read_adapter_run(adapter_dir: Path) -> dict[str, Any]:
 def _apply_adapter(rt: SimpleNamespace, model: Any, adapter_dir: Path) -> None:
     config = json.loads((adapter_dir / "adapter_config.json").read_text())
     lora = config["lora_parameters"]
+    if config.get("adapter_type"):
+        from . import joint_mlx
+        if config["adapter_type"] != joint_mlx.ADAPTER_TYPE:
+            raise ValueError(f"Unsupported adapter type: {config['adapter_type']}")
+        joint_mlx.load(model, adapter_dir, lora)
+        return
     rt.FastTTSModel.get_peft_model(
         model, r=lora["rank"], lora_alpha=lora["alpha"], lora_dropout=lora.get("dropout", 0.0),
         target_modules=lora.get("keys") or None,
@@ -430,7 +436,7 @@ def synthesize(
         "max_tokens": max_tokens, "sample_rate": SAMPLE_RATE,
         "duration_seconds": int(audio.size) / SAMPLE_RATE, "clipped_samples": clipped,
         "runtime_seconds": time.perf_counter() - start, "created_at": _now(),
-        "audio_sha256": _digest(output), "limitations": LIMITATIONS,
+        "audio_sha256": _digest(output), "limitations": run.get("limitations", LIMITATIONS),
     }
     _write_json(sidecar, metadata)
     return metadata
