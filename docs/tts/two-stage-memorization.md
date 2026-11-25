@@ -6,8 +6,9 @@ syllables exactly as the codec reconstructed them**. The previous adapter at
 The listener found most isolated syllables recognizable with the two-stage
 adapter. The 150-update phrase **failed the listening test**. Only the first
 two syllables were audible to the listener, who described the delivery as
-unnaturally pinched and nasal. The codec reconstructions have yet to receive
-a separate listening judgment.
+unnaturally pinched and nasal. In a separate check, the listener judged both a
+naturally spoken recording of this phrase and its frozen-codec reconstruction
+to sound good.
 
 ```sh
 open /Users/super/git/oneoffcoder/rpa/build/tts/runs/joint-six/listening/listen.html
@@ -37,8 +38,14 @@ tokens, including the whole spelling of “Hmoob,” had reached the talker befo
 it emitted EOS after 12 audio frames. The first four frames matched the isolated
 `kuv` recording in all 16 codebooks. With the same seed, lowercase
 `kuv yog hmoob` stopped after five frames (0.40 s), with or without the period.
-The training set contains six isolated utterances and no examples of continuing
-from one Hmong syllable into the next. The cause of the nasal quality is unresolved.
+Every training utterance ended after one Hmong syllable.
+
+For the connected-speech check, the recording went through the same frozen
+encoder and decoder using all 16 codebooks. The listener accepted both the
+original and the 1.92-second reconstruction. That narrows the failure on this
+phrase to the sequence of audio codes generated from text. The exact reason
+the generator dropped the last word and produced a strained voice remains open.
+The natural recording is reserved as a listening reference.
 
 The initial text embedding is identical for `po` (token 5368) and `poj` (tokens
 5368, 73). The extra token first enters after the model has generated a whole

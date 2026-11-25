@@ -21,7 +21,9 @@ The listener rejected that adapter. A [two-stage follow-up](two-stage-memorizati
 trained the residual predictor alongside the talker. Generated audio matched five
 of six codec reconstructions byte for byte, with `poj` rendered as `po`. The
 listener recognized most isolated syllables but heard only the first two in
-“Kuv yog Hmoob.” and found the phrase voice unnatural.
+“Kuv yog Hmoob.” and found the phrase voice unnatural. A natural recording
+of the whole phrase and its frozen-codec reconstruction both sounded good
+to the listener.
 
 The initial model is
 [`mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16`](https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-0.6B-Base-bf16).
