@@ -67,8 +67,9 @@ html_logo = '_static/images/logo-small.png'
 html_favicon = '_static/favicon.ico'
 html_css_files = ['css/override.css']
 html_js_files = [
-    'https://threejs.org/build/three.js',
-    'https://threejs.org/examples/js/controls/OrbitControls.js',
+    # viz.js uses the global Three.js API and legacy OrbitControls.
+    'https://cdn.jsdelivr.net/npm/three@0.124.0/build/three.min.js',
+    'https://cdn.jsdelivr.net/npm/three@0.124.0/examples/js/controls/OrbitControls.js',
     'js/howler.min.js',
     'js/custom.js',
     'js/viz.js'
