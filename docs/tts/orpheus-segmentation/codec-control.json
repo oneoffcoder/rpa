@@ -1,0 +1,79 @@
+{
+  "natural_references": {
+    "hmoob_chiv_keeb_huam_yuaj_los_ntawm_teb_chaws_suav": {
+      "frames": 53,
+      "original_samples": 107488,
+      "decoded_samples": 108544,
+      "equal_to_native_snac_decode": true
+    },
+    "kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam": {
+      "frames": 55,
+      "original_samples": 112096,
+      "decoded_samples": 112640,
+      "equal_to_native_snac_decode": true
+    },
+    "kuv_mus_kawm_ntawv": {
+      "frames": 33,
+      "original_samples": 66016,
+      "decoded_samples": 67584,
+      "equal_to_native_snac_decode": true
+    },
+    "kuv_noj_mov": {
+      "frames": 21,
+      "original_samples": 42976,
+      "decoded_samples": 43008,
+      "equal_to_native_snac_decode": true
+    },
+    "kuv_yog_hmoob": {
+      "frames": 23,
+      "original_samples": 45536,
+      "decoded_samples": 47104,
+      "equal_to_native_snac_decode": true
+    },
+    "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris": {
+      "frames": 53,
+      "original_samples": 108512,
+      "decoded_samples": 108544,
+      "equal_to_native_snac_decode": true
+    }
+  },
+  "saved_emissions": {
+    "Kuv hlub kuv niam kuv txiv.": "Incomplete seven-token frame",
+    "kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam/chunk-2.json": {
+      "text": "thiab kuv tej me nyuam.",
+      "byte_match": true
+    },
+    "kuv_hlub_kuv_niam_kuv_txiv_thiab_kuv_tej_me_nyuam/whole.json": {
+      "text": "Kuv hlub kuv niam kuv txiv thiab kuv tej me nyuam.",
+      "byte_match": true
+    },
+    "kuv_mus_kawm_ntawv/chunk-1.json": {
+      "text": "Kuv mus kawm ntawv.",
+      "byte_match": true
+    },
+    "kuv_mus_kawm_ntawv/whole.json": {
+      "text": "Kuv mus kawm ntawv.",
+      "byte_match": true
+    },
+    "kuv_yog_hmoob/chunk-1.json": {
+      "text": "Kuv yog Hmoob.",
+      "byte_match": true
+    },
+    "kuv_yog_hmoob/whole.json": {
+      "text": "Kuv yog Hmoob.",
+      "byte_match": true
+    },
+    "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris/chunk-1.json": {
+      "text": "Nyuj ua rau nyuj thauj.",
+      "byte_match": true
+    },
+    "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris/chunk-2.json": {
+      "text": "nees ua rau nees ris.",
+      "byte_match": true
+    },
+    "nyuj_ua_rau_nyuj_thauj_nees_ua_rau_nees_ris/whole.json": {
+      "text": "Nyuj ua rau nyuj thauj nees ua rau nees ris.",
+      "byte_match": true
+    }
+  }
+}

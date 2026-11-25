@@ -1,6 +1,6 @@
 # Orpheus whole-sentence and phrase comparison
 
-**Revision 1.2 primary run, November 25, 2026.** Orpheus remains the active research model following the earlier listener's preference on short Hmong sentences. F5 and Qwen are deferred. The frozen policy produced eight listening clips. The family-sentence assembly contains a diagnostic recovery from an invalid model emission and fails the technical gate. Jee listened to two of the eight clips and judged both bad. The other six are unjudged. All four whole-request WAVs exactly match the previous audit.
+**Final outcome, revision 1.2.** Jee judged all eight clips bad and gave the verdict in chat after bypassing the web form. Neither the whole-sentence readings nor the phrase assemblies met the listening goal. The earlier two-clip report was interim. All four whole-request WAVs exactly match the earlier audit. The family-sentence assembly also failed a technical check after the model emitted a malformed audio-token group.
 
 ## Listening on the Mac
 
@@ -35,9 +35,20 @@ The runner kept each complete decoded sample in its raw WAV. The join rule measu
 
 The measured model-call and decode time totaled **128.18 seconds**, including the failed call and recovery decoding. Setup across the two processes took **20.21 seconds**. The maximum sampled macOS physical footprint was **11.21 GiB** with 250 ms polling, within the 30-minute and 32-GiB bounds. New model downloads were unnecessary. PyTorch 2.8.0 on MPS used the original BF16 weights, SDPA, the historical tokenizer and speaker-free prompt, and the CPU SNAC decoder at 24 kHz.
 
-**Partial native listening result.** Jee clarified in chat, “i only listened to 2 of them they are bad”. The chat verdict did not identify either clip or assign a specific pronunciation, tone, voice or pause defect. The local panel separately recorded one first response and zero ratings at the time of the update. The saved response is part of the same audit and is not counted as a third clip. There is insufficient paired listening evidence to attribute either judgment to segmentation or to compare the two arms.
+**Native listening result.** The listener's final verdict was “they are all bad” and “i bypassed the stupid web ui”. This covers all four whole-request clips and all four assemblies across four texts. The two short-control pairs have identical audio within each pair. The panel separately saved one first response and zero ratings. The final verdict is informal, with no individual transcription, numeric naturalness score or attribution to tones, words, pauses or voice quality. Relative preference between two unacceptable readings is unknown.
 
-**Decision.** The full primary policy cannot qualify for opt-in integration, because one long assembly required a decoder recovery. Whether the clean long pair shows a useful improvement awaits native responses. Repeats at seeds 3408/3409, fresh balanced development passages, product integration, F5 timing trials and training were not run. If a native listener finds a useful change, retain the technical failure when deciding whether to repeat. The six fresh passages require a passing policy. Neither a familiar sentence nor an identical short control establishes generalization.
+**Decision.** Close revision 1.2 as a failed primary experiment. Defer the segmentation workflow, repeat seeds, fresh-passage validation and integration. Extra silence at joins cannot account for the rejected short controls, which have no joins. The single malformed emission also leaves the other rejected clips unexplained. F5 remains deferred. Before another training run, audit existing connected Hmong audio for target variety, complete utterance boundaries and exact spoken-text alignment. Reserve independent recordings for evaluation.
+
+### Decoder cross-check
+
+On six human recordings, packing the native SNAC codes into Orpheus token order and unpacking them produced identical decoder input and output to direct SNAC decoding at a matched seed. Independently unpacking the nine valid saved Orpheus emissions using the published example's level ordering reproduced each saved WAV byte for byte. The tenth emission failed the strict decoder as previously reported. This checks the local token ordering and WAV export. Perceptual fidelity of SNAC on the human recordings was not rated. [Control measurements](codec-control.json)
+
+```sh
+HF_HUB_OFFLINE=1 build/tts/hmong-model-audit/runtime/bin/python python/orpheus_codec_control.py \
+  build/tts/orpheus-segments-primary ~/Downloads/hmong-tts-audit/original
+```
+
+A candidate for a future data audit is the publisher's Hmong–Thai speech dataset. Its published statistics cover 1,990 audio rows with a mean duration of 9.95475 seconds (about 5.50 hours). Every row has the same source link, and the minimum Hmong transcript length is zero. The preview alone cannot establish dialect, voice consistency, sentence boundaries, annotation accuracy or reuse rights for the underlying recordings. [Dataset card and examples](https://huggingface.co/datasets/Pakorn2112/hmong-dataset-audio-v1) · [Dataset statistics](https://datasets-server.huggingface.co/statistics?dataset=Pakorn2112%2Fhmong-dataset-audio-v1&config=default&split=train)
 
 ## Reproduce and verify
 
