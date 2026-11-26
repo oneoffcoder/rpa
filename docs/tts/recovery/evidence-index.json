@@ -981,6 +981,36 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Five-epoch corpus VITS run completed at step 7330 with stop_reason epoch_limit; selected epoch 5, validation 28.0979 (best), checkpoint-epoch5 sha 757926d0 with 111 discriminator/838 generator optimizer states and full order/cursor; correct-vs-length-matched-wrong gives 7/12 and mean correlation 0.004 at epoch 5. Measured training result only, no native acceptance.",
+      "created_at": "2026-11-27T06:25:00+00:00",
+      "gate": "F-04",
+      "id": "ev_0000000000000050",
+      "notes": "PID 39012; output data/runs/vits-corpus-full-validated-20261126T1344Z. Correct-vs-wrong audio diagnostic is not an intelligibility or F-07 result.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/vits-five-epoch.md",
+          "sha256": "5304a9e2a7b72eb92058b842ef4aacd7856bc71c28edd4cdcb36798b5adf31f5"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Five-epoch held-out comparison: validation scores 28.7395/28.9923/28.8145/28.7711/28.0979; selected epoch 5; correct-vs-wrong audio 7-8/12 with near-zero correlation but no native intelligibility; prior owner samples were buzzing. No frozen candidate.",
+      "created_at": "2026-11-26T18:25:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000049",
+      "notes": "Measured validation and diagnostic only; native F-07 remains open.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/vits-five-epoch.md",
+          "sha256": "5304a9e2a7b72eb92058b842ef4aacd7856bc71c28edd4cdcb36798b5adf31f5"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
