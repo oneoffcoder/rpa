@@ -801,6 +801,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Exported the clean-split candidate a16f4cb3 as a 1.46GB portable .nemo (sha 87d16174), restored it through the pinned NeMo path with exact parameter-fingerprint equality, all 372.9M params on CUDA, and a private unlistened sample",
+      "created_at": "2026-11-26T15:00:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000037",
+      "notes": "Private candidate artifact only; not an accepted/release package, no second-worker inspection or native listening. Saved under ignored data/runs.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-portable-artifact.md",
+          "sha256": "abc5873e6743e0ee33c179f887d5e0ac6106c2a1b75aabfde6ecb9868cd6104a"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
