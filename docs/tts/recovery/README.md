@@ -27,7 +27,7 @@ Blocked / Not required. Evidence is append-only in
 | **F-01** workspace, environment, evidence, compute | **In progress** | none | implementation agent | [`environment.md`](environment.md), [`evidence/f01-environment.json`](evidence/f01-environment.json), [`evidence/f01-gpu-kernel-proof.json`](evidence/f01-gpu-kernel-proof.json), [`run-manifest.md`](run-manifest.md), [`decisions.jsonl`](decisions.jsonl) | Establish the independent owner-controlled backup destination (100–200 GB workspace is measured); then append the F-01 completion entry |
 | **F-02** language/voice contract, calibration, scoring | **Blocked** | native participants; Jee capacity | independent native reviewer + rights | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready), [`calibration-scripts.review.csv`](calibration-scripts.review.csv) (272 rows, blank decisions), [`review-import.md`](review-import.md) (validation ready), [`capacity-constraint.md`](capacity-constraint.md) | Jee will not record, recruit, or fill the worksheet. Engage an independent native reviewer/rights holder or adopt an explicit scope change; do not expect calibration recordings |
 | **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/access; owner decisions | data engineer + native QA; owner for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), [`f03-existing-source-investigation-2026-11-26.md`](f03-existing-source-investigation-2026-11-26.md), [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md) | Corrected to ISO `mww` / `MWWHDVN2DA`; CMU and FCBH Hmong Daw NT are the same source. FCBH needs a DBP key plus written training rights (personal-use terms); Pangeanic advertises 43 h but needs a sample/quote; Garellek and UMN access unresolved. No permitted sentence audio yet |
-| **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 data | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-runner.md`](f04-runner.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `configs/tts/f04-vits.yaml`, `rpa-tts model diagnose`, `rpa-tts train gate` | Real Magpie runner/diagnosis and private-render path implemented with exact-byte fingerprints and resume-state checks. `train gate` reports `platform_unsupported` on Windows; no 5090 load/step/render has run. Needs a Linux/WSL2 host plus permitted F-02 speech |
+| **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 data | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-runner.md`](f04-runner.md), [`f04-cpu-diagnostic.md`](f04-cpu-diagnostic.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `rpa-tts model diagnose` | CPU diagnostic loaded the real Magpie weights, generated 1.02 s of private audio (unlistened) and round-tripped a `.nemo` bit-exactly; **no 5090 GPU load, training step, resume or listening has run**. Needs a Linux/WSL2 host plus permitted F-02 speech |
 | **F-05** accepted corpus, coverage, frozen splits | **In progress** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), [`dataset-lifecycle.md`](dataset-lifecycle.md), [`audio-verification.md`](audio-verification.md), `rpa-tts corpus split/freeze/verify-audio` | Freeze, verify and byte-level audio checks are ready; no accepted corpus exists. Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **In progress** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) (header), [`dataset-lifecycle.md`](dataset-lifecycle.md) | Record a stage decision before any comparison; `train record` now enforces unique, bounded learning-curve rows |
 | **F-07** independent native qualification | **In progress** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), [`listening-review.md`](listening-review.md), [`qualification-suite.md`](qualification-suite.md), `rpa-tts evaluate gate` (implemented, no data) | Build the 300-sentence + 20-paragraph suite with the enforced composition contract once scripts, contrast pairs and stimuli are frozen; recruit 12 listeners |
@@ -79,6 +79,12 @@ Corrections are appended, not deleted.
   Yuhalu serves a 51.38-minute isolated-word archive under an unverified license;
   Pangeanic advertises 43 h with no sample or quote; no rights are cleared. See
   [`f03-existing-source-investigation-2026-11-26.md`](f03-existing-source-investigation-2026-11-26.md).
+- **F-04 CPU diagnostic:** behind clearly labelled compatibility shims, the real
+  Magpie weights load on CPU (372.9 M params, 22.3 s) and generate 1.02 s of
+  private audio (10.63 s, **unlistened**, no quality claim); a `.nemo` save/reload
+  is bit-exact across 260 tensors. **No 5090 GPU load, training step, resume or
+  native listening has run, and release synthesis stays F-07-gated.** See
+  [`f04-cpu-diagnostic.md`](f04-cpu-diagnostic.md).
 - **F-04 host constraint:** WSL2 is not enabled (`VirtualMachinePlatform`
   disabled, no distributions, no Docker) and the pinned NeMo stack resolves GPU
   PyTorch only on Linux. The owner must choose WSL2 or a Linux worker before the
@@ -177,9 +183,10 @@ rules, split determinism, coverage accounting, pooled syllable errors, empty
 outputs in denominators, crossed listener/script bootstrap arithmetic, gate
 outcomes, evidence append-only behavior and CLI/gate refusals.
 `.github/workflows/tts.yml` runs the CPU test/lint suite and the pinned book
-build on pushes and PRs. The owner independently verified Actions run
-**45785823770 passed on `cfc2872`**; commits after that were not observed from
-this session, so do not claim green beyond that run.
+build on pushes and PRs. GitHub Actions run **45789357474 passed on `9add501`**
+(the torch-optional test boundary fix); the owner earlier verified run
+45785823770 on `cfc2872`. Commits after `9add501` were not observed from this
+session, so do not claim green beyond that run.
 
 ## Runbook index
 
@@ -206,6 +213,7 @@ this session, so do not claim green beyond that run.
 | [`f04-artifact-inspection.md`](f04-artifact-inspection.md) | Verified artifact hashes, packaged config, text-tokenizer contract and risks |
 | [`f04-host-path.md`](f04-host-path.md) | WSL2/Linux requirement, measured host facts and owner options |
 | [`f04-runner.md`](f04-runner.md) | Real Magpie load/finetune/private-render path, defect chain and pending GPU/listening checks |
+| [`f04-cpu-diagnostic.md`](f04-cpu-diagnostic.md) | CPU-only load, private generation and bit-exact `.nemo` round trip (not the gate) |
 | [`f04-vits-standby.md`](f04-vits-standby.md) | Standby VITS pin, `rpa-chars-1` text contract and measured import environment |
 | [`book-regression.md`](book-regression.md) | Pinned Sphinx build, warnings and reference checks |
 | [`book-audio-references.md`](book-audio-references.md) | Static syllable playback link/inventory verification |

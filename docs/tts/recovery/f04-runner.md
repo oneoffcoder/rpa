@@ -1,8 +1,9 @@
 # F-04 Magpie runner: real path, executed checks and defects
 
-**Status:** Runner implemented; **the 5090 model step, save/reload resume, private
-generation and any listening have not been executed.** No F-04 evidence is
-claimed. Release synthesis remains gated on F-07.
+**Status:** Runner implemented. A **CPU diagnostic** now loads the real Magpie
+weights, generates 1.02 s of private audio and round-trips a `.nemo` bit-exactly;
+the **5090 GPU load, training step, PTL resume and any listening have not been
+executed.** No F-04 gate is claimed. Release synthesis remains gated on F-07.
 
 ## Intended execution path
 
@@ -47,10 +48,16 @@ claimed. Release synthesis remains gated on F-07.
 | ByT5 tokenizer pin in lane config | passed |
 | Environment diagnosis | failed at `platform_unsupported` |
 | `train gate` | refused with the platform defect; diagnosis JSON written |
-| Native NeMo CPU import attempt | failed; see defect chain |
-| Magpie load / training step / save-reload / private audio | **not executed** |
+| Native NeMo CPU import attempt | initially failed; fixed with diagnostic shims (see below) |
+| CPU Magpie load (shimmed) | passed: 372,919,838 params, 22.3 s, codec restored |
+| CPU private generation (`kuv hlub koj`) | passed mechanically: 1.0217 s in 10.63 s; **not listened to**, no quality claim |
+| CPU weights `.nemo` round trip | passed: 260 tensors bit-exact (`6de1d7b1…`); weights/config only |
+| GPU load / training step / PTL resume | **not executed** |
 | 5090 F-04 gate | **not executed** |
 | Native listening | **not performed** |
+
+See `f04-cpu-diagnostic.md` and `evidence/f04-cpu-inference.json` for the shims,
+hashes and limitations.
 
 ## First reproducible integration defect chain (native Windows diagnostic)
 

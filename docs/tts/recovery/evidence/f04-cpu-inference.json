@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "scope": "CPU diagnostic only; not the F-04 5090 gate and not native acceptance",
+  "date": "2026-11-26",
+  "environment": {
+    "python": "3.12.16",
+    "torch": "2.9.1+cu128",
+    "cuda_available": true,
+    "device_used": "cpu",
+    "nemo_toolkit": "3.0.0 (PyPI diagnostic; not pinned commit 0305e4b1)",
+    "pyopenjtalk": "pyopenjtalk-plus 0.4.1.post10",
+    "lightning": "2.6.6",
+    "compatibility_shims": [
+      "stub nv_one_logger training-telemetry API and PTL integration modules",
+      "stub lightning.pytorch.loggers.NeptuneLogger",
+      "LANGUAGE_TOKENIZER_MAP['hmong'] = ['text_ce_tokenizer']"
+    ]
+  },
+  "artifact": {
+    "path": "data/artifacts/magpie-v2607/magpie_tts_multilingual_357m.nemo",
+    "sha256": "ec675fa8c02b9c1d5382c5c2b5a6acec6492c1e8344866c07cf3892185d18953",
+    "packaged_config_members": 5,
+    "parameters": 372919838,
+    "codec": "nvidia/nemo-nano-codec-22khz-1.89kbps-21.5fps@fc00890b (restored)",
+    "sample_rate": 22050,
+    "baked_context_speakers": 5,
+    "load_seconds": 22.3
+  },
+  "inference": {
+    "text": "kuv hlub koj",
+    "language_selector": "hmong -> text_ce_tokenizer (ByT5)",
+    "apply_TN": false,
+    "speaker_index": 0,
+    "seconds_generated": 1.0217,
+    "samples": 22528,
+    "generation_seconds_cpu": 10.63,
+    "audio_path": "data/runs/f04-cpu-private/kuv-hlub-koj.wav",
+    "audio_sha256": "043544b62ad01f29663bb35ee1a4778f7f65d761fe3da103e3b9be320f2d5ee4",
+    "listened": false,
+    "quality_claim": "none; the base model has no Hmong adaptation and the output may be unintelligible"
+  },
+  "weights_roundtrip": {
+    "path": "data/runs/f04-cpu-private/roundtrip.nemo",
+    "bytes": 1459763200,
+    "sha256": "6de1d7b1bef19413d756dacf19713ef7bb8da6cbc17f67a703a4d05e05714fb8",
+    "tensors": 260,
+    "keys_equal": true,
+    "bit_exact": true,
+    "fingerprint_equal": true,
+    "scope": "weights/config only; not optimizer/scheduler/RNG resume",
+    "workaround": "rewired archived artifact paths to local paths before save_to; direct .nemo save on Windows fails in NeMo artifact copy"
+  },
+  "not_executed": [
+    "5090 GPU load",
+    "training/optimizer step",
+    "PTL checkpoint resume with optimizer, scheduler, step and RNG",
+    "Hmong data finetuning",
+    "F-04 gate",
+    "native listening or acceptance",
+    "release synthesis"
+  ],
+  "f04_status": "in_progress; CPU mechanics verified, GPU/data gate not passed"
+}
