@@ -19,6 +19,8 @@ audio/weights private. Permission:
 
 - Four held-out Mark prompts: MRK 1:1, 1:3, 1:6, 1:7; same `seed`, speaker 0,
   `apply_TN=False`, 22,050 Hz and inference settings for both conditions.
+  The trained checkpoint also saw the ambiguous `REV 22:21` row during its first
+  2,000 rows; the Mark prompts are unaffected.
 - Conditions were randomized per item into blinded `A`/`B` slots. Answer key,
   reference text, per-slot hashes/durations and playback paths:
   `data/runs/ab-private-cursor/answer-key.json`; WAVs in the same directory.

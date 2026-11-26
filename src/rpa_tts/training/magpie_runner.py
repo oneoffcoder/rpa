@@ -827,13 +827,29 @@ def read_pcm16_wav(path: str | Path) -> tuple[np.ndarray, int]:
     return samples, rate
 
 
+def encode_transcript(
+    model: Any, text: str, *, tokenizer_name: str = "text_ce_tokenizer"
+) -> list[int]:
+    """Single training/inference transcript contract: tokens plus EOS, no BOS.
+
+    Pinned NeMo dataset code appends ``model.eos_id`` after tokenization; using
+    this helper for both training batches and controlled inference keeps IDs and
+    terminal tokens identical.
+    """
+    eos_id = getattr(model, "eos_id", None)
+    if eos_id is None:
+        raise InputError("model has no eos_id; cannot build the transcript contract")
+    tokens = model.tokenizer.encode(text, tokenizer_name=tokenizer_name)
+    return list(tokens) + [int(eos_id)]
+
+
 def make_verse_batch(model: Any, row: dict[str, Any], *, device: str = "cuda") -> dict[str, Any]:
     """Build the Magpie training batch for one verse row."""
     import torch
 
     samples, rate = read_pcm16_wav(row["audio_path"])
     audio = torch.from_numpy(samples).unsqueeze(0).to(device)
-    token_ids = model.tokenizer.encode(row["text"], tokenizer_name="text_ce_tokenizer")
+    token_ids = encode_transcript(model, row["text"])
     return {
         "text": torch.tensor([token_ids], dtype=torch.long, device=device),
         "text_lens": torch.tensor([len(token_ids)], dtype=torch.long, device=device),
@@ -1021,6 +1037,7 @@ __all__ = [
     "effective_packaged_config",
     "ensure_hmong_tokenizer_mapping",
     "evaluate_verse_loss",
+    "encode_transcript",
     "load_magpie",
     "make_verse_batch",
     "parameter_fingerprint",

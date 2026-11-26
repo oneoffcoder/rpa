@@ -6,7 +6,8 @@ accepted package, and not native-approved.
 ## Artifact
 
 - Source candidate: clean chapter-split checkpoint `a16f4cb3…` (5,761 train rows;
-  dev mean 11.9123 → 11.0115).
+  dev mean 11.9123 → 11.0115). The candidate includes one ambiguous row
+  (`REV 22:21`) from the first 2,000 training rows; quarantined going forward.
 - Exported with the artifact-path workaround required by NeMo's Windows `nemo:`
   copy defect:
   `data/runs/f04-split-train/model.nemo`

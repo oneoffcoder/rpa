@@ -195,6 +195,45 @@ def build_chapter_manifest(
     return rows
 
 
+def audit_audio_uniqueness(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Flag rows that share a WAV hash, which cannot be distinct verse pairs.
+
+    A duplicate hash means the same waveform was cut for different transcripts or
+    intervals; those rows are ambiguous until combined-verse alignment is done.
+    """
+    by_hash: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        digest = str(row.get("audio_sha256", "") or "")
+        if not digest:
+            raise InputError(f"row {row.get('id')!r} has no audio_sha256")
+        by_hash.setdefault(digest, []).append(row)
+    groups = []
+    for digest, members in sorted(by_hash.items()):
+        if len(members) < 2:
+            continue
+        groups.append(
+            {
+                "sha256": digest,
+                "ids": [str(member["id"]) for member in members],
+                "references": [str(member.get("reference", "")) for member in members],
+                "intervals": [[member.get("start"), member.get("end")] for member in members],
+                "texts": [str(member.get("text", "")) for member in members],
+            }
+        )
+    ambiguous = sorted({row_id for group in groups for row_id in group["ids"]})
+    return {
+        "rows": len(rows),
+        "distinct_audio_hashes": len(by_hash),
+        "duplicate_groups": groups,
+        "ambiguous_ids": ambiguous,
+        "ok": not groups,
+        "note": (
+            "Duplicate hashes are ambiguous until combined-verse alignment; "
+            "exclude them from training/evaluation splits."
+        ),
+    }
+
+
 def write_manifest(rows: list[dict[str, Any]], path: str | Path) -> dict[str, Any]:
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -246,6 +285,7 @@ __all__ = [
     "BOOK_CHAPTERS",
     "EDITION",
     "TEXT_FILESET",
+    "audit_audio_uniqueness",
     "build_chapter_manifest",
     "cut_verse",
     "download_file",

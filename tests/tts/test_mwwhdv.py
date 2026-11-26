@@ -10,6 +10,7 @@ import pytest
 
 from rpa_tts.cli import main
 from rpa_tts.data.mwwhdv import (
+    audit_audio_uniqueness,
     build_chapter_manifest,
     cut_verse,
     verse_spans,
@@ -51,6 +52,70 @@ def test_verse_spans_uses_next_available_start():
 def test_verse_spans_requires_timestamps():
     with pytest.raises(InputError, match="no usable"):
         verse_spans([], 4.0)
+
+
+def test_audit_audio_uniqueness_flags_same_waveform(tmp_path):
+    rows = [
+        {
+            "id": "REV-22-20",
+            "reference": "REV 22:20",
+            "audio_sha256": "same",
+            "start": 298.23,
+            "end": 327.18,
+            "text": "one",
+        },
+        {
+            "id": "REV-22-21",
+            "reference": "REV 22:21",
+            "audio_sha256": "same",
+            "start": 298.23,
+            "end": 327.18,
+            "text": "two",
+        },
+        {
+            "id": "MRK-1-1",
+            "reference": "MRK 1:1",
+            "audio_sha256": "unique",
+            "start": 3.75,
+            "end": 9.01,
+            "text": "three",
+        },
+    ]
+    report = audit_audio_uniqueness(rows)
+    assert report["ok"] is False
+    assert report["ambiguous_ids"] == ["REV-22-20", "REV-22-21"]
+    assert report["distinct_audio_hashes"] == 2
+    assert report["duplicate_groups"][0]["sha256"] == "same"
+    assert audit_audio_uniqueness([rows[2]])["ok"] is True
+
+
+def test_cli_mwwhdv_audit_fails_on_duplicates(tmp_path, capsys):
+    manifest = tmp_path / "manifest.jsonl"
+    manifest.write_text(
+        "\n".join(
+            json.dumps(row)
+            for row in (
+                {"id": "a", "reference": "A 1:1", "audio_sha256": "x"},
+                {"id": "b", "reference": "A 1:2", "audio_sha256": "x"},
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    code = main(
+        [
+            "corpus",
+            "mwwhdv-audit",
+            "--manifest",
+            str(manifest),
+            "--output",
+            str(tmp_path / "report.json"),
+        ]
+    )
+    assert code == 1
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["ambiguous_ids"] == ["a", "b"]
+    assert json.loads((tmp_path / "report.json").read_text(encoding="utf-8"))["ok"] is False
 
 
 @pytest.mark.skipif(FFMPEG is None, reason="ffmpeg is not installed")

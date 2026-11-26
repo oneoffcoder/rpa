@@ -831,6 +831,156 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Negative owner listening result: all eight clips in the corrected blinded A/B (base and trained slots) were heard and none sounded like Hmong; this is not a preference or acceptance result",
+      "created_at": "2026-11-26T15:30:00+00:00",
+      "gate": "F-07",
+      "id": "ev_0000000000000039",
+      "notes": "Informal owner listening, not the F-07 12-listener panel. Audio unaccepted; F-07 remains open.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "1c637cade3d57f98652c0476b0c3582f8687234c6e2eab6f9399d42588c2bed7"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Controlled diagnosis found no short-text wiring defect: source pairs reproduce, text conditioning is active (different texts change audio), codec round-trips, checkpoint updates text embedding and lowers LUK loss, and a one-pair overfit reaches loss 0.0198 in 200 steps; the negative A/B is consistent with severe undertraining, with a separate long-text inference chunking mismatch",
+      "created_at": "2026-11-26T15:31:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000040",
+      "notes": "Diagnostics: MRK train 77 vs inference 78 tokens (EOS); LUK 275 vs 3 chunks; base LUK loss 11.4771 vs trained 10.6136; overfit MAT 1:1 10.4703->0.0198. Training paused; no native/release claim.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "1c637cade3d57f98652c0476b0c3582f8687234c6e2eab6f9399d42588c2bed7"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Manifest audit found 7,935 rows with 7,934 distinct WAV hashes: REV 22:20 and REV 22:21 share hash 76a070d8 and interval 298.23-327.183625 with different transcripts; both are quarantined pending combined-verse alignment",
+      "created_at": "2026-11-26T15:32:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000041",
+      "notes": "4k checkpoint cumulative selection includes REV22:21 from first 2k; continuation 2k-3999 has neither. Quarantine split 7,933 rows = 5,759/714/1,460; audit tool added.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "1c637cade3d57f98652c0476b0c3582f8687234c6e2eab6f9399d42588c2bed7"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Codec audit identifies the upstream bottleneck: Magpie and separately restored NanoCodec have identical functional weights (713/713 common keys), exactly equal codes (1,8,347), and near-identical 16.1146s decodes (corr 0.99999996, SNR 8.39dB); the 1.89kbps codec reconstruction is not recognizable Hmong, so TTS training cannot recover it. Shared transcript contract now appends EOS exactly like pinned dataset (LUK 276, MRK 78); aligned 200-step LUK probe loss 0.0301 but codec-limited",
+      "created_at": "2026-11-26T15:50:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000042",
+      "notes": "No vocabulary added. Old no-EOS checkpoints diagnostic only. English base native path retained (1.904s) and transcribed correctly on owner MBP; direct codec WAV retained.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "ddd733e2f95d555c7e3bb9d55f53d804adc3968b9d6a9130b94cf893be1f9c7b"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Updated owner listening result: all eight A/B clips unlike Hmong; LUK codec reconstruction and matched-token trained Luke also unrecognizable as Hmong after source confirmation; stock English generation transcribed correctly. No candidate acceptance, preference or panel result.",
+      "created_at": "2026-11-26T15:51:00+00:00",
+      "gate": "F-07",
+      "id": "ev_0000000000000043",
+      "notes": "Informal owner listening plus English MBP check; not the 12-listener F-07 panel. Control pack under data/runs/pair-trace.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "ddd733e2f95d555c7e3bb9d55f53d804adc3968b9d6a9130b94cf893be1f9c7b"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Activated the VITS standby lane for a bounded private diagnostic: 80 paired updates on six short exact transcript/WAV verses (no transcript dropout) changed 83M parameters with finite losses; free-running outputs for two seen texts plus held-out LUK 19:22 are distinct (4.25s/2.88s/13.01s), and audio-conditioned reconstruction is 16.08s vs 16.08s source",
+      "created_at": "2026-11-26T16:00:00+00:00",
+      "gate": "F-04",
+      "id": "ev_0000000000000044",
+      "notes": "No native/quality/release claim. Checkpoint 04e1d373; outputs under data/runs/vits-diagnostic. Trigger: recorded Magpie codec failure. Resume and listening remain open.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f04-vits-standby.md",
+          "sha256": "c958968d00600f1e72892aad897fc4a3d2733a00ee23456f638fa42fac95a2ec"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Same-family positive control and decoder promotion: LJSpeech VITS copy-synthesis of LUK 19:22 has lag-256 -0.00984 (source -0.01097) and 231/231 compatible decoder keys; a fresh Hmong rpa-chars-1 model initialized with that decoder and trained 200 paired updates breaks the hop artifact (corrected reconstruction lag 0.062) and yields distinct free-running outputs with lags 0.14-0.20 and F0 185-186 Hz; checkpoint d3cca137 with full optimizer state and promoted decoder 3234678a",
+      "created_at": "2026-11-26T16:20:00+00:00",
+      "gate": "F-04",
+      "id": "ev_0000000000000045",
+      "notes": "Promotes waveform path only; no native/quality/release claim. u450 0.346 lag was not promoted because the 430.66/86 Hz hop artifact remained. No panel or new recordings.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f04-vits-standby.md",
+          "sha256": "b207513a5c7719d07eeded5cddf3eb3b3481c1e3c7e3eca26e6579f8262e9e6e"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Corpus audit remains: 7,935 rows/7,934 distinct WAV hashes; REV 22:20/21 ambiguous and quarantined; cleaned split 5,759/714/1,460. Current diagnosis record includes codec/contract evidence.",
+      "created_at": "2026-11-26T16:21:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000046",
+      "notes": "Current hash snapshot for the combined corpus/diagnosis record.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "0dc795bfcaad3ea03cca38a8631b9e527e6dd2f0aa9353374582e0d897cab8cb"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Current candidate diagnosis: Magpie/NanoCodec round-trip is not recognizable Hmong; shared EOS transcript contract matches pinned dataset; no frozen candidate. VITS decoder promotion is tracked under F-04/F-06 separately.",
+      "created_at": "2026-11-26T16:22:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000047",
+      "notes": "Current hash snapshot; no native/quality/release claim.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "0dc795bfcaad3ea03cca38a8631b9e527e6dd2f0aa9353374582e0d897cab8cb"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Current negative listening record: all eight A/B clips, LUK codec and matched-token Luke unlike Hmong; stock English transcribed correctly; no native panel/acceptance.",
+      "created_at": "2026-11-26T16:23:00+00:00",
+      "gate": "F-07",
+      "id": "ev_0000000000000048",
+      "notes": "Current hash snapshot.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-negative-diagnosis.md",
+          "sha256": "0dc795bfcaad3ea03cca38a8631b9e527e6dd2f0aa9353374582e0d897cab8cb"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

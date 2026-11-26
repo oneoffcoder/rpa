@@ -30,7 +30,7 @@ from .data.manifest import (
     validate_rows,
     write_manifest,
 )
-from .data.mwwhdv import build_chapter_manifest
+from .data.mwwhdv import audit_audio_uniqueness, build_chapter_manifest
 from .data.mwwhdv import write_manifest as write_verse_manifest
 from .data.split import assign_splits
 from .data.verify import verify_audio
@@ -172,6 +172,11 @@ def parser() -> argparse.ArgumentParser:
     mwwhdv.add_argument("--chapter-duration", type=float, required=True)
     mwwhdv.add_argument("--output-dir", type=Path, required=True)
     mwwhdv.add_argument("--manifest", type=Path, required=True)
+    mwwhdv_audit = corpus_commands.add_parser(
+        "mwwhdv-audit", help="flag duplicate WAV hashes in a verse manifest"
+    )
+    mwwhdv_audit.add_argument("--manifest", type=Path, required=True)
+    mwwhdv_audit.add_argument("--output", type=Path, required=True)
     freeze = corpus_commands.add_parser(
         "freeze", help="freeze an approved accepted dataset version with hashes and coverage"
     )
@@ -575,6 +580,20 @@ def _cmd_corpus_book_html(args: argparse.Namespace) -> tuple[dict[str, Any], int
         args.build_dir,
         output_json=args.output_json,
         output_md=args.output_md,
+    )
+    return report, 0 if report["ok"] else 1
+
+
+def _cmd_corpus_mwwhdv_audit(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    rows = [
+        json.loads(line)
+        for line in args.manifest.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    report = audit_audio_uniqueness(rows)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     return report, 0 if report["ok"] else 1
 
@@ -1109,6 +1128,7 @@ _DISPATCH = {
     ("corpus", "book-audio"): _cmd_corpus_book_audio,
     ("corpus", "book-html"): _cmd_corpus_book_html,
     ("corpus", "mwwhdv-chapter"): _cmd_corpus_mwwhdv_chapter,
+    ("corpus", "mwwhdv-audit"): _cmd_corpus_mwwhdv_audit,
     ("corpus", "freeze"): _cmd_corpus_freeze,
     ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
     ("corpus", "verify-audio"): _cmd_corpus_verify_audio,

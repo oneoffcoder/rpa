@@ -24,5 +24,7 @@ Permission: <https://jeepower.atlassian.net/wiki/spaces/RPA/pages/2467102728>.
 ## Caveat
 
 Chapter-disjoint dev, but the same multi-voice drama speakers appear in training.
-No native listening, WER, preference or release claim. The private test split
-remains untouched for a future locked comparison.
+The first training candidate also includes the ambiguous `REV 22:21` row (shared
+WAV with 22:20) from the first 2,000 rows; it is one row among 5,761 and is
+disclosed, not silently accepted. No native listening, WER, preference or release
+claim. The private test split remains untouched for a future locked comparison.

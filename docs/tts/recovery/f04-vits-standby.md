@@ -1,10 +1,10 @@
 # F-04 VITS standby lane: text and environment contract
 
-**Status:** Standby preparation. The lane is **not activated** and no VITS model
-has trained. Magpie remains the first live gate; activation requires a recorded
-Magpie compatibility/codec failure. This document records the prepared text
-contract and environment plan so the fallback can start without reopening the
-architecture debate.
+**Status:** **Activated for a bounded private diagnostic on 2026-11-26** after the
+recorded Magpie/NanoCodec failure. This is not an F-04 gate pass and no VITS
+quality claim is made. Magpie remains the first live gate; the VITS lane was
+activated only because the Magpie codec reconstruction of the confirmed Hmong
+source was not recognizable as Hmong.
 
 ## Pinned implementation
 
@@ -121,3 +121,64 @@ uv pip install coqui-tts==0.28.0 torchcodec==0.9.1
 
 This proves the import environment only. No model was instantiated or trained;
 no data exists; the lane remains standby and is **not** an F-04 gate pass.
+
+## Activated bounded diagnostic (2026-11-26)
+
+Trigger: recorded Magpie codec failure (LUK 19:22 source confirmed Hmong; both
+Magpie and directly restored NanoCodec round-trips were not recognizable as
+Hmong). `Vits` additionally required `six==1.17.0`, installed in `.venv-vits`;
+the FFmpeg 8.1 shared `bin/` was placed on `PATH`.
+
+Configuration: single-speaker `VitsConfig`, `rpa-chars-1` (`num_chars=37`),
+83,046,892 parameters, seed 3407, batch 3/4, AdamW 2e-4 for discriminator and
+generator. Six short clean train verses from 1 Corinthians (4.15–5.75 s) were
+paired one-to-one with their exact WAVs; LUK 19:22 was held out. There was
+**no transcript dropout or unconditional draw**: every supervised example used
+its transcript. Quotes in the held-out LUK text were mapped to spaces only
+because `rpa-chars-1` has no apostrophe token.
+
+### Initial probe and corrected measurement
+
+- The first 80-update probe reported distinct WAVs, but its "audio-conditioned
+  reconstruction" incorrectly decoded `flow(z)` (prior space). The correct VITS
+  copy-synthesis path decodes the posterior `z` directly (`decoder(z*mask)`).
+- Corrected probe across saved checkpoints: u100 0.984, u200 0.981, u300 0.965,
+  u400 **0.936** lag-256. A further 50 updates reached u450 **0.346**, but the
+  MBP still measured a 430.66 Hz / 86 Hz hop artifact, so this was not promoted.
+- Old incorrect u400 probe: 0.954 lag; corrected u400: 0.936. The old threshold
+  and distinct hashes were not treated as speech.
+
+### Same-family positive control
+
+- Coqui registry LJSpeech VITS (22.05 kHz, hop 256; 36,321,264 parameters)
+  copy-synthesized LUK 19:22 through its posterior encoder and waveform decoder:
+  **16.0798 s**, lag-256 **−0.00984** (source −0.01097), RMS 0.1203.
+- Its waveform decoder is key/shape compatible with the Hmong VITS
+  (**231/231 keys**); preserved at
+  `data/runs/vits-diagnostic/ljspeech/ljspeech_waveform_decoder.pt`
+  (SHA `3418c191…`).
+
+### Promoted paired Hmong fit
+
+- Fresh Hmong `rpa-chars-1` text model with the LJSpeech waveform decoder
+  initialized; 200 paired generator/discriminator updates, same six exact
+  transcript/WAV pairs, no transcript dropout.
+- Corrected reconstruction lag-256: u100 **0.365**, u150 **−0.302**,
+  u200 **0.062** — the hop artifact is broken.
+- Free-running, fixed speaker/seed 3407:
+
+  | Text | Output | Ref | Ratio | Median F0 out/ref | Lag-256 |
+  | --- | ---: | ---: | ---: | ---: | ---: |
+  | 1CO 11:1 | 4.319 s | 4.47 s | 0.966 | 185.1/176.7 Hz | 0.156 |
+  | 1CO 12:19 | 2.926 s | 4.15 s | 0.705 | 186.1/181.9 Hz | 0.140 |
+  | LUK 19:22 | 13.502 s | 16.08 s | 0.840 | 185.1/147.7 Hz | 0.203 |
+
+- Full-state checkpoint:
+  `data/runs/vits-diagnostic/hmong-pretrained-decoder/checkpoint.pt`
+  (SHA `d3cca137…`), 200 updates, seed 3407, generator/discriminator optimizer
+  states present. Promoted decoder:
+  `.../hmong_waveform_decoder.pt` (SHA `3234678a…`, 14,337,024 parameters).
+- Outputs: `seen_a.wav`, `seen_b.wav`, `heldout_luk.wav`.
+
+This promotes the **waveform path**, not a native or quality result. Training
+still needs native-qualified evaluation; no release claim.

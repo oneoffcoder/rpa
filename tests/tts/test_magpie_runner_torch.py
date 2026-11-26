@@ -67,6 +67,7 @@ class FakeTrainModel:
     def __init__(self):
         self.weight = torch.nn.Parameter(torch.tensor(1.0))
         self.tokenizer = self
+        self.eos_id = 999
         self.seen = []
 
     def encode(self, text, tokenizer_name=None):
@@ -99,9 +100,10 @@ def test_read_pcm16_wav_and_batch(tmp_path):
     assert samples.dtype.name == "float32"
     model = FakeTrainModel()
     batch = make_verse_batch(model, {"audio_path": str(path), "text": "kuv"}, device="cpu")
-    assert batch["text"].shape == (1, 3)
+    assert batch["text"].shape == (1, 4)
     assert batch["audio"].shape == (1, 22050)
-    assert batch["text_lens"].item() == 3
+    assert batch["text_lens"].item() == 4
+    assert batch["text"][0, -1].item() == model.eos_id
 
 
 def test_interrupted_and_uninterrupted_rows_match(tmp_path):

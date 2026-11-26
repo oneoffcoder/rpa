@@ -23,6 +23,8 @@ first/second halves do not overlap.
 
 - Loaded the 2,000-step checkpoint (`e69d6018…`) through the exact pinned NeMo
   path, restored optimizer/scheduler/RNG, and started at **step 2000 / row 2000**.
+  The cumulative checkpoint includes ambiguous `REV 22:21` from the first 2,000
+  rows; the continuation block 2,000–3,999 contains neither ambiguous row.
 - First-row set and continuation-row set each contain 2,000 IDs with **overlap 0**.
 - Trained the next 2,000 distinct rows; checkpoint `3ede81ea…`, global step 4,000,
   optimizer/scheduler/RNG verified resumable.
