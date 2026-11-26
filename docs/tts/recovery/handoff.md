@@ -267,13 +267,32 @@ loader, optimization, scheduling, evaluation, checkpointing, and resume.
 See the [pinned VITS recipe](https://github.com/idiap/coqui-ai-TTS/blob/7d547eed8580be4fbcd409b7f3082d1d44acbe64/recipes/ljspeech/vits_tts/train_vits.py)
 and [Coqui language guidance](https://coqui-tts.readthedocs.io/en/latest/faq.html#how-can-i-train-in-a-different-language).
 
-**Ready on Radiance, with training stopped.** The fresh config is
-`data/runs/vits-coqui-rpa-handoff-v2/config.json`. Its readiness receipt binds
-the source manifests, metadata, config, and package pins. Preparation checked
-all 7,933 audio SHA-256 hashes, mono PCM16 WAV format at 22,050 Hz, and lexical
-letter preservation. The loader accepts 5,759 train and 714 dev utterances.
-The 1,460 test utterances are excluded from Trainer inputs. The receipt records
-editorial punctuation transformations by utterance ID.
+**Launched on Radiance; live.**
+
+**Live run (verified):**
+- **Config:** `data/runs/vits-coqui-rpa-handoff-v2/config.json`; readiness
+  receipt binds the source manifests, metadata, config and package pins.
+- **Wrapper PID** `40488`; **actual trainer PID** `32512`; one RTX 5090
+  trainer, no competing process.
+- **Saved run location:**
+  `data/runs/vits-coqui-rpa-handoff-v2/output/vits_coqui_rpa-November-26-2026_07+19AM-5ab5cf8`.
+- **Logs:** `data/runs/vits-coqui-rpa-handoff-v2/train.stderr.log` (Coqui
+  Trainer writes its log stream here; 417 KB and advancing) and
+  `train.stdout.log` (0 bytes). Launch record:
+  `data/runs/vits-coqui-rpa-handoff-v2/launch.json`.
+- **Retention:** config `save_step=250`, `save_n_checkpoints=5`,
+  `save_best_after=0`, `save_all_best=false`. Verified files currently retain
+  `checkpoint_500` through `checkpoint_1500` (five) plus `best_model.pth` and
+  `best_model_1440.pth`; `checkpoint_250` has been rotated out.
+- **First eval:** step 1,440, `EvalStats/avg_loss_1=46.5028`,
+  `avg_loss_mel=36.2806`, `avg_loss_duration=1.9377`, `avg_loss_kl=1.3923`,
+  `avg_loss_disc=2.1895`; `best_model_1440.pth` was selected. Process remains
+  live beyond that boundary.
+
+A separate small upstream CLI smoke performed optimizer steps and validation,
+saved a checkpoint, and restored model, optimizer, scheduler and best loss
+with Coqui's continue path. A premature full-corpus invocation was stopped.
+The fresh handoff had an empty output directory and no prior model inputs.
 
 The production config starts from fresh weights. It uses the stock VITS
 AdamW and ExponentialLR pairs, upstream spectral settings, and the full
@@ -281,11 +300,6 @@ audited dev split. Platform settings are batch 4, dev batch 2, float32, and
 zero auxiliary data loader workers on Windows. The cap is 100 epochs.
 The 37-token Coqui vocabulary includes the stock VITS blank. The preview prompts
 are RPA. Preview audio is development evidence.
-
-A separate small upstream CLI smoke performed optimizer steps and validation,
-saved a checkpoint, and restored model, optimizer, scheduler and best loss
-with Coqui's continue path. A premature full-corpus invocation was stopped.
-The fresh handoff has an empty output directory and no prior model inputs.
 
 Run from `C:\Users\jee\git\rpa` on Radiance in PowerShell:
 
