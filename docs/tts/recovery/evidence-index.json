@@ -711,6 +711,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Continued the book-disjoint Mark-holdout run from 2,000 to 4,000 steps; held-out Mark mean loss fell 11.1840 -> 11.1643 (base 11.9279, 6.4% total) and is plateauing, with a resumable checkpoint (c382291d)",
+      "created_at": "2026-11-26T14:00:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000031",
+      "notes": "Book-disjoint but not speaker-disjoint; private development only, no native/WER/quality/release claim.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-mark-holdout-4k.md",
+          "sha256": "0bf61cfd00ca1a38bc37bd1d8da6cec2c24ce68f63b3295882ced9967534fa81"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
