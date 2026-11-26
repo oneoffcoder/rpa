@@ -76,7 +76,7 @@ Corrections are appended, not deleted.
   4 s/script. Drafts only; no recording or approval exists. See
   [`calibration-scripts.draft.md`](calibration-scripts.draft.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (209 TTS tests); see
+  ingestion implemented and tested (217 TTS tests); see
   [`listening-instrument.md`](listening-instrument.md). No session, stimuli or
   responses exist, and the template sentences are not native-approved.
 - **Retired PR #1 archive** inspected selectively; see
