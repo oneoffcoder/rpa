@@ -87,7 +87,7 @@ Written 2026-11-26 for the next worker. Read
 
 - **No active process or background job** from this session remains. Earlier
   audit/build jobs finished; their logs were transient.
-- **F-04 allowance:** 8 active GPU hours and two engineering days, unspent.
+- **F-04 allowance:** The measured run history and remaining budget must be tracked before launch.
   Record any future GPU job's id/host/command/log path/elapsed time here.
 
 ## Completed evidence (see `evidence-index.json`)
@@ -258,28 +258,64 @@ training:
 No new recordings or worksheet work is requested from Jee; the independent
 reviewer path is required.
 
-## Live VITS resume (2026-11-26)
+## Official Coqui VITS baseline
 
-- **PID:** `23504`; run directory
-  `data/runs/vits-corpus-resume-100`; one trainer only.
-- **Resume:** epoch-5 checkpoint
-  `data/runs/vits-corpus-full-validated-20261126T1344Z/checkpoint-epoch5.pt`
-  (step 7,330; 111 discriminator / 838 generator AdamW states restored).
-- **Rule:** 32 fixed dev verses, singleton batches, fixed seed; validation score
-  is the sum of mean mel, duration and KL losses (lower is better). Explicit
-  **patience 10** completed epochs without improvement; script default patience
-  0 disables convergence stopping. **Cap 100 total epochs**; `epoch_limit`
-  otherwise.
-- **Latest verified boundary:** epoch 6 score **27.4323285** (mel 23.2805,
-  duration 2.0240, KL 2.1278); best epoch 6, stale 0. Best checkpoint
-  `checkpoint-epoch6.pt`; the process is working epoch 7.
-- **Remaining gate:** native listener/intelligibility and F-07 qualification.
-  Validation and correct-vs-wrong audio diagnostics are not native acceptance.
-  Owner listening on the earlier step-1500 renders was buzzing.
+Primary path for White Hmong training. Coqui `0.28.0` and its Trainer `0.4.0`
+are pinned on Radiance. The repo supplies an audited corpus, RPA text projection,
+and a Coqui character class. The upstream VITS model and Trainer own the data
+loader, optimization, scheduling, evaluation, checkpointing, and resume.
+See the [pinned VITS recipe](https://github.com/idiap/coqui-ai-TTS/blob/7d547eed8580be4fbcd409b7f3082d1d44acbe64/recipes/ljspeech/vits_tts/train_vits.py)
+and [Coqui language guidance](https://coqui-tts.readthedocs.io/en/latest/faq.html#how-can-i-train-in-a-different-language).
 
-## Upstream audit: live VITS vs Coqui 0.28.0
+**Ready on Radiance, with training stopped.** The fresh config is
+`data/runs/vits-coqui-rpa-handoff-v1/config.json`. Its readiness receipt binds
+the source manifests, metadata, config, and package pins. Preparation checked
+all 7,933 audio SHA-256 hashes, mono PCM16 WAV format at 22,050 Hz, and lexical
+letter preservation. The loader accepts 5,759 train and 714 dev utterances.
+The 1,460 test utterances are excluded from Trainer inputs. The receipt records
+editorial punctuation transformations by utterance ID.
 
-The live trainer is `scripts/vits_multiepoch_train.py`; text encoding is
+The production config starts from fresh weights. It uses the stock VITS
+AdamW and ExponentialLR pairs, upstream spectral settings, and the full
+audited dev split. Platform settings are batch 4, dev batch 2, float32, and
+zero auxiliary data loader workers on Windows. The cap is 100 epochs.
+The 36-token Coqui vocabulary has its own IDs and the three preview prompts
+are RPA. Preview audio is development evidence.
+
+A separate small upstream CLI smoke performed optimizer steps and validation,
+saved a checkpoint, and restored model, optimizer, scheduler and best loss
+with Coqui's continue path. A premature full-corpus invocation was stopped.
+The fresh handoff has an empty output directory and no prior model inputs.
+
+Run from `C:\Users\jee\git\rpa` on Radiance in PowerShell:
+
+```powershell
+$ff = (Get-ChildItem data/artifacts/ffmpeg-shared/extracted81 -Recurse -Filter ffmpeg.exe | Select-Object -First 1).DirectoryName
+$env:PATH = "$ff;$env:PATH"
+$env:PYTHONPATH = (Resolve-Path src).Path
+$env:CUDA_VISIBLE_DEVICES = '0'
+$config = 'data/runs/vits-coqui-rpa-handoff-v1/config.json'
+.venv-vits/Scripts/python.exe scripts/vits_coqui_setup.py train --config $config --check
+.venv-vits/Scripts/python.exe scripts/vits_coqui_setup.py train --config $config
+```
+
+For a fresh reproducible preparation, use `scripts/vits_coqui_setup.py prepare
+--run <new-run-dir>` in the same environment. To resume, use `train
+--continue-path <new-trainer-output-directory>` with this pipeline's Trainer
+output. Native listening and F-07 qualification remain open.
+
+
+## Retired custom-loop run (historical)
+
+The custom-loop trainer PID `23504` was stopped by the owner; its checkpoints
+and generated outputs were deleted. The recorded metrics are historical. The stale
+custom validation/patience notes are retained only as history. The primary clean
+run is the official Coqui section above.
+
+## Upstream audit of the retired custom loop (historical)
+
+The following comparison describes the retired custom loop, not the primary
+clean run. The previous trainer was `scripts/vits_multiepoch_train.py`; text encoding is
 `src/rpa_tts/text/vits_tokens.py`. The pinned LJSpeech recipe is the closest
 upstream reference:
 [Coqui fine-tuning docs](https://docs.coqui.ai/en/latest/finetuning.html),
