@@ -124,8 +124,10 @@ The book's `source/`, original audio and explorer are unchanged
 3. **Model runtime/host (F-04):** artifacts are resolved and hash-verified, but
    NeMo Speech is not installed and the host cannot run the pinned Linux GPU
    stack natively (no WSL2, no Docker). The owner must enable WSL2 or provide a
-   Linux worker before the GPU gate. `train run` and `resume` correctly refuse
-   (exit 3) until the gate passes and a tested wrapper exists.
+   Linux worker before the Magpie GPU gate. The VITS standby environment *does*
+   import with CUDA on native Windows after the recorded torchcodec/FFmpeg
+   fixes, but activation still requires a recorded Magpie failure and accepted
+   F-02 data. `train run` and `resume` correctly refuse (exit 3).
 4. **Owner backup destination (F-01 completion).**
 5. **GitHub PR/auth:** branch can be pushed over SSH; PR creation needs owner
    authentication.
