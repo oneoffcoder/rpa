@@ -168,6 +168,8 @@ The book's `source/`, original audio and explorer are unchanged
     constraint (WSL2/Linux requirement) and owner options.
   - `07ff18f19d802a801345e0a881227bfa2ed02447` — blinded listening instrument,
     schema and tests for F-02/F-07.
+  - `268a3f55abf5a5d6d37a2065efc388445742679a` — F-03 source re-verification and
+    access blockers.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
