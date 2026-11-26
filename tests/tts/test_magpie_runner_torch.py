@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import json
 import math
+import struct
+import wave
+from pathlib import Path
 
 import pytest
 
@@ -10,9 +13,14 @@ torch = pytest.importorskip("torch")
 from rpa_tts.errors import InputError, UnsupportedInputError  # noqa: E402
 from rpa_tts.training.magpie_runner import (  # noqa: E402
     MagpieRunnerError,
+    evaluate_verse_loss,
+    make_verse_batch,
     parameter_fingerprint,
+    read_pcm16_wav,
     render_private_audio,
     save_and_reload,
+    save_training_checkpoint,
+    train_verse_steps,
     verify_resume_checkpoint,
     write_rng_state,
 )
@@ -39,6 +47,112 @@ def _loader(path):
     model = FakeModel()
     model.weights = torch.load(path, weights_only=True)["layer.weight"]
     return model
+
+
+def _pcm_wav(path: Path, seconds: float = 1.0, rate: int = 22050) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(path), "wb") as handle:
+        handle.setnchannels(1)
+        handle.setsampwidth(2)
+        handle.setframerate(rate)
+        frames = b"".join(
+            struct.pack("<h", int(2000 * math.sin(2 * math.pi * 220 * i / rate)))
+            for i in range(int(rate * seconds))
+        )
+        handle.writeframes(frames)
+    return path
+
+
+class FakeTrainModel:
+    def __init__(self):
+        self.weight = torch.nn.Parameter(torch.tensor(1.0))
+        self.tokenizer = self
+
+    def encode(self, text, tokenizer_name=None):
+        return [ord(char) for char in text[:8]]
+
+    def parameters(self):
+        return [self.weight]
+
+    def state_dict(self):
+        return {"weight": self.weight.detach()}
+
+    def train(self):
+        return self
+
+    def eval(self):
+        return self
+
+    def training_step(self, batch, step):
+        return self.weight * batch["audio"].abs().mean() + 1.0
+
+    def process_batch(self, batch):
+        return {"loss": self.training_step(batch, 0)}
+
+
+def test_read_pcm16_wav_and_batch(tmp_path):
+    path = _pcm_wav(tmp_path / "v.wav")
+    samples, rate = read_pcm16_wav(path)
+    assert rate == 22050
+    assert samples.dtype.name == "float32"
+    model = FakeTrainModel()
+    batch = make_verse_batch(model, {"audio_path": str(path), "text": "kuv"}, device="cpu")
+    assert batch["text"].shape == (1, 3)
+    assert batch["audio"].shape == (1, 22050)
+    assert batch["text_lens"].item() == 3
+
+
+def test_evaluate_and_train_verse_steps(tmp_path):
+    path = _pcm_wav(tmp_path / "v.wav")
+    rows = [{"audio_path": str(path), "text": "kuv hlub koj"}]
+    model = FakeTrainModel()
+    base = evaluate_verse_loss(model, rows, device="cpu")
+    assert base["rows"] == 1
+    assert math.isfinite(base["mean"])
+    report = train_verse_steps(
+        model,
+        rows,
+        steps=3,
+        learning_rate=1e-3,
+        device="cpu",
+        eval_rows=rows,
+        eval_every=2,
+        log_every=2,
+    )
+    assert report["steps"] == 3
+    assert report["losses_finite"] is True
+    assert len(report["history"]) == 2  # one eval and one train log
+    assert report["optimizer"].state_dict()
+    assert report["scheduler"].state_dict()
+
+
+def test_save_training_checkpoint_is_resumable(tmp_path):
+    path = _pcm_wav(tmp_path / "v.wav")
+    rows = [{"audio_path": str(path), "text": "kuv"}]
+    model = FakeTrainModel()
+    report = train_verse_steps(model, rows, steps=2, device="cpu")
+    saved = save_training_checkpoint(
+        model,
+        report["optimizer"],
+        report["scheduler"],
+        tmp_path / "checkpoint.pt",
+        step=2,
+        rng_state_path=tmp_path / "rng.pt",
+    )
+    assert saved["resume_verification"]["passed"] is True
+    assert saved["resume_verification"]["global_step"] == 2
+    assert saved["sha256"]
+
+
+def test_read_pcm16_rejects_stereo(tmp_path):
+    path = tmp_path / "stereo.wav"
+    with wave.open(str(path), "wb") as handle:
+        handle.setnchannels(2)
+        handle.setsampwidth(2)
+        handle.setframerate(22050)
+        handle.writeframes(b"\x00\x00\x00\x00" * 100)
+    with pytest.raises(InputError, match="mono 16-bit"):
+        read_pcm16_wav(path)
 
 
 def test_fingerprint_detects_swapped_equal_sum_weights():

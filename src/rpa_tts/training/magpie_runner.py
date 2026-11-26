@@ -751,6 +751,155 @@ def build_finetune_command(
     }
 
 
+def read_pcm16_wav(path: str | Path) -> tuple[np.ndarray, int]:
+    """Read a mono 16-bit PCM WAV without an audio-codec dependency."""
+    with wave.open(str(path), "rb") as handle:
+        if handle.getnchannels() != 1 or handle.getsampwidth() != 2:
+            raise InputError(
+                "verse training audio must be mono 16-bit PCM WAV "
+                f"({handle.getnchannels()} channel(s), {handle.getsampwidth()} bytes)"
+            )
+        rate = handle.getframerate()
+        raw = handle.readframes(handle.getnframes())
+    samples = np.frombuffer(raw, dtype="<i2").astype(np.float32) / 32768.0
+    return samples, rate
+
+
+def make_verse_batch(model: Any, row: dict[str, Any], *, device: str = "cuda") -> dict[str, Any]:
+    """Build the Magpie training batch for one verse row."""
+    import torch
+
+    samples, rate = read_pcm16_wav(row["audio_path"])
+    audio = torch.from_numpy(samples).unsqueeze(0).to(device)
+    token_ids = model.tokenizer.encode(row["text"], tokenizer_name="text_ce_tokenizer")
+    return {
+        "text": torch.tensor([token_ids], dtype=torch.long, device=device),
+        "text_lens": torch.tensor([len(token_ids)], dtype=torch.long, device=device),
+        "audio": audio,
+        "audio_lens": torch.tensor([audio.shape[-1]], dtype=torch.long, device=device),
+        "sample_rate": rate,
+    }
+
+
+def evaluate_verse_loss(
+    model: Any,
+    rows: list[dict[str, Any]],
+    *,
+    limit: int | None = None,
+    device: str = "cuda",
+) -> dict[str, Any]:
+    """Mean/min/max Magpie loss over held-out verse rows (no gradients)."""
+    import torch
+
+    subset = rows[:limit] if limit else rows
+    if not subset:
+        raise InputError("no rows to evaluate")
+    model.eval()
+    values: list[float] = []
+    with torch.no_grad():
+        for row in subset:
+            batch = make_verse_batch(model, row, device=device)
+            values.append(float(model.process_batch(batch)["loss"].detach().cpu()))
+    model.train()
+    return {
+        "rows": len(values),
+        "mean": round(sum(values) / len(values), 6),
+        "min": round(min(values), 6),
+        "max": round(max(values), 6),
+    }
+
+
+def train_verse_steps(
+    model: Any,
+    rows: list[dict[str, Any]],
+    *,
+    steps: int,
+    learning_rate: float = 1e-5,
+    clip_grad_norm: float = 1.0,
+    device: str = "cuda",
+    eval_rows: list[dict[str, Any]] | None = None,
+    eval_every: int = 0,
+    log_every: int = 0,
+) -> dict[str, Any]:
+    """Run bounded private verse finetuning steps and return losses/history."""
+    import torch
+
+    if steps <= 0:
+        raise InputError("steps must be positive")
+    if not rows:
+        raise InputError("no training rows")
+    parameters = [p for p in model.parameters() if p.requires_grad]
+    if not parameters:
+        raise InputError("model has no trainable parameters")
+    optimizer = torch.optim.AdamW(parameters, lr=learning_rate)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=max(1, steps // 2), gamma=0.5)
+    model.train()
+    losses: list[float] = []
+    history: list[dict[str, Any]] = []
+    for step in range(steps):
+        row = rows[step % len(rows)]
+        optimizer.zero_grad(set_to_none=True)
+        loss = model.training_step(make_verse_batch(model, row, device=device), step)
+        loss.backward()
+        if clip_grad_norm > 0:
+            torch.nn.utils.clip_grad_norm_(parameters, clip_grad_norm)
+        optimizer.step()
+        scheduler.step()
+        losses.append(float(loss.detach().cpu()))
+        if eval_rows and eval_every and (step + 1) % eval_every == 0:
+            history.append(
+                {
+                    "step": step + 1,
+                    "eval": evaluate_verse_loss(model, eval_rows, limit=None, device=device),
+                }
+            )
+        if log_every and (step + 1) % log_every == 0:
+            history.append({"step": step + 1, "train_loss": losses[-1]})
+    return {
+        "steps": steps,
+        "losses": losses,
+        "losses_finite": all(float(np.isfinite(value)) for value in losses),
+        "history": history,
+        "optimizer": optimizer,
+        "scheduler": scheduler,
+    }
+
+
+def save_training_checkpoint(
+    model: Any,
+    optimizer: Any,
+    scheduler: Any,
+    path: str | Path,
+    *,
+    step: int,
+    rng_state_path: str | Path,
+) -> dict[str, Any]:
+    """Save optimizer/scheduler/step/RNG state and verify resume structure."""
+    import torch
+
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    rng = write_rng_state(rng_state_path)
+    torch.save(
+        {
+            "state_dict": model.state_dict(),
+            "optimizer_states": [optimizer.state_dict()],
+            "lr_schedulers": [scheduler.state_dict()],
+            "global_step": int(step),
+            "epoch": 0,
+        },
+        destination,
+    )
+    report = verify_resume_checkpoint(destination, rng_state_path=rng["path"])
+    return {
+        "checkpoint": str(destination),
+        "bytes": destination.stat().st_size,
+        "sha256": sha256_file(destination),
+        "rng": rng,
+        "resume_verification": report,
+    }
+
+
 def run_upstream(
     command: list[str],
     *,
@@ -790,12 +939,17 @@ __all__ = [
     "capture_rng_state",
     "diagnose_environment",
     "effective_packaged_config",
+    "evaluate_verse_loss",
     "load_magpie",
+    "make_verse_batch",
     "parameter_fingerprint",
     "prepare_magpie_manifest",
+    "read_pcm16_wav",
     "render_private_audio",
     "run_upstream",
     "save_and_reload",
+    "save_training_checkpoint",
+    "train_verse_steps",
     "verify_resume_checkpoint",
     "write_rng_state",
 ]

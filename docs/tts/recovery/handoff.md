@@ -105,7 +105,7 @@ Written 2026-11-26 for the next worker. Read
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
-(the F-01 checkpoint recorded 179 tests then; the current suite is 371 passed,
+(the F-01 checkpoint recorded 179 tests then; the current suite is 375 passed,
 1 skipped, ruff clean). Book build: 0 errors / 10 warnings; playback reference
 check: 281 links, 3,688 playable tokens, exact 5,187-file inventory match, no
 zero-playable links (`book-audio-references.md`); built HTML: 12 pages, 5,152
