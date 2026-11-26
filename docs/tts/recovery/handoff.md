@@ -219,6 +219,8 @@ The book's `source/`, original audio and explorer are unchanged
     verification.
   - `3832b83006902d43b6cb1bc24164ea1c0d91d1aa` — enforced F-07 qualification
     suite composition.
+  - `1225de9b3105720a25a5750cd1d867c70f123c24` — native review worksheet for
+    the 272-candidate draft pool.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
