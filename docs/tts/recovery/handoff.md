@@ -309,6 +309,8 @@ and permission exist.
     reference verification.
   - `b0ec3380d1c94fd9984847e3df29ef80692e83b0` — built-HTML reference check and
     paused owner-unblock brief.
+  - `6a316c9d2e82100aeac304c25bf8ffc4ba4b4956` — real F-04 runner, capacity
+    constraint and corrected `mww` existing-source investigation.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
