@@ -277,6 +277,40 @@ reviewer path is required.
   Validation and correct-vs-wrong audio diagnostics are not native acceptance.
   Owner listening on the earlier step-1500 renders was buzzing.
 
+## Upstream audit: live VITS vs Coqui 0.28.0
+
+The live trainer is `scripts/vits_multiepoch_train.py`; text encoding is
+`src/rpa_tts/text/vits_tokens.py`. The pinned LJSpeech recipe is the closest
+upstream reference:
+[Coqui fine-tuning docs](https://docs.coqui.ai/en/latest/finetuning.html),
+[VITS config/model docs](https://docs.coqui.ai/en/latest/models/vits.html), and
+[LJSpeech VITS recipe at `7d547ee`](https://github.com/idiap/coqui-ai-TTS/blob/7d547eed8580be4fbcd409b7f3082d1d44acbe64/recipes/ljspeech/vits_tts/train_vits.py).
+The documentation site labels itself 0.22.0; the installed package is pinned
+0.28.0 and the recipe/API above are the audited behavior.
+
+| Area | Upstream Coqui recipe/docs | Live Hmong VITS | Verdict |
+| --- | --- | --- | --- |
+| Data loading | `load_tts_samples`/LJSpeech formatter, Trainer dataloader, eval split | Custom quarantine JSONL + `soundfile`, fixed chapter split contract | Custom loader; split is preserved/comparable |
+| Text inventory | `english_cleaners`, phonemes, LJSpeech characters | `rpa-chars-1`: 37 tokens, lowercase/quote sanitizing, no phonemizer | Intentional custom Hmong contract; no upstream Hmong tokenizer |
+| Audio | 22,050 Hz, win 1024, hop 256, 80 mels | Same 22,050/1024/256/80 | Matches |
+| Batch/optimizer | batch 32, mixed precision, ExponentialLR generator/discriminator schedulers | batch 4, fp32, AdamW 2e-4, **no scheduler** | Real optimization gap |
+| Init/fine-tune | `--restore_path` through the Coqui Trainer | Full LJSpeech acoustic modules + fresh Hmong symbol embedding, loaded manually | Custom; no upstream Hmong fine-tune recipe |
+| Epochs | Recipe default 1000 | 100 cap, patience 10 | Comparable targets, different recipe |
+| Evaluation | Trainer eval dataloader/eval loss | 32 fixed dev singleton batches; score=mel+duration+KL; plus correct-vs-wrong audio diagnostic | Custom diagnostic, not upstream eval and not native acceptance |
+
+**Real gaps:** no Coqui formatter/dataloader or phonemizer, no LR schedulers,
+batch/mixed-precision regime differs, and checkpoint selection uses a custom
+composite. **Intentional custom pieces:** the RPA character inventory, fresh
+Hmong embeddings, chapter-held-out split and 22.05 kHz config match the data.
+The live trainer was not changed during this audit; PID `23504` continues.
+
+The **NVIDIA Magpie** add-a-language guide
+([source](https://docs.nvidia.com/nemo/speech/nightly/tts/magpietts-finetuning.html#adding-a-new-language))
+is a different stack and was not used for VITS. Its codec gate failed
+(1.89 kbps round-trip not recognizable Hmong), which triggered the VITS lane;
+Magpie's constant-LR/no-scheduler/batch-16 guidance therefore does not validate
+this VITS recipe.
+
 ## Next smallest executable steps
 
 1. Owner: establish the independent backup destination, then append the F-01
