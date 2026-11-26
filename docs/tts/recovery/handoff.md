@@ -258,6 +258,25 @@ training:
 No new recordings or worksheet work is requested from Jee; the independent
 reviewer path is required.
 
+## Live VITS resume (2026-11-26)
+
+- **PID:** `23504`; run directory
+  `data/runs/vits-corpus-resume-100`; one trainer only.
+- **Resume:** epoch-5 checkpoint
+  `data/runs/vits-corpus-full-validated-20261126T1344Z/checkpoint-epoch5.pt`
+  (step 7,330; 111 discriminator / 838 generator AdamW states restored).
+- **Rule:** 32 fixed dev verses, singleton batches, fixed seed; validation score
+  is the sum of mean mel, duration and KL losses (lower is better). Explicit
+  **patience 10** completed epochs without improvement; script default patience
+  0 disables convergence stopping. **Cap 100 total epochs**; `epoch_limit`
+  otherwise.
+- **Latest verified boundary:** epoch 6 score **27.4323285** (mel 23.2805,
+  duration 2.0240, KL 2.1278); best epoch 6, stale 0. Best checkpoint
+  `checkpoint-epoch6.pt`; the process is working epoch 7.
+- **Remaining gate:** native listener/intelligibility and F-07 qualification.
+  Validation and correct-vs-wrong audio diagnostics are not native acceptance.
+  Owner listening on the earlier step-1500 renders was buzzing.
+
 ## Next smallest executable steps
 
 1. Owner: establish the independent backup destination, then append the F-01

@@ -17,14 +17,13 @@ import hashlib
 import json
 import os
 import random
-import sys
 import time
 from pathlib import Path
 
+import librosa
 import numpy as np
 import soundfile as sf
 import torch
-import librosa
 from TTS.tts.configs.vits_config import VitsConfig
 from TTS.tts.models.vits import Vits
 
@@ -209,9 +208,7 @@ def main() -> int:
         model.disc.parameters(), lr=2e-4, betas=(0.8, 0.99), eps=1e-9, weight_decay=0.01
     )
     gen_params = [p for n, p in model.named_parameters() if not n.startswith("disc.")]
-    gen_opt = torch.optim.AdamW(
-        gen_params, lr=2e-4, betas=(0.8, 0.99), eps=1e-9, weight_decay=0.01
-    )
+    gen_opt = torch.optim.AdamW(gen_params, lr=2e-4, betas=(0.8, 0.99), eps=1e-9, weight_decay=0.01)
     start_step = 0
     seen_unique: set[str] = set()
     epoch = 0
@@ -231,6 +228,7 @@ def main() -> int:
         torch.set_rng_state(ck["torch_rng"].cpu().to(torch.uint8))
         if ck.get("cuda_rng"):
             torch.cuda.set_rng_state_all([s.cpu().to(torch.uint8) for s in ck["cuda_rng"]])
+
     def save(step: int, eval_payload: dict | None = None) -> None:
         ckpt = ROOT / "checkpoint.pt"
         tmp = ROOT / "checkpoint.pt.tmp"
@@ -267,6 +265,7 @@ def main() -> int:
         if eval_payload:
             status["eval"] = eval_payload
         atomic_json(ROOT / "status.json", status)
+
     def synth(p: dict, ids: list[int]) -> tuple[np.ndarray, float]:
         with torch.random.fork_rng(devices=[torch.cuda.current_device()]):
             torch.manual_seed(SEED)
@@ -284,12 +283,16 @@ def main() -> int:
             out["model_outputs"].detach().float().cpu().numpy().reshape(-1),
             float(out["durations"].sum().detach().cpu()),
         )
+
     def wrong_ids(p: dict, used: set[str]) -> tuple[list[int], str]:
         target = len(p["ids"])
-        candidates = [q for q in dev if q["row"]["id"] not in used and q["row"]["id"] != p["row"]["id"]]
+        candidates = [
+            q for q in dev if q["row"]["id"] not in used and q["row"]["id"] != p["row"]["id"]
+        ]
         candidates.sort(key=lambda q: (abs(len(q["ids"]) - target), q["row"]["id"]))
         q = candidates[0]
         return q["ids"], q["row"]["reference"]
+
     def evaluate(step: int) -> dict:
         model.eval()
         outdir = ROOT / "eval" / f"step_{step:05d}"
@@ -327,6 +330,7 @@ def main() -> int:
         atomic_json(outdir / "eval.json", payload)
         atomic_json(ROOT / "latest_eval.json", payload)
         return payload
+
     model.train()
     step = start_step
     rows_seen = 0
@@ -393,7 +397,6 @@ def main() -> int:
                 save(step, eval_payload)
             if not np.isfinite(rec["gen_loss"]) or not np.isfinite(rec["disc_loss"]):
                 raise SystemExit(f"non-finite loss at step {step}")
-    save(step)
     print(json.dumps({"done": True, "step": step, "rows_seen": rows_seen}), flush=True)
     return 0
 
