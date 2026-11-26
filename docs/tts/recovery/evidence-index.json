@@ -816,6 +816,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Two fresh processes loading the exported candidate .nemo produced byte-identical synthesis for the same prompt/seed/settings: sha e6d1f5d3, 1.2074s/26,624 samples at 22,050Hz, confirming deterministic private inference from the portable artifact",
+      "created_at": "2026-11-26T15:10:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000038",
+      "notes": "Private development only; audio unlistened; no native/quality/release claim. Artifact sha 87d16174 under ignored data/runs.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-synth-repro.md",
+          "sha256": "423cbd4fccb59118cbf34d91be57e511eadec659a6a8b126fb401f519a16da85"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
