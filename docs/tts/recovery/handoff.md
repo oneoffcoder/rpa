@@ -217,6 +217,8 @@ The book's `source/`, original audio and explorer are unchanged
     and validated learning-curve recording.
   - `90d3840abb482a58c19a2ccb2d25ac8ae711c669` — byte-level manifest audio
     verification.
+  - `3832b83006902d43b6cb1bc24164ea1c0d91d1aa` — enforced F-07 qualification
+    suite composition.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
