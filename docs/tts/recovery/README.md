@@ -23,12 +23,12 @@ Blocked / Not required. Evidence is append-only in
 | Stage | State | Dependencies | Responsible | Evidence | Next action |
 | --- | --- | --- | --- | --- | --- |
 | **F-01** workspace, environment, evidence, compute | **In progress** | none | implementation agent | [`environment.md`](environment.md), [`evidence/f01-environment.json`](evidence/f01-environment.json), [`evidence/f01-gpu-kernel-proof.json`](evidence/f01-gpu-kernel-proof.json), [`run-manifest.md`](run-manifest.md), [`decisions.jsonl`](decisions.jsonl) | Establish the independent owner-controlled backup destination (100–200 GB workspace is measured); then append the F-01 completion entry |
-| **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started) | Hold the three-listener calibration session, approve dialect/voice, enumerate attested contrast cells, adopt approved expansions |
+| **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready) | Approve dialect/voice and session scripts, enumerate attested contrast cells, adopt approved expansions, then run the calibration pack |
 | **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), repository syllable audit (below) | One-day bounded CMU source/text/rights investigation; request UMN/Garellek/Pangeanic terms; no corpus purchase without a prepared scope |
 | **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), `configs/tts/f04-magpie.yaml`, `rpa-tts model check` | Owner chooses the Linux path (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); then load the hash-verified Magpie artifact and run the bounded two-day/8-GPU-hour gate |
 | **F-05** accepted corpus, coverage, frozen splits | **Not started** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), `rpa-tts corpus split` | Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **Not started** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) | Write the first stage decision before any 1/2-hour comparison |
-| **F-07** independent native qualification | **Not started** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | `rpa-tts evaluate gate` (implemented, no data) | Staff the 12-listener plan only after a candidate and protocol are frozen |
+| **F-07** independent native qualification | **Not started** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), `rpa-tts evaluate gate` (implemented, no data) | Staff the 12-listener plan only after a candidate and protocol are frozen |
 | **F-08** reproducible package + approved lesson audio | **Not started** | F-07 passed + distribution rights | ML/application engineer + native content reviewer | `rpa-tts package build` (gated) | Not actionable before F-07 |
 | **F-09** online serving | **Not required** (deferred) | F-08 acceptance + concrete hosting requirement | operations | decision D-05 in [`decisions.jsonl`](decisions.jsonl) | Becomes required only if arbitrary-text serving is authorized |
 
@@ -63,6 +63,10 @@ Corrections are appended, not deleted.
 - **Book regression:** the pinned Sphinx environment builds `source/` with no
   lesson/audio regressions (see [`book-regression.md`](book-regression.md)).
   Building is not publishing.
+- **Listening instrument:** blinded, counterbalanced pack builder and response
+  ingestion implemented and tested (209 TTS tests); see
+  [`listening-instrument.md`](listening-instrument.md). No session, stimuli or
+  responses exist, and the template sentences are not native-approved.
 - **Retired PR #1 archive** inspected selectively; see
   [`archive-pr1.md`](archive-pr1.md).
 
@@ -84,6 +88,8 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts train run/resume` | **gated (F-04)** | Refuses until F-04 passes and a wrapper is tested |
 | `rpa-tts synthesize` | **gated (F-07)** | Refuses until F-07 passes and a package is accepted |
 | `rpa-tts evaluate metrics/gate` | yes | Scoring and F-07 gate; needs real listening data |
+| `rpa-tts evaluate pack` | yes | Builds a blinded, counterbalanced listener pack (no audio or session yet) |
+| `rpa-tts evaluate ingest` | yes | Validates completed sheets into a scores payload |
 | `rpa-tts evidence add` | yes | Hash-checked append |
 | `rpa-tts package build` | **gated (F-08)** | Refuses before F-08 |
 
@@ -100,6 +106,7 @@ outcomes, evidence append-only behavior and CLI/gate refusals.
 | [`environment.md`](environment.md) | Measured host, pinned stack, GPU proof, reproduction commands |
 | [`language-contract.yaml`](language-contract.yaml) | Draft dialect, normalization, scoring, buckets, attested cells (native work) |
 | [`listener-calibration.md`](listener-calibration.md) | F-02 session protocol, instrument checks, privacy |
+| [`listening-instrument.md`](listening-instrument.md) | Blinded pack builder, task order, ingestion rules and commands |
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |
 | [`rights-matrix.csv`](rights-matrix.csv) | Per-source permission status and next actions |
 | [`model-candidates.md`](model-candidates.md) | F-04 Magpie/VITS lane contracts, gate checklist, budgets |

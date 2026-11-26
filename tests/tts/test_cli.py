@@ -296,6 +296,60 @@ def test_train_plan_requires_an_explicit_stage_decision(
     assert payload["blockers"]
 
 
+def test_evaluate_pack_and_ingest_round_trip(
+    tmp_path, pack_definition, write_responses, config_path, capsys
+):
+    definition_path = tmp_path / "definition.json"
+    definition_path.write_text(json.dumps(pack_definition()), encoding="utf-8")
+    pack_dir = tmp_path / "pack"
+    assert (
+        main(["evaluate", "pack", "--definition", str(definition_path), "--output", str(pack_dir)])
+        == 0
+    )
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["summary"]["assignments"] == 9
+    assert payload["audio_staged"] is False
+
+    write_responses(pack_dir, tmp_path / "responses")
+    scores_path = tmp_path / "scores.json"
+    assert (
+        main(
+            [
+                "evaluate",
+                "ingest",
+                "--pack",
+                str(pack_dir),
+                "--responses",
+                str(tmp_path / "responses"),
+                "--output",
+                str(scores_path),
+            ]
+        )
+        == 0
+    )
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["transcriptions"] == 9
+    assert payload["catastrophic_outputs"] == 0
+
+    assert (
+        main(
+            [
+                "evaluate",
+                "metrics",
+                "--scores",
+                str(scores_path),
+                "--output",
+                str(tmp_path / "metrics.json"),
+                "--config",
+                str(config_path),
+            ]
+        )
+        == 0
+    )
+    metrics = json.loads(capsys.readouterr().out)
+    assert metrics["syllable"]["pooled_error_rate"] == 0.0
+
+
 def test_run_manifest_validate_rejects_garbage(tmp_path, capsys):
     path = tmp_path / "run.json"
     path.write_text("{}", encoding="utf-8")

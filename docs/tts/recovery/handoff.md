@@ -82,7 +82,7 @@ Written 2026-11-26 for the next worker. Read
 | Gate | Evidence |
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
-| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`) |
+| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument implemented and tested (`…000c`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts downloaded, hash-verified and packaged config inspected (`…000a`) |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
@@ -96,7 +96,9 @@ The book's `source/`, original audio and explorer are unchanged
 
 1. **Native participants (F-02):** three fluent listeners, native language lead
    and adjudicators are not scheduled; no approvals, no attested contrast cells,
-   no approved expansions.
+   no approved expansions. The blinded instrument is ready
+   (`listening-instrument.md`), but **no pack has been run**; template sentences
+   still need native approval and the calibration stimuli do not exist.
 2. **Rights/people (F-03):** no source has cleared training/weight-distribution
    rights; CMU is blocked on source/text/rights match; outreach requires owner
    authorization and money where quoted.
@@ -140,6 +142,12 @@ The book's `source/`, original audio and explorer are unchanged
 5. Before any learning run, write the stage decision with
    `.venv/Scripts/python -m rpa_tts train plan ...` (see `--help`), then append it
    to `stage-decisions.jsonl`.
+6. Once native scripts/stimuli exist: build the calibration pack with
+   `.venv/Scripts/python -m rpa_tts evaluate pack --definition <definition.json> --output <pack-dir> --stage-audio <root>`,
+   distribute phase A then phase B, ingest with
+   `.venv/Scripts/python -m rpa_tts evaluate ingest --pack <pack-dir> --responses <responses-dir> --output scores.json`,
+   then run `evaluate metrics`/`gate`. Do not reuse exposed scripts for the locked
+   test.
 
 ## Checkpoint
 

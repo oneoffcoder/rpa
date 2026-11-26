@@ -190,6 +190,29 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Blinded counterbalanced listening instrument implemented and tested: one condition per script/listener, opaque codes, phase-A transcription/naturalness before phase-B contrast, strict response ingestion into the F-07 scores payload",
+      "created_at": "2026-11-26T08:40:00+00:00",
+      "gate": "F-02",
+      "id": "ev_000000000000000c",
+      "notes": "No pack has been used with a listener and no responses exist. Template sentences are illustrative and require native approval; stimuli and calibration recordings do not exist. Software validation covers balance, blindness, determinism, replay caps, empty outputs and missing/duplicate/invalid responses.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/listening-instrument.md",
+          "sha256": "14785e184cc6146b770085654a6e24b3edc6e066eebda812d34e33b058bb762d"
+        },
+        {
+          "path": "docs/tts/recovery/listening-pack.template.json",
+          "sha256": "4d24de58b82e5dcbccfc4ac35dba8772eb1a5b8da0bd3e186d162eebead5df2f"
+        },
+        {
+          "path": "configs/tts/schemas/listening-pack.schema.json",
+          "sha256": "dd5e7ad166ebd7d3ebef60a1d61f1aacd23ef2f508f3e0e2c1a27904494b8194"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

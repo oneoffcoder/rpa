@@ -32,6 +32,7 @@ from .environment import collect_environment, gpu_kernel_proof, write_json_repor
 from .errors import GateNotPassedError, InputError, RpaTtsError
 from .evaluation.gate import evaluate_release
 from .evaluation.metrics import contrast_summary, naturalness_summary, score_transcriptions
+from .evaluation.pack import build_pack, load_definition, load_responses, stage_audio
 from .evaluation.uncertainty import mean_with_interval
 from .evidence import append_entry, make_entry
 from .evidence import gate_status as evidence_gate_status
@@ -164,6 +165,24 @@ def parser() -> argparse.ArgumentParser:
     gate.add_argument("--scores", type=Path, required=True)
     gate.add_argument("--output", type=Path, required=True)
     gate.add_argument("--config", type=Path, default=None)
+    pack_build = evaluate_commands.add_parser(
+        "pack", help="build a blinded, counterbalanced listening pack"
+    )
+    pack_build.add_argument("--definition", type=Path, required=True)
+    pack_build.add_argument("--output", type=Path, required=True)
+    pack_build.add_argument(
+        "--stage-audio",
+        type=Path,
+        default=None,
+        help="source root for the definition's audio paths; stages blind audio into the pack",
+    )
+    pack_build.add_argument("--overwrite", action="store_true")
+    ingest = evaluate_commands.add_parser(
+        "ingest", help="validate completed response sheets into a scores payload"
+    )
+    ingest.add_argument("--pack", type=Path, required=True)
+    ingest.add_argument("--responses", type=Path, required=True)
+    ingest.add_argument("--output", type=Path, required=True)
 
     # evidence --------------------------------------------------------------
     evidence = commands.add_parser("evidence", help="append to the evidence index")
@@ -554,6 +573,40 @@ def _cmd_evaluate_gate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     return report, exit_code
 
 
+def _cmd_evaluate_pack(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    definition = load_definition(args.definition)
+    built = build_pack(definition, args.output)
+    pack_manifest = args.output / "pack-manifest.json"
+    payload: dict[str, Any] = {
+        "output": str(args.output),
+        "summary": built["summary"],
+        "pack_manifest_sha256": sha256_file(pack_manifest),
+        "audio_staged": False,
+    }
+    if args.stage_audio:
+        staged = stage_audio(args.output, args.stage_audio, overwrite=args.overwrite)
+        payload["audio_staged"] = True
+        payload["staged_audio_sha256"] = staged["manifest"]["staged_audio_sha256"]
+    return payload, 0
+
+
+def _cmd_evaluate_ingest(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    scores = load_responses(args.pack, args.responses)
+    write_json_report(scores, args.output)
+    payload = {
+        "output": str(args.output),
+        "pack_id": scores["pack_id"],
+        "transcriptions": len(scores["transcriptions"]),
+        "naturalness": len(scores["naturalness"]),
+        "contrasts": len(scores["contrasts"]),
+        "catastrophic_outputs": scores["catastrophic_outputs"],
+        "note": (
+            "Run evaluate metrics/gate next; adjudication of critical errors remains a native step."
+        ),
+    }
+    return payload, 0
+
+
 def _cmd_evidence_add(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     root = _repo_root(args)
     index_path = args.index or evidence_index_path(root)
@@ -598,6 +651,8 @@ _DISPATCH = {
     ("synthesize", None): _cmd_synthesize,
     ("evaluate", "metrics"): _cmd_evaluate_metrics,
     ("evaluate", "gate"): _cmd_evaluate_gate,
+    ("evaluate", "pack"): _cmd_evaluate_pack,
+    ("evaluate", "ingest"): _cmd_evaluate_ingest,
     ("evidence", "add"): _cmd_evidence_add,
     ("package", "build"): _cmd_package,
     ("run-manifest", "validate"): _cmd_run_manifest_validate,

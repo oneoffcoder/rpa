@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "pack_id": "calibration-template-01",
+  "design": "calibration",
+  "seed": 3407,
+  "conditions": ["candidate", "natural", "baseline"],
+  "plays": {
+    "short_max": 2,
+    "paragraph_extra": 1
+  },
+  "items": [
+    {
+      "script_id": "s001",
+      "bucket": "ordinary_sentences",
+      "text": "kuv hlub koj",
+      "condition_audio": {
+        "candidate": "audio/candidate/s001.wav",
+        "natural": "audio/natural/s001.wav",
+        "baseline": "audio/baseline/s001.wav"
+      }
+    },
+    {
+      "script_id": "s002",
+      "bucket": "targeted_contrasts",
+      "text": "nws yog ib tug neeg",
+      "critical": true,
+      "contrast": {
+        "options": ["neeg", "nees"],
+        "expected": "neeg"
+      },
+      "condition_audio": {
+        "candidate": "audio/candidate/s002.wav",
+        "natural": "audio/natural/s002.wav",
+        "baseline": "audio/baseline/s002.wav"
+      }
+    },
+    {
+      "script_id": "s003",
+      "bucket": "questions_numbers_names",
+      "text": "koj puas nyob zoo",
+      "condition_audio": {
+        "candidate": "audio/candidate/s003.wav",
+        "natural": "audio/natural/s003.wav",
+        "baseline": "audio/baseline/s003.wav"
+      }
+    }
+  ],
+  "listeners": [
+    {
+      "listener_id": "L-01",
+      "roles": ["transcription", "naturalness", "contrast"]
+    },
+    {
+      "listener_id": "L-02",
+      "roles": ["transcription", "naturalness", "contrast"]
+    },
+    {
+      "listener_id": "L-03",
+      "roles": ["transcription", "naturalness", "contrast"]
+    }
+  ]
+}

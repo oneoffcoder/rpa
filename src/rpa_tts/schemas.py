@@ -399,6 +399,100 @@ EVIDENCE_INDEX: dict[str, Any] = {
     },
 }
 
+LISTENING_PACK: dict[str, Any] = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rpa.oneoffcoder.com/schemas/listening-pack.schema.json",
+    "title": "RPA TTS blinded listening-pack definition",
+    "description": (
+        "Input definition for a counterbalanced listening pack. One condition is assigned per "
+        "listener and script; contrast alternatives appear only in the separately distributed "
+        "phase-B sheet."
+    ),
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["schema_version", "pack_id", "design", "seed", "conditions", "items", "listeners"],
+    "properties": {
+        "schema_version": {"type": "integer", "enum": [1]},
+        "pack_id": {"type": "string", "pattern": r"^[a-z0-9][a-z0-9._-]{2,63}$"},
+        "design": {"type": "string", "enum": ["calibration", "qualification"]},
+        "seed": {"type": "integer", "minimum": 0},
+        "conditions": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": True,
+            "items": {"type": "string", "pattern": r"^[a-z][a-z0-9_-]{1,31}$"},
+        },
+        "plays": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "short_max": {"type": "integer", "minimum": 1, "maximum": 5},
+                "paragraph_extra": {"type": "integer", "minimum": 0, "maximum": 2},
+            },
+        },
+        "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["script_id", "bucket", "text", "condition_audio"],
+                "properties": {
+                    "script_id": {"type": "string", "pattern": r"^[a-z0-9][a-z0-9_-]{0,63}$"},
+                    "bucket": {"type": "string", "enum": BUCKETS},
+                    "kind": {"type": "string", "enum": ["sentence", "paragraph"]},
+                    "text": {"type": "string", "minLength": 1},
+                    "critical": {"type": "boolean"},
+                    "contrast": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "required": ["options", "expected"],
+                        "properties": {
+                            "options": {
+                                "type": "array",
+                                "minItems": 2,
+                                "uniqueItems": True,
+                                "items": {"type": "string", "minLength": 1},
+                            },
+                            "expected": {"type": "string", "minLength": 1},
+                        },
+                    },
+                    "condition_audio": {
+                        "type": "object",
+                        "minProperties": 2,
+                        "additionalProperties": {"type": "string", "minLength": 1},
+                    },
+                    "expansion_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
+                },
+            },
+        },
+        "listeners": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["listener_id", "roles"],
+                "properties": {
+                    "listener_id": {"type": "string", "pattern": r"^L-[0-9]{2,3}$"},
+                    "roles": {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": True,
+                        "items": {
+                            "type": "string",
+                            "enum": ["transcription", "naturalness", "contrast"],
+                        },
+                    },
+                },
+            },
+        },
+    },
+}
+
 SCHEMAS: dict[str, dict[str, Any]] = {
     "utterance-manifest.schema.json": UTTERANCE_MANIFEST,
     "run-manifest.schema.json": RUN_MANIFEST,
@@ -406,6 +500,7 @@ SCHEMAS: dict[str, dict[str, Any]] = {
     "stage-decision.schema.json": STAGE_DECISION,
     "evidence-entry.schema.json": EVIDENCE_ENTRY,
     "evidence-index.schema.json": EVIDENCE_INDEX,
+    "listening-pack.schema.json": LISTENING_PACK,
 }
 
 LEARNING_CURVE_COLUMNS = [

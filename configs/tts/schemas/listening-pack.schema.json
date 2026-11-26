@@ -1,0 +1,177 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/listening-pack.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Input definition for a counterbalanced listening pack. One condition is assigned per listener and script; contrast alternatives appear only in the separately distributed phase-B sheet.",
+  "properties": {
+    "conditions": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_-]{1,31}$",
+        "type": "string"
+      },
+      "minItems": 2,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "design": {
+      "enum": [
+        "calibration",
+        "qualification"
+      ],
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "bucket": {
+            "enum": [
+              "ordinary_sentences",
+              "targeted_contrasts",
+              "questions_numbers_names",
+              "continuous_passages",
+              "calibration"
+            ],
+            "type": "string"
+          },
+          "condition_audio": {
+            "additionalProperties": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minProperties": 2,
+            "type": "object"
+          },
+          "contrast": {
+            "additionalProperties": false,
+            "properties": {
+              "expected": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "options": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 2,
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "options",
+              "expected"
+            ],
+            "type": "object"
+          },
+          "critical": {
+            "type": "boolean"
+          },
+          "expansion_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "sentence",
+              "paragraph"
+            ],
+            "type": "string"
+          },
+          "script_id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+            "type": "string"
+          },
+          "text": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "script_id",
+          "bucket",
+          "text",
+          "condition_audio"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "listeners": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "listener_id": {
+            "pattern": "^L-[0-9]{2,3}$",
+            "type": "string"
+          },
+          "roles": {
+            "items": {
+              "enum": [
+                "transcription",
+                "naturalness",
+                "contrast"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "listener_id",
+          "roles"
+        ],
+        "type": "object"
+      },
+      "minItems": 2,
+      "type": "array"
+    },
+    "pack_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$",
+      "type": "string"
+    },
+    "plays": {
+      "additionalProperties": false,
+      "properties": {
+        "paragraph_extra": {
+          "maximum": 2,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "short_max": {
+          "maximum": 5,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "schema_version": {
+      "enum": [
+        1
+      ],
+      "type": "integer"
+    },
+    "seed": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema_version",
+    "pack_id",
+    "design",
+    "seed",
+    "conditions",
+    "items",
+    "listeners"
+  ],
+  "title": "RPA TTS blinded listening-pack definition",
+  "type": "object"
+}

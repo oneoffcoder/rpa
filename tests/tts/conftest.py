@@ -85,6 +85,122 @@ def repo_root() -> Path:
     return REPO_ROOT
 
 
+PACK_CONDITIONS = ["candidate", "natural", "baseline"]
+
+
+def build_pack_definition(**overrides):
+    """A small three-condition pack definition for instrument tests."""
+
+    def item(script_id, bucket, text, **extra):
+        return {
+            "script_id": script_id,
+            "bucket": bucket,
+            "text": text,
+            "condition_audio": {
+                condition: f"audio/{condition}/{script_id}.wav" for condition in PACK_CONDITIONS
+            },
+            **extra,
+        }
+
+    definition = {
+        "schema_version": 1,
+        "pack_id": "calibration-test-01",
+        "design": "calibration",
+        "seed": 3407,
+        "conditions": list(PACK_CONDITIONS),
+        "items": [
+            item("s001", "ordinary_sentences", "kuv hlub koj"),
+            item(
+                "s002",
+                "targeted_contrasts",
+                "nws yog ib tug neeg",
+                critical=True,
+                contrast={"options": ["neeg", "nees"], "expected": "neeg"},
+            ),
+            item("s003", "ordinary_sentences", "koj puas nyob zoo"),
+        ],
+        "listeners": [
+            {
+                "listener_id": f"L-{index:02d}",
+                "roles": ["transcription", "naturalness", "contrast"],
+            }
+            for index in range(1, 4)
+        ],
+    }
+    definition.update(overrides)
+    return definition
+
+
+def write_pack_responses(pack_dir, responses_dir, *, empty_codes=()):
+    """Write valid phase-A/B response sheets from a built pack manifest."""
+    import csv
+    import json
+
+    manifest = json.loads((Path(pack_dir) / "pack-manifest.json").read_text(encoding="utf-8"))
+    items = {item["script_id"]: item for item in manifest["items"]}
+    empty = set(empty_codes)
+    responses_dir = Path(responses_dir)
+    responses_dir.mkdir(parents=True, exist_ok=True)
+    for listener in manifest["listeners"]:
+        listener_id = listener["listener_id"]
+        assignments = [
+            entry for entry in manifest["assignments"] if entry["listener_id"] == listener_id
+        ]
+        with (responses_dir / f"{listener_id}-phase-a.csv").open(
+            "w", encoding="utf-8", newline=""
+        ) as stream:
+            writer = csv.writer(stream)
+            writer.writerow(
+                ["code", "audio", "transcription", "naturalness", "replay_count", "comments"]
+            )
+            for entry in assignments:
+                text = "" if entry["code"] in empty else items[entry["script_id"]]["text"]
+                writer.writerow(
+                    [
+                        entry["code"],
+                        entry["blind_audio"],
+                        text,
+                        4 if entry["condition"] == "candidate" else 5,
+                        0,
+                        "",
+                    ]
+                )
+        contrasts = [
+            entry
+            for entry in manifest["contrast_assignments"]
+            if entry["listener_id"] == listener_id
+        ]
+        if contrasts:
+            with (responses_dir / f"{listener_id}-phase-b.csv").open(
+                "w", encoding="utf-8", newline=""
+            ) as stream:
+                writer = csv.writer(stream)
+                writer.writerow(
+                    ["code", "option_a", "option_b", "chosen", "confidence", "comments"]
+                )
+                for entry in contrasts:
+                    writer.writerow(
+                        [
+                            entry["code"],
+                            entry["options"][0],
+                            entry["options"][1],
+                            entry["expected"],
+                            "",
+                            "",
+                        ]
+                    )
+
+
+@pytest.fixture
+def pack_definition():
+    return build_pack_definition
+
+
+@pytest.fixture
+def write_responses():
+    return write_pack_responses
+
+
 @pytest.fixture
 def row_factory():
     return build_row
