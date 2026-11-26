@@ -1,0 +1,86 @@
+# F-04 VITS standby lane (issue F-04/F-05).
+# Prepared text/environment contract only; the lane is NOT activated. Activation
+# requires a recorded Magpie compatibility/codec failure. See
+# docs/tts/recovery/f04-vits-standby.md. Artifacts remain null until the lane is
+# activated and its initialized weights are saved and hashed.
+schema_version: 1
+project:
+  name: rpa-tts
+  seed: 3407
+host:
+  profile: rtx-5090-win11
+  device: cuda:0
+  precision: fp32
+  roots:
+    workspace: data
+    artifacts: data/artifacts
+audio:
+  master_sample_rate: 48000
+  master_bit_depth: 24
+  model_sample_rate: 24000
+  channels: 1
+splits:
+  dev_fraction: 0.1
+  test_fraction: 0.2
+  bucket_field: bucket
+  group_field: group_id
+  buckets:
+  - ordinary_sentences
+  - targeted_contrasts
+  - questions_numbers_names
+  - continuous_passages
+  - calibration
+coverage:
+  min_examples_per_attested_cell: 5
+model_lanes:
+  magpie:
+    enabled: true
+    priority: 1
+    status: not_started
+    upstream:
+      model: nvidia/magpie_tts_multilingual_357m
+      model_version: v2607
+      nemo_commit: 0305e4b15ac2924219536da44d315397d92ee769
+      codec: nvidia/nemo-nano-codec-22khz-1.89kbps-21.5fps
+      codec_sample_rate: 22050
+    artifacts:
+      model_path: null
+      model_sha256: null
+      codec_path: null
+      codec_sha256: null
+  vits:
+    enabled: true
+    priority: 2
+    status: standby
+    upstream:
+      original_commit: 2e561ba58618d021b5b8323d3765880f7e0ecfdb
+      implementation: idiap/coqui-ai-TTS
+      implementation_commit: 7d547eed8580be4fbcd409b7f3082d1d44acbe64
+      package: coqui-tts
+      package_version: 0.28.0
+      license: MPL-2.0
+      text_contract: rpa-chars-1
+    artifacts:
+      model_path: null
+      model_sha256: null
+gates:
+  f04:
+    max_active_gpu_hours: 8
+    max_engineering_days: 2
+    max_compatibility_corrections: 1
+  f06:
+    bootstrap_resamples: 5000
+    min_relative_syllable_error_reduction: 0.2
+    min_naturalness_gain: 0.3
+  f07:
+    pooled_syllable_error_max: 0.05
+    bucket_syllable_error_max: 0.1
+    contrast_accuracy_min: 0.95
+    naturalness_mean_min: 4.0
+    naturalness_lower_bound_min: 3.8
+    naturalness_gap_max: 0.5
+    required_buckets:
+    - ordinary_sentences
+    - targeted_contrasts
+    - questions_numbers_names
+    - continuous_passages

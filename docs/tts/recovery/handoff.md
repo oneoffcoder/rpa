@@ -37,6 +37,13 @@ Written 2026-11-26 for the next worker. Read
   `evidence/f01-environment.json`; versions: `evidence/f01-pip-freeze.txt`.
 - **Book env:** `.venv-docs` (pinned Sphinx 7.4.7 stack, setuptools 80.9.0,
   Pillow 9.5.0). Keep the two environments separate.
+- **VITS standby env (measured import only):** `.venv-vits`, Python 3.12.16,
+  `torch==2.9.1+cu128`, `torchaudio==2.9.1+cu128`, `coqui-tts==0.28.0`,
+  `torchcodec==0.9.1`; CUDA available. `torchcodec` needs shared FFmpeg 4–8
+  DLLs: the BtbN FFmpeg 8.1 shared build is extracted under ignored
+  `data/artifacts/ffmpeg-shared/` and its `bin/` must be on PATH at runtime.
+  Full pins: `evidence/f04-vits-pip-freeze.txt`. No model was instantiated or
+  trained; the lane is standby.
 - **Disk:** 556.13 GB free at recording (workspace reservation 100–200 GB met).
 - **Backups:** an independent owner-controlled artifact backup destination is
   **not yet established** (the remaining F-01 item). Do not claim preservation
@@ -88,7 +95,7 @@ Written 2026-11-26 for the next worker. Read
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
-| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts downloaded, hash-verified and packaged config inspected (`…000a`) |
+| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`

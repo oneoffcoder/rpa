@@ -262,6 +262,29 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "VITS standby text contract rpa-chars-1 verified (37 tokens, all 5,187 syllables round-trip) and a separate coqui-tts 0.28.0 + torch 2.9.1+cu128 environment imports with CUDA on this host after pinning torchcodec 0.9.1 and shared FFmpeg 8.1; no model instantiated or trained",
+      "created_at": "2026-11-26T09:20:00+00:00",
+      "gate": "F-04",
+      "id": "ev_0000000000000010",
+      "notes": "Lane remains standby; activation requires a recorded Magpie compatibility/codec failure. Import proved only: torchcodec 0.9.1, coqui 0.28.0, torch 2.9.1+cu128, torchaudio 2.9.1+cu128, cuda True. Corrections recorded: torchaudio required, torchcodec 0.17 incompatible with torch 2.9, FFmpeg 9 unsupported by torchcodec 0.9.1 so a shared FFmpeg 8.1 build is on PATH. No data, no forward/backward, no synthesis, no save/resume.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f04-vits-standby.md",
+          "sha256": "c0da27326519441a3342bde746f038ae0de28d2e5e40468037bc195c1067c9bc"
+        },
+        {
+          "path": "docs/tts/recovery/evidence/f04-vits-environment.txt",
+          "sha256": "b865e10d2314696879ea52c1c42d9862aa50e82ed7bd0c35542cb73fc844aa3e"
+        },
+        {
+          "path": "docs/tts/recovery/evidence/f04-vits-pip-freeze.txt",
+          "sha256": "738c18758a208b0a5747c2b787298680d615c85b1bf4e2219cbdd4b2d09cb98a"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

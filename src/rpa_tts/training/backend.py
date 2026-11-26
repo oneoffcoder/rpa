@@ -73,16 +73,16 @@ def _upstream_checks(lane_name: str, upstream: dict[str, Any]) -> list[dict[str,
             }
         )
         implementation = upstream.get("implementation")
+        implementation_commit = str(upstream.get("implementation_commit") or "")
+        pinned = bool(HEX40.fullmatch(implementation_commit))
         checks.append(
             {
                 "name": "implementation_pinned",
-                "status": "passed"
-                if isinstance(implementation, str)
-                and implementation
-                and HEX40.fullmatch(str(upstream.get("implementation_commit") or ""))
-                else "not_started",
+                "status": "passed" if pinned else "not_started",
                 "detail": (
-                    f"implementation {implementation!r} is a candidate; "
+                    f"implementation {implementation!r} pinned at {implementation_commit}"
+                    if pinned
+                    else f"implementation {implementation!r} is a candidate; "
                     "pin its commit before the gate"
                 ),
             }

@@ -1,0 +1,32 @@
+VITS standby environment measurement
+Recorded: 2026-11-26 on Desktop-W9QAA
+Python: 3.12.16 in .venv-vits (uv)
+Packages (see f04-vits-pip-freeze.txt for the full freeze):
+  torch==2.9.1+cu128
+  torchaudio==2.9.1+cu128
+  coqui-tts==0.28.0 (TTS import)
+  torchcodec==0.9.1
+  monotonic-alignment-search (cp312 Windows wheel available)
+CUDA available: True
+Import proof:
+  torchcodec 0.9.1 coqui 0.28.0 torch 2.9.1+cu128 audio 2.9.1+cu128 cuda True
+FFmpeg shared runtime:
+  BtbN ffmpeg-n8.1-latest-win64-gpl-shared-8.1.zip
+  bytes: 90,902,330
+  sha256: 89a40d7c3d4aa627844885e29c8cf4d90034cc19ac8eed43863a86fe7a87a400
+  extracted bin/ must be on PATH when importing/running coqui/torchcodec.
+
+Failure/correction chain (all recorded because they are the Windows risks):
+1. coqui-tts 0.28.0 post-install check requires torchaudio -> installed the
+   matching cu128 wheel.
+2. coqui-tts imports torchcodec on PyTorch >= 2.9 -> installed torchcodec.
+3. torchcodec 0.17.0 requires torch >= 2.11 -> libtorchcodec_image.dll load
+   failure on torch 2.9.1; pinned torchcodec 0.9.1 (compatibility table: 0.9 for
+   torch 2.9).
+4. torchcodec 0.9.1 supports FFmpeg 4-8; the host's static FFmpeg 9 build has no
+   shared DLLs and master/9 is unsupported -> prepended a shared FFmpeg 8.1 bin
+   to PATH and the import succeeded.
+
+Not tested: model instantiation, training, forward/backward, synthesis,
+save/resume. No Hmong data exists and the lane remains standby; this is not an
+F-04 gate pass.
