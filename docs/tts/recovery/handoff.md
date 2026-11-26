@@ -237,6 +237,8 @@ The book's `source/`, original audio and explorer are unchanged
     and inspection.
   - `95be0b3a85b196cad48b546f7dc217713f20dbad` — validated native review import
     into an approved script set.
+  - `698111d636b521d0880917668623af163d1f0fa2` — existing syllable playback
+    reference verification.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
