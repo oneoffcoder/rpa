@@ -115,9 +115,12 @@ The book's `source/`, original audio and explorer are unchanged
 
 ## Checkpoint
 
-- Implementation checkpoint: the commit containing this file (see
-  `git log -1 --format=%H` on the branch and the pushed branch on origin).
-- Push command used: `git push -u origin feat/white-hmong-tts-recovery`.
+- **Implementation commit:** `47c18d11a3a4c3514bfa785f02d5c638a5401526` (the
+  follow-up commit that records this handoff is its child; run
+  `git log -1 --format=%H` on the branch for the current tip).
+- **Push:** `git push -u origin feat/white-hmong-tts-recovery`; verify with
+  `git ls-remote --heads origin feat/white-hmong-tts-recovery`. The PR to `main`
+  still needs owner authentication (see above).
 - Any later worker must verify `git status --short --branch`, `git worktree list`
   and `git ls-remote --heads origin main feat/white-hmong-tts-recovery` before
   changing files, and must not force-push or reset.
