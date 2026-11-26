@@ -29,6 +29,7 @@ from .data.manifest import (
     write_manifest,
 )
 from .data.split import assign_splits
+from .data.verify import verify_audio
 from .data.versioning import freeze_dataset, verify_dataset_config
 from .environment import collect_environment, gpu_kernel_proof, write_json_report
 from .errors import GateNotPassedError, InputError, RpaTtsError
@@ -133,6 +134,14 @@ def parser() -> argparse.ArgumentParser:
         "verify-dataset", help="re-hash a frozen dataset configuration"
     )
     verify_dataset.add_argument("--config", type=Path, required=True)
+    verify_audio = corpus_commands.add_parser(
+        "verify-audio", help="re-hash and re-decode manifest audio against source files"
+    )
+    verify_audio.add_argument("--manifest", type=Path, required=True)
+    verify_audio.add_argument("--audio-root", type=Path, required=True)
+    verify_audio.add_argument("--workers", type=int, default=4)
+    verify_audio.add_argument("--tolerance", type=float, default=0.05)
+    verify_audio.add_argument("--output", type=Path, default=None)
 
     # model -----------------------------------------------------------------
     model = commands.add_parser("model", help="model-lane and artifact readiness")
@@ -432,6 +441,21 @@ def _cmd_corpus_freeze(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
 def _cmd_corpus_verify_dataset(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     result = verify_dataset_config(args.config)
     return result, 0 if result["ok"] else 1
+
+
+def _cmd_corpus_verify_audio(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    rows = load_manifest(args.manifest)
+    require_valid_rows(rows, purpose="audit", require_native_approval=False)
+    report = verify_audio(
+        rows,
+        args.audio_root,
+        workers=args.workers,
+        duration_tolerance_seconds=args.tolerance,
+    )
+    if args.output:
+        write_json_report(report, args.output)
+        report["output"] = str(args.output)
+    return report, 0 if report["ok"] else 1
 
 
 def _cmd_train_record(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
@@ -760,6 +784,7 @@ _DISPATCH = {
     ("corpus", "scripts"): _cmd_corpus_scripts,
     ("corpus", "freeze"): _cmd_corpus_freeze,
     ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
+    ("corpus", "verify-audio"): _cmd_corpus_verify_audio,
     ("model", "check"): _cmd_model_check,
     ("train", "plan"): _cmd_train_plan,
     ("train", "record"): _cmd_train_record,

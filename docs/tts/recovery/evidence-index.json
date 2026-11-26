@@ -315,6 +315,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Byte-level manifest audio verification implemented and tested against synthetic WAVs: existence, SHA-256, decoded duration tolerance, sample rate, channels and decodability, with failure aggregation; no real corpus audio verified",
+      "created_at": "2026-11-26T09:40:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000013",
+      "notes": "Integrity only, not native acceptance/rights/quality. No accepted corpus or real dataset exists. Run before freeze; freeze still trusts recorded hashes until a decision makes verify-audio a required precondition.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/audio-verification.md",
+          "sha256": "2cb92c632e98e179aa48c8dd1df49facad127bf1927a405eb94bf7c660ab59c7"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
