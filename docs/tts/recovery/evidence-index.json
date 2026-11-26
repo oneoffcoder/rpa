@@ -285,6 +285,36 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Immutable dataset freeze and verify implemented with strict preconditions: native approval, resolved rights, non-empty train/dev/test, no group leakage, approved language contract and a passing coverage screen; no dataset version exists",
+      "created_at": "2026-11-26T09:30:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000011",
+      "notes": "Software only. No accepted corpus, no frozen manifest and no native sign-off. Freeze relies on recorded audio hashes; byte-level audio verification remains a follow-up.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/dataset-lifecycle.md",
+          "sha256": "53ff7894c934f67c302dccc76c8378886c7e1752bc473b0a889e76455b7e4ee3"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Learning-curve recording implemented with fixed columns, unique run ids, bounded values, decision vocabulary and evidence ids; no learning row exists",
+      "created_at": "2026-11-26T09:30:05+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000012",
+      "notes": "Software only. learning-curve.csv has a header and no rows; stage-decisions.jsonl is empty; no run has been executed.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/dataset-lifecycle.md",
+          "sha256": "53ff7894c934f67c302dccc76c8378886c7e1752bc473b0a889e76455b7e4ee3"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

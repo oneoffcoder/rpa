@@ -196,6 +196,44 @@ def pack_definition():
     return build_pack_definition
 
 
+def write_approved_contract(path, *, cell=None, status="approved"):
+    """Write a minimal contract whose one cell matches ``kuv`` by default."""
+    import yaml
+
+    cell = cell or {
+        "id": "C-01",
+        "type": "onset_tone",
+        "consonant": "k",
+        "vowel": "u",
+        "tone": "v",
+    }
+    data = {
+        "schema_version": 1,
+        "status": status,
+        "dialect": {"name": "White Hmong / Hmong Daw / Hmoob Dawb"},
+        "normalization": {"version": "rpa-norm-1"},
+        "approved_expansions": {},
+        "critical_contrasts": [cell],
+        "buckets": [
+            "ordinary_sentences",
+            "targeted_contrasts",
+            "questions_numbers_names",
+            "continuous_passages",
+            "calibration",
+        ],
+    }
+    Path(path).write_text(yaml.safe_dump(data), encoding="utf-8")
+    return Path(path)
+
+
+@pytest.fixture
+def approved_contract(tmp_path):
+    def write(*, cell=None, status="approved", name="contract.yaml"):
+        return write_approved_contract(tmp_path / name, cell=cell, status=status)
+
+    return write
+
+
 @pytest.fixture
 def write_responses():
     return write_pack_responses

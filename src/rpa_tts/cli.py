@@ -29,6 +29,7 @@ from .data.manifest import (
     write_manifest,
 )
 from .data.split import assign_splits
+from .data.versioning import freeze_dataset, verify_dataset_config
 from .environment import collect_environment, gpu_kernel_proof, write_json_report
 from .errors import GateNotPassedError, InputError, RpaTtsError
 from .evaluation.gate import evaluate_release
@@ -41,11 +42,12 @@ from .evidence import gate_status as evidence_gate_status
 from .hashing import sha256_file
 from .inference.synthesize import package as build_package
 from .inference.synthesize import synthesize
-from .paths import evidence_index_path, find_repo_root, workspace_root
+from .paths import evidence_index_path, find_repo_root, recovery_dir, workspace_root
 from .schemas import STAGE_DECISION
 from .text.normalize import normalize_rpa
 from .training import backend
 from .training.gates import gate_statuses
+from .training.learning_curve import append_row, row_from_run_manifest
 from .training.run_manifest import (
     build_run_manifest,
     load_run_manifest,
@@ -117,6 +119,20 @@ def parser() -> argparse.ArgumentParser:
     scripts.add_argument("--output-jsonl", type=Path, required=True)
     scripts.add_argument("--output-report", type=Path, required=True)
     scripts.add_argument("--min-words", type=int, default=3)
+    freeze = corpus_commands.add_parser(
+        "freeze", help="freeze an approved accepted dataset version with hashes and coverage"
+    )
+    freeze.add_argument("--manifest", type=Path, required=True)
+    freeze.add_argument("--version", required=True)
+    freeze.add_argument("--contract", type=Path, default=None)
+    freeze.add_argument("--manifests-dir", type=Path, default=None)
+    freeze.add_argument("--configs-dir", type=Path, default=None)
+    freeze.add_argument("--min-examples", type=int, default=5)
+    freeze.add_argument("--notes", default="")
+    verify_dataset = corpus_commands.add_parser(
+        "verify-dataset", help="re-hash a frozen dataset configuration"
+    )
+    verify_dataset.add_argument("--config", type=Path, required=True)
 
     # model -----------------------------------------------------------------
     model = commands.add_parser("model", help="model-lane and artifact readiness")
@@ -144,6 +160,20 @@ def parser() -> argparse.ArgumentParser:
     plan.add_argument("--raters", required=True)
     plan.add_argument("--next-increment", required=True)
     plan.add_argument("--record-decision", type=Path, default=None)
+    record = train_commands.add_parser(
+        "record", help="append one judged learning run to learning-curve.csv"
+    )
+    record.add_argument("--run-manifest", type=Path, required=True)
+    record.add_argument("--dataset-version", required=True)
+    record.add_argument("--dev-syllable-error", type=float, required=True)
+    record.add_argument("--dev-naturalness", type=float, required=True)
+    record.add_argument(
+        "--decision",
+        required=True,
+        choices=["baseline", "promote", "hold", "reject", "inconclusive"],
+    )
+    record.add_argument("--evidence-id", required=True)
+    record.add_argument("--curve", type=Path, default=None)
     run = train_commands.add_parser("run", help="start a training run (requires F-04)")
     run.add_argument("--config", type=Path, default=None)
     run.add_argument("--manifest", type=Path, required=True)
@@ -381,6 +411,41 @@ def _cmd_corpus_scripts(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
         min_words=args.min_words,
     )
     return report, 0
+
+
+def _cmd_corpus_freeze(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    root = find_repo_root()
+    contract = args.contract or recovery_dir(root) / "language-contract.yaml"
+    result = freeze_dataset(
+        args.manifest,
+        args.version,
+        contract_path=contract,
+        manifests_dir=args.manifests_dir,
+        configs_dir=args.configs_dir,
+        repo_root=root,
+        min_examples=args.min_examples,
+        notes=args.notes,
+    )
+    return result, 0
+
+
+def _cmd_corpus_verify_dataset(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    result = verify_dataset_config(args.config)
+    return result, 0 if result["ok"] else 1
+
+
+def _cmd_train_record(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    manifest = load_run_manifest(args.run_manifest)
+    row = row_from_run_manifest(
+        manifest,
+        dataset_version=args.dataset_version,
+        dev_syllable_error=args.dev_syllable_error,
+        dev_naturalness_mean=args.dev_naturalness,
+        decision=args.decision,
+        evidence_id=args.evidence_id,
+    )
+    curve = args.curve or recovery_dir(find_repo_root()) / "learning-curve.csv"
+    return append_row(curve, row), 0
 
 
 def _cmd_model_check(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
@@ -693,8 +758,11 @@ _DISPATCH = {
     ("corpus", "split"): _cmd_corpus_split,
     ("corpus", "coverage"): _cmd_corpus_coverage,
     ("corpus", "scripts"): _cmd_corpus_scripts,
+    ("corpus", "freeze"): _cmd_corpus_freeze,
+    ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
     ("model", "check"): _cmd_model_check,
     ("train", "plan"): _cmd_train_plan,
+    ("train", "record"): _cmd_train_record,
     ("train", "run"): _cmd_train_run,
     ("train", "resume"): _cmd_train_resume,
     ("synthesize", None): _cmd_synthesize,

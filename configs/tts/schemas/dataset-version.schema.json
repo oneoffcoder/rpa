@@ -1,0 +1,182 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/dataset-version.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable record of one frozen accepted dataset: manifest hash, split sizes and hours, rights/speaker ids, and the coverage screen against the approved language contract.",
+  "properties": {
+    "buckets": {
+      "additionalProperties": {
+        "minimum": 1,
+        "type": "integer"
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "contract": {
+      "additionalProperties": false,
+      "properties": {
+        "declared_cells": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "missing_cells": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "screening_passed": {
+          "type": "boolean"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "approved",
+            "rejected"
+          ],
+          "type": "string"
+        },
+        "underfilled_cells": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "status",
+        "declared_cells",
+        "screening_passed",
+        "missing_cells",
+        "underfilled_cells"
+      ],
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "dataset_version": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$",
+      "type": "string"
+    },
+    "manifest_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "normalization_version": {
+      "pattern": "^(rpa-norm-[0-9]+|mixed)$",
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "preprocessing_versions": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "rights_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema_version": {
+      "enum": [
+        1
+      ],
+      "type": "integer"
+    },
+    "speakers": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "split_hours": {
+      "additionalProperties": false,
+      "properties": {
+        "dev": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "test": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "train": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "train",
+        "dev",
+        "test"
+      ],
+      "type": "object"
+    },
+    "split_rows": {
+      "additionalProperties": false,
+      "properties": {
+        "dev": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "test": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "train": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "train",
+        "dev",
+        "test"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "dataset_version",
+    "created_at",
+    "manifest_path",
+    "manifest_sha256",
+    "normalization_version",
+    "preprocessing_versions",
+    "split_rows",
+    "split_hours",
+    "buckets",
+    "rights_ids",
+    "speakers",
+    "contract",
+    "notes"
+  ],
+  "title": "RPA TTS frozen dataset version configuration",
+  "type": "object"
+}

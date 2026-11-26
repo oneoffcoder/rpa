@@ -493,6 +493,89 @@ LISTENING_PACK: dict[str, Any] = {
     },
 }
 
+DATASET_VERSION: dict[str, Any] = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rpa.oneoffcoder.com/schemas/dataset-version.schema.json",
+    "title": "RPA TTS frozen dataset version configuration",
+    "description": (
+        "Immutable record of one frozen accepted dataset: manifest hash, split sizes and hours, "
+        "rights/speaker ids, and the coverage screen against the approved language contract."
+    ),
+    "type": "object",
+    "additionalProperties": False,
+    "required": [
+        "schema_version",
+        "dataset_version",
+        "created_at",
+        "manifest_path",
+        "manifest_sha256",
+        "normalization_version",
+        "preprocessing_versions",
+        "split_rows",
+        "split_hours",
+        "buckets",
+        "rights_ids",
+        "speakers",
+        "contract",
+        "notes",
+    ],
+    "properties": {
+        "schema_version": {"type": "integer", "enum": [1]},
+        "dataset_version": {"type": "string", "pattern": r"^[a-z0-9][a-z0-9._-]{2,63}$"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "manifest_path": {"type": "string", "minLength": 1},
+        "manifest_sha256": {"type": "string", "pattern": SHA256_PATTERN},
+        "normalization_version": {"type": "string", "pattern": r"^(rpa-norm-[0-9]+|mixed)$"},
+        "preprocessing_versions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "split_rows": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": SPLITS,
+            "properties": {
+                "train": {"type": "integer", "minimum": 1},
+                "dev": {"type": "integer", "minimum": 1},
+                "test": {"type": "integer", "minimum": 1},
+            },
+        },
+        "split_hours": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": SPLITS,
+            "properties": {split: {"type": "number", "minimum": 0} for split in SPLITS},
+        },
+        "buckets": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {"type": "integer", "minimum": 1},
+        },
+        "rights_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "speakers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "contract": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": [
+                "path",
+                "sha256",
+                "status",
+                "declared_cells",
+                "screening_passed",
+                "missing_cells",
+                "underfilled_cells",
+            ],
+            "properties": {
+                "path": {"type": "string", "minLength": 1},
+                "sha256": {"type": "string", "pattern": SHA256_PATTERN},
+                "status": {"type": "string", "enum": ["draft", "approved", "rejected"]},
+                "declared_cells": {"type": "integer", "minimum": 0},
+                "screening_passed": {"type": "boolean"},
+                "missing_cells": {"type": "array", "items": {"type": "string"}},
+                "underfilled_cells": {"type": "array", "items": {"type": "string"}},
+            },
+        },
+        "notes": {"type": "string"},
+    },
+}
+
 SCHEMAS: dict[str, dict[str, Any]] = {
     "utterance-manifest.schema.json": UTTERANCE_MANIFEST,
     "run-manifest.schema.json": RUN_MANIFEST,
@@ -501,6 +584,7 @@ SCHEMAS: dict[str, dict[str, Any]] = {
     "evidence-entry.schema.json": EVIDENCE_ENTRY,
     "evidence-index.schema.json": EVIDENCE_INDEX,
     "listening-pack.schema.json": LISTENING_PACK,
+    "dataset-version.schema.json": DATASET_VERSION,
 }
 
 LEARNING_CURVE_COLUMNS = [

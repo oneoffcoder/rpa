@@ -26,8 +26,8 @@ Blocked / Not required. Evidence is append-only in
 | **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready), [`calibration-scripts.draft.md`](calibration-scripts.draft.md) (272 candidates, draft) | Native lead selects/approves 100–150 scripts and decides the two blocked loanword/quote cases; then record and run the calibration pack |
 | **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md), repository syllable audit (below) | CMU is blocked (dead start URL, broken downloader, offsets invalidated by F0 pruning, no rights); owner must authorize outreach/access to Bible Brain, Garellek/oral-history, UMN or Pangeanic; continue owned-recording planning |
 | **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `configs/tts/f04-vits.yaml`, `rpa-tts model check` | Owner chooses the Linux path for Magpie (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); the VITS standby environment now imports on Windows and its `rpa-chars-1` text contract is verified, but no lane has run |
-| **F-05** accepted corpus, coverage, frozen splits | **Not started** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), `rpa-tts corpus split` | Admit a 30–60 minute native-confirmed pilot after rights clear |
-| **F-06** bounded learning comparisons, frozen candidate | **Not started** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) | Write the first stage decision before any 1/2-hour comparison |
+| **F-05** accepted corpus, coverage, frozen splits | **In progress** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), [`dataset-lifecycle.md`](dataset-lifecycle.md), `rpa-tts corpus split/freeze` | Freeze, verify and byte-level audio checks are ready; no accepted corpus exists. Admit a 30–60 minute native-confirmed pilot after rights clear |
+| **F-06** bounded learning comparisons, frozen candidate | **In progress** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) (header), [`dataset-lifecycle.md`](dataset-lifecycle.md) | Record a stage decision before any comparison; `train record` now enforces unique, bounded learning-curve rows |
 | **F-07** independent native qualification | **Not started** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), `rpa-tts evaluate gate` (implemented, no data) | Staff the 12-listener plan only after a candidate and protocol are frozen |
 | **F-08** reproducible package + approved lesson audio | **Not started** | F-07 passed + distribution rights | ML/application engineer + native content reviewer | `rpa-tts package build` (gated) | Not actionable before F-07 |
 | **F-09** online serving | **Not required** (deferred) | F-08 acceptance + concrete hosting requirement | operations | decision D-05 in [`decisions.jsonl`](decisions.jsonl) | Becomes required only if arbitrary-text serving is authorized |
@@ -75,6 +75,11 @@ Corrections are appended, not deleted.
   blocked on loanword/quote decisions), totaling 3,633 syllables ≈18 minutes at
   4 s/script. Drafts only; no recording or approval exists. See
   [`calibration-scripts.draft.md`](calibration-scripts.draft.md).
+- **F-05/F-06 data lifecycle:** dataset freeze/verify enforces native approval,
+  resolved rights, non-empty splits, no group leakage, an approved contract and a
+  passing coverage screen before writing an immutable version; learning-curve
+  append enforces fixed columns, unique run ids and bounded values. No dataset
+  version or learning row exists. See [`dataset-lifecycle.md`](dataset-lifecycle.md).
 - **VITS standby preparation:** the `rpa-chars-1` character contract (37 tokens)
   round-trips all 5,187 documented syllables, and a separate `.venv-vits` imports
   `coqui-tts 0.28.0` with `torch 2.9.1+cu128` on this Windows host after pinning
@@ -82,7 +87,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (252 TTS tests), including two-adjudicator
+  ingestion implemented and tested (281 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -104,6 +109,9 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts corpus split --manifest ... --output ...` | yes | Deterministic grouped split |
 | `rpa-tts corpus coverage --manifest ... --contract ...` | yes | Coverage ledger |
 | `rpa-tts corpus scripts --rst source/speaking.rst ...` | yes | Drafts candidate scripts from book examples (not approved) |
+| `rpa-tts corpus freeze --manifest ... --version ...` | yes | Freezes an approved, coverage-passing dataset version (none exists) |
+| `rpa-tts corpus verify-dataset --config ...` | yes | Re-hashes a frozen dataset config |
+| `rpa-tts train record --run-manifest ...` | yes | Appends one validated learning-curve row (none exists) |
 | `rpa-tts model check` | yes | Lane metadata/hash readiness (not a GPU gate) |
 | `rpa-tts train plan ...` | yes | Pre-run plan/stage-decision draft; no GPU work |
 | `rpa-tts train run/resume` | **gated (F-04)** | Refuses until F-04 passes and a wrapper is tested |
@@ -146,6 +154,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`book-regression.md`](book-regression.md) | Pinned Sphinx build, warnings and reference checks |
 | [`audit/repo-syllables/report.md`](audit/repo-syllables/report.md) | Technical audit of the 5,187 isolated-syllable recordings |
 | [`run-manifest.md`](run-manifest.md) | Schemas, reproducibility fields, evidence and storage rules |
+| [`dataset-lifecycle.md`](dataset-lifecycle.md) | Immutable dataset freeze/verify and validated learning-curve records |
 | [`coverage-ledger.md`](coverage-ledger.md) | Coverage screen rule and current (empty) data |
 | [`decisions.jsonl`](decisions.jsonl) | Product/project decisions, append-only |
 | [`stage-decisions.jsonl`](stage-decisions.jsonl) | Pre-run learning decisions (empty) |

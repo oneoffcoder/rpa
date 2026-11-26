@@ -52,7 +52,9 @@ Written 2026-11-26 for the next worker. Read
 ## Data, splits, checkpoints and runs
 
 - **Dataset:** none accepted. `data/manifests/` contains policy only; no frozen
-  manifest exists. No split, config dataset version or checkpoint exists.
+  manifest or dataset config exists. `learning-curve.csv` has only its header;
+  `stage-decisions.jsonl` is empty. `corpus freeze`/`verify-dataset` and
+  `train record` are implemented and tested but have never run on real data.
 - **Repository syllable audit:** 5,187 isolated MP3s audited without
   modification; decoded 0.6416 hours; 0 decode errors. Manifest SHA-256
   `d87289cbc97aef73594e5fcc8939e87f4a20afec988c57a7458ae09d3e5177ce`
@@ -96,6 +98,10 @@ Written 2026-11-26 for the next worker. Read
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
+| F-05 | Data lifecycle tooling: freeze/verify (`…0011`); no dataset version exists |
+| F-06 | Learning-curve recording (`…0012`); no learning row or stage decision exists |
+| F-07 | Blinded instrument (`…000c`, `…000f`); no candidate or qualification data |
+| F-08 | Not started |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
@@ -176,6 +182,10 @@ The book's `source/`, original audio and explorer are unchanged
    current source and matching text, the Garellek/oral-history recordings, UMN
    and Pangeanic. No purchase, account or audio retrieval is authorized yet; CMU
    must not be re-attempted with the broken downloader or blind indices.
+8. Once a native-approved pilot exists: audit → split → coverage → freeze
+   (`corpus freeze --version <v> --contract ...`) and then `corpus verify-dataset`.
+   After each learning run, append a judged row with `train record`; do not edit
+   the curve by hand.
 
 ## Checkpoint
 
