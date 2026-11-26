@@ -211,6 +211,8 @@ The book's `source/`, original audio and explorer are unchanged
     text contract, pinned environment and import proof.
   - `bb8c625010c40338a17f18f4c5d0d2d61dc328ae` — immutable dataset freeze/verify
     and validated learning-curve recording.
+  - `90d3840abb482a58c19a2ccb2d25ac8ae711c669` — byte-level manifest audio
+    verification.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
