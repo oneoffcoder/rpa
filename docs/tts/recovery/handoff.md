@@ -96,9 +96,9 @@ Written 2026-11-26 for the next worker. Read
 | Gate | Evidence |
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); playback reference check (`…0018`); built-HTML reference check (`…0019`); backup item open (`…0005`) |
-| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); validated review import (`…0017`); two-adjudicator error review and paragraph review (`…000f`) |
-| F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
-| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
+| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); validated review import (`…0017`); two-adjudicator error review and paragraph review (`…000f`); **blocked on no-new-recording constraint** (`…001a`) |
+| F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`); corrected mww/MWWHDVN2DA identity, FCBH terms and minutes-by-source investigation (`…001b`) |
+| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`); real runner, diagnosis, finetune/private-render path and defect chain (`…001c`) |
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); no dataset version exists |
 | F-06 | Learning-curve recording (`…0012`); no learning row or stage decision exists |
 | F-07 | Blinded instrument (`…000c`, `…000f`); qualification composition enforced (`…0014`); no candidate, stimuli or panel |
@@ -106,39 +106,42 @@ Written 2026-11-26 for the next worker. Read
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
-(the F-01 checkpoint recorded 179 tests then; the current suite is 345 passed,
+(the F-01 checkpoint recorded 179 tests then; the current suite is 366 passed,
 1 skipped, ruff clean). Book build: 0 errors / 10 warnings; playback reference
 check: 281 links, 3,688 playable tokens, exact 5,187-file inventory match, no
 zero-playable links (`book-audio-references.md`); built HTML: 12 pages, 5,152
 audio references, 737 page links, 0 missing local references, sitemap present
-(`book-html-references.md`).
+(`book-html-references.md`). F-04 diagnosis on this host: `platform_unsupported`;
+no 5090 load, training step, save/reload, private render or listening was run
+(`f04-runner.md`).
 The book's `source/`, original audio and explorer are unchanged
 (`git diff --stat origin/main -- source Makefile` is empty).
 
 ## Remaining blockers
 
-1. **Native participants (F-02):** three fluent listeners, native language lead
-   and adjudicators are not scheduled; no approvals, no attested contrast cells,
-   no approved expansions. The blinded instrument is ready
-   (`listening-instrument.md`), a 272-candidate draft pool exists, and a
-   blank-decision review worksheet awaits the native lead
-   (`calibration-scripts.review.csv`); **no row is approved, no pack has been
-   run**, no stimuli exist and nothing has been recorded. The public book
-   sentences are calibration/development material, not the locked test.
+1. **Native participants (F-02, blocked):** Jee will not record, recruit a
+   speaker, or fill the worksheet. Three fluent listeners, a native language lead
+   and adjudicators are not scheduled; no approvals, attested contrast cells or
+   approved expansions exist. The instrument and blank 272-row worksheet remain
+   available for an independent reviewer, but **no row is approved, no pack has
+   been run and no stimuli exist**. See `capacity-constraint.md`.
 2. **Rights/people (F-03):** no source has cleared training/weight-distribution
-   rights. CMU is blocked: the index hash/rows were re-verified, the old
-   downloader exits after its first page, it prunes with an F0 extractor before
-   applying offsets, and the recorded `listen.bible.is` host no longer resolves;
-   Bible Brain's API requires credentials and its terms do not grant training.
-   Garellek/oral-history, UMN and Pangeanic outreach still needs owner
-   authorization. See `f03-source-investigation-2026-11-26.md`.
-3. **Model runtime/host (F-04):** artifacts are resolved and hash-verified, but
-   NeMo Speech is not installed and the host cannot run the pinned Linux GPU
-   stack natively (no WSL2, no Docker). The owner must enable WSL2 or provide a
-   Linux worker before the Magpie GPU gate. The VITS standby environment *does*
-   import with CUDA on native Windows after the recorded torchcodec/FFmpeg
-   fixes, but activation still requires a recorded Magpie failure and accepted
-   F-02 data. `train run` and `resume` correctly refuse (exit 3).
+   rights. The lookup is corrected to ISO `mww`/`MWWHDVN2DA`; the CMU index and
+   the FCBH Hmong Daw New Testament narration are the same source (260 chapters,
+   15.3988 h indexed, likely multi-voice audio drama). FCBH requires a DBP key and
+   permits personal use only; Pangeanic advertises 43 h with no sample/licence;
+   Garellek/oral-history and UMN access are unresolved; Yuhalu is 51.38 min of
+   isolated words with no licence. No audio was retrieved or reconstructed. See
+   `f03-existing-source-investigation-2026-11-26.md`.
+3. **Model runtime/host (F-04):** artifacts are resolved and hash-verified; the
+   real runner (`model diagnose`, `train gate`, `train finetune`,
+   `train render-private`) is implemented, but NeMo Speech is not installed and
+   the host cannot run the pinned Linux GPU stack natively (no WSL2, no Docker).
+   The owner must enable WSL2 or provide a Linux worker before the Magpie GPU
+   gate. The VITS standby environment imports with CUDA on native Windows after
+   the recorded torchcodec/FFmpeg fixes, but activation still requires a recorded
+   Magpie failure and permitted data. `train run`/`resume` and release synthesis
+   correctly refuse (exit 3).
 4. **Owner backup destination (F-01 completion).**
 5. **F-08 packaging:** `package inspect` exists, but packaging and synthesis
    need an F-07-accepted model, distribution rights and a frozen benchmark; no
@@ -157,72 +160,82 @@ The book's `source/`, original audio and explorer are unchanged
   development/regression material only. No fresh final evaluation material has
   been recorded; the locked 300-item suite does not exist.
 
-## Owner unblock brief (round 11, paused here)
+## Owner/data unblock brief (round 12)
 
-### Exact native review return
+### Lasting constraint
 
-- Worksheet: `docs/tts/recovery/calibration-scripts.review.csv` (272 rows: 270
-  `pending_native_approval`, 2 `blocked_contract_review`).
-- For **every** row the reviewer sets `decision` to `accept`, `edit` or `reject`.
-  For `edit`, fill `edited_text` with approved RPA (must pass strict `rpa-norm-1`);
-  use `notes` for rationale. Blocked rows are `cal-006` (`Mekas`, `Eeskiv`) and
-  `cal-182` (ASCII double quotes); they need a spelling/product decision, not a
-  silent accept. Do not put names or contact details in the sheet.
-- Return: the filled CSV and a stable non-identifying reviewer id (e.g. `N-01`).
-  Then validate and produce the approved set:
+Jee will **not** record new audio, recruit a speaker, or complete the native
+worksheet. F-02 is **blocked**; F-04–F-08 cannot pass without a permitted existing
+sentence corpus and an independent native reviewer, or an explicitly adopted
+scope change. Acceptance criteria are unchanged; no rejected output is relabeled.
+See `capacity-constraint.md`.
 
-  ```text
-  rpa-tts corpus review-import \
-    --draft docs/tts/recovery/calibration-scripts.draft.jsonl \
-    --review <filled-review.csv> \
-    --output-jsonl <approved.jsonl> --output-report <approved.md> \
-    --reviewer-id N-01
-  ```
+### Immediate data task: existing White Hmong sentence audio
 
-- The native lead then approves/selects the 100–150 calibration scripts and
-  records 10–15 minutes at 48 kHz/24-bit mono from the consented selected
-  speaker (quiet space, stable setup, logged changes), with private consent/rights
-  IDs. Attested onset/vowel-by-tone cells and approved number expansions remain
-  separate native deliverables in `language-contract.yaml`.
+- Corrected identity: **MWWHDV, ISO `mww`, fileset `MWWHDVN2DA`** (the prior `hmv`
+  probe was wrong). CMU index and the **FCBH Hmong Daw New Testament** narration
+  are the same source: 260 NT chapters, 7,382 aligned segments, 15.3988 h indexed
+  (Pass 1 18:06:46), likely a **multi-voice audio drama**.
+- **FCBH/DBP:** the API now requires a key (`language_code=mww` returns 422);
+  the license permits personal, non-commercial use through DBP on a single device
+  and grants no training/derivative/weights/redistribution rights. No audio was
+  downloaded and no chapter was reconstructed.
+- **Pangeanic:** advertises 43 audio hours (2,580 min), WAV/MP3, transcribed with
+  metadata; no sample, quote, per-speaker White Hmong hours or licence terms.
+- **Garellek/Esposito:** eight speakers read three folktales; 11,282 vowel tokens
+  analysed; total duration not stated; audio host did not resolve; no training
+  permission on file.
+- **UMN Hmong Corpus:** site TLS invalid and project page 403; no inventory/export
+  or terms verified.
+- **Yuhalu:** 6,282 WAVs in one `Kong` folder, 51.38 min of isolated words at
+  44.1 kHz; no labels/licence; not sentence speech.
+- **Repository:** 5,187 isolated syllables, 38.49 min, reference/technical use
+  only; speaker identity/dialect unverified.
+- Full table, hashes and remaining access needs:
+  `f03-existing-source-investigation-2026-11-26.md`.
+
+### Native work still required
+
+The worksheet (`calibration-scripts.review.csv`, 272 rows; 270 pending, 2 blocked)
+and `review-import` remain valid for **any independent native reviewer**, but Jee
+will not fill them and no reviewer is currently assigned. Native qualification
+(F-07) still needs an independent speaker/listener panel; it cannot be waived.
 
 ### 5090 host options (measured)
 
 1. **Enable WSL2 (recommended; no purchase).** CPU virtualization and SLAT are
    enabled and the WSL feature is on, but `VirtualMachinePlatform` is disabled and
-   no distro exists. Requires an administrator command (`wsl --install
-   --no-distribution` or enabling the feature), a reboot, a distro, and the WSL
-   CUDA driver; then the pinned Linux NeMo/Magpie stack can use the 5090.
+   no distro exists. Requires an administrator command, a reboot, a distro and the
+   WSL CUDA driver; then the pinned Linux NeMo/Magpie stack can use the 5090.
 2. **Linux worker** on the 5090 or another GPU (none available today); move the
    hash-verified artifacts and NeMo environment.
 3. **VITS standby on native Windows** (`coqui-tts 0.28.0` + `torch 2.9.1+cu128`)
-   imports successfully with CUDA. It is still standby: activation requires a
-   recorded Magpie compatibility/codec failure per F-04 and the same F-02 data.
-4. **Cloud GPU** only as a contingency with an authorized budget; no account or
-   spend exists.
+   imports with CUDA. It remains standby: activation requires a recorded Magpie
+   compatibility/codec failure per F-04 and the same permitted data.
+4. **Cloud GPU** only with an authorized budget; none exists.
 
 ### Authorized pilot data available
 
-**None.** The repository's 5,187 isolated syllable MP3s (0.6416 decoded hours)
-are reference/lexicon material with unverified speaker identity and dialect, not
-connected-speech training data. The CMU archive is metadata only with no rights
-clearance; the other sources are unresolved/unavailable. No consent, rights
-manifest, accepted corpus or dataset version exists.
+**None.** No consent, rights manifest, accepted corpus or dataset version exists.
+The FCBH narration is not permitted for training; Pangeanic is a paid-licence
+lead; Garellek/UMN access is unresolved; Yuhalu/repository are isolated words.
+No new recordings will be made.
 
 ### Smallest owner decision that unlocks progress
 
-**Assign the native White Hmong lead and authorize the calibration script review
-plus the 10–15 minute recording session.** That is the earliest real dependency:
-F-04's gate needs F-02 calibration speech, and F-05–F-08 depend on accepted data;
-no agent-only step can substitute for it. Host enablement (WSL2) is the smallest
-*infrastructure* action and can run in parallel, but it is not sufficient alone.
-Rights/outreach authorization is also required before any external corpus use.
+**Pursue one permitted existing sentence source now:** obtain FCBH DBP access
+**plus written training/derivative/weights permission** (and confirm the edition/
+fileset and whether the narration is multi-voice drama), **or** approve a
+Pangeanic sample/per-speaker-hours/licence request. Host enablement (WSL2) can run
+in parallel but is insufficient without data. The research-milestone scope change
+using existing paired recordings is still **not adopted** (`decisions.jsonl` D-06).
 
 ### Paused
 
-Remaining critical work requires people (native reviewer, listeners, speaker),
-permission (rights/outreach), or infrastructure (WSL2/Linux worker, independent
-backup). No further agent-only change advances a gate; work is paused here per
-the steering request, with rights and native acceptance gates intact.
+Remaining critical work requires permissions/rights (FCBH/Pangeanic/Garellek/UMN),
+an independent native reviewer, or infrastructure (WSL2/Linux worker, backup).
+The runner is implemented and ready; no agent-only step advances a gate until data
+and permission exist.
 
 ## Next smallest executable steps
 
@@ -231,48 +244,33 @@ the steering request, with rights and native acceptance gates intact.
    `rpa-tts evidence add --gate F-01 --claim "independent backup destination established at <owner path>" --status passed --path docs/tts/recovery/environment.md`
 2. Owner: open the PR for `feat/white-hmong-tts-recovery` → `main` and post the
    issue progress update linking `docs/tts/recovery/README.md`.
-3. Owner: choose the F-04 host path in `f04-host-path.md` (recommended: enable
-   WSL2; the CPU/BIOS virtualization flags are already on), or provide a Linux
-   worker. This blocks the Magpie GPU gate, not F-02/F-03 preparation.
-4. Agent (after the host path exists): install NeMo Speech at pinned commit
-   `0305e4b15ac2924219536da44d315397d92ee769` with CUDA 12.8, restore the
-   hash-verified Magpie `.nemo`, record which of the five packaged configs is
-   effective, the tokenizer offsets, ByT5 byte-token IDs for every RPA character
-   and the `check_text_embedding_matches_tokenizer` result. Re-run
-   `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie` to
-   confirm hashes before loading.
-5. Before any learning run, write the stage decision with
+3. Owner (**data, first**): pursue FCBH DBP access + written training permission,
+   or approve the Pangeanic sample/licence request. Do not download/train without
+   permission; do not reconstruct from the old downloader.
+4. Owner: choose the F-04 host path in `f04-host-path.md` (recommended: enable
+   WSL2; CPU/BIOS virtualization flags are already on), or provide a Linux worker.
+5. Agent (after host + permitted data): install NeMo at pinned commit
+   `0305e4b15ac2924219536da44d315397d92ee769`, run
+   `rpa-tts model diagnose` and `rpa-tts train gate`; then build the manifest
+   (`prepare_magpie_manifest`), run the bounded `train finetune`, verify the
+   `.nemo` weights round trip with exact-byte fingerprints, verify the PTL
+   checkpoint + RNG sidecar with `verify_resume_checkpoint`, and render private
+   evaluation audio only. Do not touch release synthesis.
+6. Before any learning run, write the stage decision with
    `.venv/Scripts/python -m rpa_tts train plan ...` (see `--help`), then append it
    to `stage-decisions.jsonl`.
-6. Native lead: fill `calibration-scripts.review.csv` (accept/edit/reject,
-   edited text, notes) for the 272 candidates — 270 pending, 2 blocked on
-   `Mekas`/`Eeskiv`/ASCII quotes — then validate it with
-   `corpus review-import --draft ... --review ... --reviewer-id N-01`, which
-   writes the approved script set and report. Record the approved 100–150
-   calibration scripts. After stimuli exist, build the pack
-   with `.venv/Scripts/python -m rpa_tts evaluate pack --definition <definition.json> --output <pack-dir> --stage-audio <root>`,
-   distribute phase A then phase B, ingest with
-   `.venv/Scripts/python -m rpa_tts evaluate ingest --pack <pack-dir> --responses <responses-dir> --output scores.json`,
-   then merge two-adjudicator critical-error decisions with `evaluate adjudicate`
-   and human paragraph findings with `evaluate paragraphs`, then run
-   `evaluate metrics`/`gate`. Do not reuse exposed scripts for the locked test.
-7. Owner: authorize outreach/access requests for a permitted CMU/Bible Brain
-   current source and matching text, the Garellek/oral-history recordings, UMN
-   and Pangeanic. No purchase, account or audio retrieval is authorized yet; CMU
-   must not be re-attempted with the broken downloader or blind indices.
-8. Once a native-approved pilot exists: audit → split → coverage →
-   `corpus verify-audio --manifest <split.jsonl> --audio-root <root>` → freeze
-   (`corpus freeze --version <v> --contract ...`) and then
-   `corpus verify-dataset`. After each learning run, append a judged row with
-   `train record`; do not edit the curve by hand.
+7. If an independent native reviewer is engaged: fill
+   `calibration-scripts.review.csv` for the 272 candidates, validate with
+   `corpus review-import --draft ... --review ... --reviewer-id N-01`, and build
+   the calibration pack. Jee will not do this.
+8. Once a permitted, native-approved pilot exists: audit → split → coverage →
+   `corpus verify-audio` → freeze → `corpus verify-dataset`; then `train record`.
 9. After a frozen candidate: author/approve the 300 sentence + 20 paragraph
-   qualification scripts and contrast pairs, generate and stage the three
-   conditions, build the pack (composition is enforced), recruit 12 listeners,
-   then run ingest → adjudicate → paragraphs → metrics → gate. No suite exists.
-10. After F-07 acceptance and distribution rights: assemble the package
-    (`model-manifest.json`, checkpoint, config, benchmark hashes), run
+   qualification scripts, stage three conditions, recruit 12 listeners, then run
+   ingest → adjudicate → paragraphs → metrics → gate. No suite exists.
+10. After F-07 acceptance and distribution rights: assemble the package, run
     `package inspect`, have a second worker reproduce the benchmark, and only then
-    consider authorized lesson-audio integration. No package exists.
+    consider authorized lesson-audio integration.
 
 ## Checkpoint
 

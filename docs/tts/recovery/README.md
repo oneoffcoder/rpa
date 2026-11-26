@@ -4,9 +4,11 @@
 Hmong TTS on RTX 5090 — final recovery plan v1.2*.
 **Branch:** `feat/white-hmong-tts-recovery` (base `origin/main`
 `5919bb0650737a1534dc5746e191714820039b7d`; PR target `main`).
-**Status:** F-01 preparation is executed; no model has been trained, no native
-listening has occurred, no source rights have cleared and no TTS release exists.
-This issue must not be closed as a completed TTS product at this stage.
+**Status:** F-01 preparation is executed; F-02 is blocked by the lasting
+no-new-recording constraint; a real F-04 runner exists but no model has been
+loaded or trained, no native listening has occurred, and no release exists. F-09
+is `not_required` for local/static delivery. No source rights have cleared. This
+issue must not be closed as a completed TTS product at this stage.
 
 Goal: read unfamiliar RPA sentences and paragraphs with correct words,
 tone/phonation and natural connected speech, without a recording of the
@@ -23,9 +25,9 @@ Blocked / Not required. Evidence is append-only in
 | Stage | State | Dependencies | Responsible | Evidence | Next action |
 | --- | --- | --- | --- | --- | --- |
 | **F-01** workspace, environment, evidence, compute | **In progress** | none | implementation agent | [`environment.md`](environment.md), [`evidence/f01-environment.json`](evidence/f01-environment.json), [`evidence/f01-gpu-kernel-proof.json`](evidence/f01-gpu-kernel-proof.json), [`run-manifest.md`](run-manifest.md), [`decisions.jsonl`](decisions.jsonl) | Establish the independent owner-controlled backup destination (100–200 GB workspace is measured); then append the F-01 completion entry |
-| **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready), [`calibration-scripts.review.csv`](calibration-scripts.review.csv) (272 rows, blank decisions), [`review-import.md`](review-import.md) (validation ready) | Native lead fills the review sheet (270 pending, 2 blocked), imports decisions, approves 100–150 scripts, then records and runs the calibration pack |
-| **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md), repository syllable audit (below) | CMU is blocked (dead start URL, broken downloader, offsets invalidated by F0 pruning, no rights); owner must authorize outreach/access to Bible Brain, Garellek/oral-history, UMN or Pangeanic; continue owned-recording planning |
-| **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `configs/tts/f04-vits.yaml`, `rpa-tts model check` | Owner chooses the Linux path for Magpie (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); the VITS standby environment now imports on Windows and its `rpa-chars-1` text contract is verified, but no lane has run |
+| **F-02** language/voice contract, calibration, scoring | **Blocked** | native participants; Jee capacity | independent native reviewer + rights | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready), [`calibration-scripts.review.csv`](calibration-scripts.review.csv) (272 rows, blank decisions), [`review-import.md`](review-import.md) (validation ready), [`capacity-constraint.md`](capacity-constraint.md) | Jee will not record, recruit, or fill the worksheet. Engage an independent native reviewer/rights holder or adopt an explicit scope change; do not expect calibration recordings |
+| **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/access; owner decisions | data engineer + native QA; owner for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), [`f03-existing-source-investigation-2026-11-26.md`](f03-existing-source-investigation-2026-11-26.md), [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md) | Corrected to ISO `mww` / `MWWHDVN2DA`; CMU and FCBH Hmong Daw NT are the same source. FCBH needs a DBP key plus written training rights (personal-use terms); Pangeanic advertises 43 h but needs a sample/quote; Garellek and UMN access unresolved. No permitted sentence audio yet |
+| **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 data | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-runner.md`](f04-runner.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `configs/tts/f04-vits.yaml`, `rpa-tts model diagnose`, `rpa-tts train gate` | Real Magpie runner/diagnosis and private-render path implemented with exact-byte fingerprints and resume-state checks. `train gate` reports `platform_unsupported` on Windows; no 5090 load/step/render has run. Needs a Linux/WSL2 host plus permitted F-02 speech |
 | **F-05** accepted corpus, coverage, frozen splits | **In progress** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), [`dataset-lifecycle.md`](dataset-lifecycle.md), [`audio-verification.md`](audio-verification.md), `rpa-tts corpus split/freeze/verify-audio` | Freeze, verify and byte-level audio checks are ready; no accepted corpus exists. Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **In progress** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) (header), [`dataset-lifecycle.md`](dataset-lifecycle.md) | Record a stage decision before any comparison; `train record` now enforces unique, bounded learning-curve rows |
 | **F-07** independent native qualification | **In progress** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), [`listening-review.md`](listening-review.md), [`qualification-suite.md`](qualification-suite.md), `rpa-tts evaluate gate` (implemented, no data) | Build the 300-sentence + 20-paragraph suite with the enforced composition contract once scripts, contrast pairs and stimuli are frozen; recruit 12 listeners |
@@ -63,13 +65,20 @@ Corrections are appended, not deleted.
   drops). No row is approved, imported or recorded. See
   [`calibration-scripts.review.md`](calibration-scripts.review.md) and
   [`review-import.md`](review-import.md).
-- **F-03 source verification:** the CMU index archive was re-verified
-  (116,131 B, SHA-256 `10528f…`, 7,382 segments = 15.3988 h), the downloader's
-  unconditional exit and F0-pruning-before-offsets defects were confirmed, and
-  the old start host no longer resolves. Garellek materials expose RPA texts and
+- **2026-11-26 capacity constraint:** Jee will not record, recruit a speaker or fill
+  the native worksheet. F-02 is blocked and F-04–F-08 cannot pass without a
+  permitted existing sentence corpus and an independent native reviewer, or an
+  explicitly adopted scope change. No acceptance criterion is lowered. See
+  [`capacity-constraint.md`](capacity-constraint.md).
+- **F-03 correction and investigation:** the CMU lookup is ISO `mww`, fileset
+  `MWWHDVN2DA`; the CMU index and the FCBH Hmong Daw New Testament narration are
+  the same source. The index is 116,131 B (SHA-256 `10528f…`, 7,382 segments =
+  15.3988 h). FCBH terms are personal-use-only and require a DBP key; no audio
+  was downloaded or reconstructed. Garellek materials expose RPA texts and
   eight-speaker read folk tales with audio via a third party; UMN fails TLS;
-  Yuhalu blocks range requests; no rights are cleared. See
-  [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md).
+  Yuhalu serves a 51.38-minute isolated-word archive under an unverified license;
+  Pangeanic advertises 43 h with no sample or quote; no rights are cleared. See
+  [`f03-existing-source-investigation-2026-11-26.md`](f03-existing-source-investigation-2026-11-26.md).
 - **F-04 host constraint:** WSL2 is not enabled (`VirtualMachinePlatform`
   disabled, no distributions, no Docker) and the pinned NeMo stack resolves GPU
   PyTorch only on Linux. The owner must choose WSL2 or a Linux worker before the
@@ -115,7 +124,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (335 TTS tests), including two-adjudicator
+  ingestion implemented and tested (366 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -146,6 +155,10 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts corpus verify-audio --manifest ... --audio-root ...` | yes | Re-hashes and re-decodes every manifest audio file (no real corpus yet) |
 | `rpa-tts train record --run-manifest ...` | yes | Appends one validated learning-curve row (none exists) |
 | `rpa-tts model check` | yes | Lane metadata/hash readiness (not a GPU gate) |
+| `rpa-tts model diagnose` | yes | Exact F-04 environment defect chain (platform, CUDA, NeMo, artifacts, tokenizer) |
+| `rpa-tts train gate` | yes | Attempts F-04; writes diagnosis and exits 3 with the first defect when blocked |
+| `rpa-tts train finetune` | yes | Builds/runs the pinned Magpie Hydra command in a qualified environment |
+| `rpa-tts train render-private` | yes | Private evaluation audio only; refuses on a failing environment diagnosis; never release |
 | `rpa-tts train plan ...` | yes | Pre-run plan/stage-decision draft; no GPU work |
 | `rpa-tts train run/resume` | **gated (F-04)** | Refuses until F-04 passes and a wrapper is tested |
 | `rpa-tts synthesize` | **gated (F-07)** | Refuses until F-07 passes and a package is accepted |
@@ -186,10 +199,13 @@ this session, so do not claim green beyond that run.
 | [`review-import.md`](review-import.md) | Validation and provenance for importing filled review decisions |
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |
 | [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md) | Verified CMU defects, rechecked lead access and rights status |
+| [`f03-existing-source-investigation-2026-11-26.md`](f03-existing-source-investigation-2026-11-26.md) | Corrected `mww`/MWWHDVN2DA identity, FCBH terms, minutes by source |
+| [`capacity-constraint.md`](capacity-constraint.md) | Lasting no-new-recordings constraint and owner options |
 | [`rights-matrix.csv`](rights-matrix.csv) | Per-source permission status and next actions |
 | [`model-candidates.md`](model-candidates.md) | F-04 Magpie/VITS lane contracts, gate checklist, budgets |
 | [`f04-artifact-inspection.md`](f04-artifact-inspection.md) | Verified artifact hashes, packaged config, text-tokenizer contract and risks |
 | [`f04-host-path.md`](f04-host-path.md) | WSL2/Linux requirement, measured host facts and owner options |
+| [`f04-runner.md`](f04-runner.md) | Real Magpie load/finetune/private-render path, defect chain and pending GPU/listening checks |
 | [`f04-vits-standby.md`](f04-vits-standby.md) | Standby VITS pin, `rpa-chars-1` text contract and measured import environment |
 | [`book-regression.md`](book-regression.md) | Pinned Sphinx build, warnings and reference checks |
 | [`book-audio-references.md`](book-audio-references.md) | Static syllable playback link/inventory verification |

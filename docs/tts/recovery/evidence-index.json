@@ -436,6 +436,51 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Jee will not record new calibration audio, recruit a speaker, or complete the native worksheet; F-02 is blocked and dependent gates cannot pass without a permitted existing corpus plus an independent native reviewer or an explicit scope change",
+      "created_at": "2026-11-26T10:55:00+00:00",
+      "gate": "F-02",
+      "id": "ev_000000000000001a",
+      "notes": "Lasting capacity constraint. Acceptance criteria unchanged; no recordings are expected and no worksheet is assigned. F-04-F-08 remain dependent on permitted data/native review.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/capacity-constraint.md",
+          "sha256": "d65bcfec737b8a6f6940d8ed225932349f9dc143a70405123380a261b8364011"
+        }
+      ],
+      "run_id": null,
+      "status": "blocked"
+    },
+    {
+      "claim": "Corrected CMU identity to ISO mww/fileset MWWHDVN2DA; identified the CMU index and FCBH Hmong Daw New Testament narration as the same source; verified FCBH access requires a DBP key and its terms permit personal use only; catalogued actual/known minutes and remaining access needs for FCBH, Pangeanic, Garellek, UMN, Yuhalu and repository sources",
+      "created_at": "2026-11-26T10:56:00+00:00",
+      "gate": "F-03",
+      "id": "ev_000000000000001b",
+      "notes": "No audio was retrieved and no chapter was reconstructed because no training permission/access exists. FCBH likely multi-voice audio drama; exact edition/text confirmation and written rights remain pending. No new recordings.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f03-existing-source-investigation-2026-11-26.md",
+          "sha256": "e40bf974ae390e79ff7a1031cd33041742feeaf2b51a77eaeb05c8e3be795a1c"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Implemented the real F-04 runner path: environment diagnosis, effective packaged-config resolution, pinned upstream Magpie finetune command, exact-byte weights round trip, separate PTL resume-state/RNG verification, and private-only evaluation audio; train gate reports platform_unsupported on this Windows host and no 5090 load/step/render has been executed",
+      "created_at": "2026-11-26T10:57:00+00:00",
+      "gate": "F-04",
+      "id": "ev_000000000000001c",
+      "notes": "Unexecuted on the 5090: model load, training step, save/reload, resume run, private synthesis and listening. Native Windows NeMo diagnostic fixed a missing nv-one-logger integration but hit an nv-one-logger/overrides/Lightning incompatibility; qualified Linux/WSL2 plus permitted data still required. Release synthesis remains F-07-gated.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f04-runner.md",
+          "sha256": "3e57db4800274f6181ce09ef61da460a1c7178a48ec91452ef5b337070fa1f6e"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

@@ -51,6 +51,12 @@ from .text.normalize import normalize_rpa
 from .training import backend
 from .training.gates import gate_statuses
 from .training.learning_curve import append_row, row_from_run_manifest
+from .training.magpie_runner import (
+    build_finetune_command,
+    diagnose_environment,
+    render_private_audio,
+    run_upstream,
+)
 from .training.run_manifest import (
     build_run_manifest,
     load_run_manifest,
@@ -181,6 +187,12 @@ def parser() -> argparse.ArgumentParser:
     model_check.add_argument("--config", type=Path, default=None)
     model_check.add_argument("--lane", choices=["magpie", "vits"], default=None)
     model_check.add_argument("--repo-root", type=Path, default=None)
+    model_diagnose = model_commands.add_parser(
+        "diagnose", help="report the exact F-04 environment defect chain"
+    )
+    model_diagnose.add_argument("--config", type=Path, default=None)
+    model_diagnose.add_argument("--manifest", type=Path, default=None)
+    model_diagnose.add_argument("--repo-root", type=Path, default=None)
 
     # train -----------------------------------------------------------------
     train = commands.add_parser("train", help="gated training entry points")
@@ -220,6 +232,44 @@ def parser() -> argparse.ArgumentParser:
     run.add_argument("--stage", default="F-06", choices=[f"F-0{index}" for index in range(5, 9)])
     run.add_argument("--output", type=Path, required=True)
     run.add_argument("--lane", choices=["magpie", "vits"], default=None)
+    gate = train_commands.add_parser(
+        "gate", help="attempt the F-04 gate or record its first blocking defect"
+    )
+    gate.add_argument("--config", type=Path, default=None)
+    gate.add_argument("--output", type=Path, required=True)
+    gate.add_argument("--manifest", type=Path, default=None)
+    gate.add_argument("--lane", choices=["magpie", "vits"], default="magpie")
+    gate.add_argument("--dry-run", action="store_true")
+    finetune = train_commands.add_parser(
+        "finetune", help="run the pinned Magpie finetuning command in a qualified environment"
+    )
+    finetune.add_argument("--config", type=Path, default=None)
+    finetune.add_argument("--init-checkpoint", type=Path, required=True)
+    finetune.add_argument("--exp-dir", type=Path, required=True)
+    finetune.add_argument("--train-manifest", type=Path, required=True)
+    finetune.add_argument("--val-manifest", type=Path, required=True)
+    finetune.add_argument("--audio-dir", type=Path, required=True)
+    finetune.add_argument("--feature-dir", type=Path, default=None)
+    finetune.add_argument("--tokenizer-name", default="hmong_chartokenizer")
+    finetune.add_argument("--devices", type=int, default=1)
+    finetune.add_argument("--batch-size", type=int, default=1)
+    finetune.add_argument("--max-epochs", type=int, default=1)
+    finetune.add_argument("--max-steps", type=int, default=1)
+    finetune.add_argument("--learning-rate", type=float, default=1e-5)
+    finetune.add_argument("--dry-run", action="store_true")
+    render_private = train_commands.add_parser(
+        "render-private", help="generate private evaluation audio (never release audio)"
+    )
+    render_private.add_argument("--config", type=Path, default=None)
+    render_private.add_argument("--artifact", type=Path, required=True)
+    render_private.add_argument("--text", required=True)
+    render_private.add_argument("--output", type=Path, required=True)
+    render_private.add_argument("--metadata", type=Path, required=True)
+    render_private.add_argument("--device", default="cuda:0")
+    render_private.add_argument("--language", default="en")
+    render_private.add_argument("--speaker-index", type=int, default=0)
+    render_private.add_argument("--seed", type=int, default=3407)
+    render_private.add_argument("--sample-rate", type=int, default=None)
     resume = train_commands.add_parser("resume", help="resume a run (requires F-04)")
     resume.add_argument("--config", type=Path, default=None)
     resume.add_argument("--run-dir", type=Path, required=True)
@@ -552,6 +602,133 @@ def _cmd_train_record(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     return append_row(curve, row), 0
 
 
+def _cmd_model_diagnose(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    config = _config(args)
+    report = diagnose_environment(
+        config,
+        manifest_path=args.manifest,
+        repo_root=_repo_root(args),
+    )
+    return report, 0 if report["ok"] else 1
+
+
+def _cmd_train_gate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    config = _config(args)
+    root = find_repo_root()
+    lane = args.lane
+    diagnosis = diagnose_environment(config, manifest_path=args.manifest, repo_root=root)
+    args.output.mkdir(parents=True, exist_ok=True)
+    diagnosis_path = args.output / "f04-diagnosis.json"
+    write_json_report(diagnosis, diagnosis_path)
+    if not diagnosis["ok"]:
+        first = diagnosis["defects"][0]
+        raise GateNotPassedError(
+            "F-04",
+            f"environment diagnosis failed: {first['code']} — {first['detail']}",
+            first.get("remediation", "resolve the reported defect and rerun train gate"),
+        )
+    if args.manifest is None:
+        raise InputError(
+            "F-04 requires F-02 calibration speech; supply --manifest with accepted rows"
+        )
+    training = config.data["model_lanes"][lane].get("training", {})
+    command = training.get("gate_command")
+    if not command or not all(isinstance(part, str) for part in command):
+        raise InputError(
+            f"lane {lane!r} has no configured gate_command; add the tested pinned upstream "
+            "command to the lane config and rerun; commands are never invented"
+        )
+    if args.dry_run:
+        return {
+            "diagnosis": diagnosis,
+            "diagnosis_path": str(diagnosis_path),
+            "command": command,
+            "dry_run": True,
+        }, 0
+    result = run_upstream(command, cwd=root)
+    write_json_report(result, args.output / "gate-command.json")
+    if not result["ok"]:
+        raise RpaTtsError(
+            f"F-04 gate command failed with exit {result['returncode']}; see "
+            f"{args.output / 'gate-command.json'}"
+        )
+    return {
+        "diagnosis": diagnosis,
+        "diagnosis_path": str(diagnosis_path),
+        "command_result": result,
+        "note": (
+            "Review outputs and append F-04 evidence manually; success here is not "
+            "native acceptance."
+        ),
+    }, 0
+
+
+def _cmd_train_finetune(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    config = _config(args)
+    root = find_repo_root()
+    diagnosis = diagnose_environment(config, repo_root=root)
+    if not diagnosis["ok"]:
+        first = diagnosis["defects"][0]
+        raise GateNotPassedError(
+            "F-04",
+            f"finetuning cannot start: {first['code']} — {first['detail']}",
+            first.get("remediation", "resolve the reported defect and rerun"),
+        )
+    built = build_finetune_command(
+        repo_root=root,
+        init_checkpoint=args.init_checkpoint,
+        exp_dir=args.exp_dir,
+        train_manifest=args.train_manifest,
+        val_manifest=args.val_manifest,
+        audio_dir=args.audio_dir,
+        feature_dir=args.feature_dir,
+        tokenizer_name=args.tokenizer_name,
+        devices=args.devices,
+        batch_size=args.batch_size,
+        max_epochs=args.max_epochs,
+        max_steps=args.max_steps,
+        learning_rate=args.learning_rate,
+    )
+    if args.dry_run:
+        return {"diagnosis": diagnosis, "finetune": built, "dry_run": True}, 0
+    result = run_upstream(built["command"], cwd=root)
+    return {"diagnosis": diagnosis, "finetune": built, "command_result": result}, (
+        0 if result["ok"] else 1
+    )
+
+
+def _cmd_train_render_private(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    config = _config(args)
+    root = find_repo_root()
+    diagnosis = diagnose_environment(config, repo_root=root)
+    if not diagnosis["ok"]:
+        first = diagnosis["defects"][0]
+        raise GateNotPassedError(
+            "F-04",
+            f"private rendering requires a qualified runner: {first['code']} — {first['detail']}",
+            first.get("remediation", "resolve the reported defect and rerun"),
+        )
+    from .training.magpie_runner import load_magpie
+
+    model = load_magpie(args.artifact, device=args.device)
+    report = render_private_audio(
+        model,
+        args.text,
+        args.output,
+        args.metadata,
+        repo_root=root,
+        language=args.language,
+        speaker_index=args.speaker_index,
+        seed=args.seed,
+        sample_rate=args.sample_rate,
+        extra_metadata={
+            "artifact": str(args.artifact),
+            "artifact_sha256": sha256_file(args.artifact),
+        },
+    )
+    return report, 0
+
+
 def _cmd_model_check(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     config = _config(args)
     root = _repo_root(args)
@@ -875,7 +1052,11 @@ _DISPATCH = {
     ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
     ("corpus", "verify-audio"): _cmd_corpus_verify_audio,
     ("model", "check"): _cmd_model_check,
+    ("model", "diagnose"): _cmd_model_diagnose,
     ("train", "plan"): _cmd_train_plan,
+    ("train", "gate"): _cmd_train_gate,
+    ("train", "finetune"): _cmd_train_finetune,
+    ("train", "render-private"): _cmd_train_render_private,
     ("train", "record"): _cmd_train_record,
     ("train", "run"): _cmd_train_run,
     ("train", "resume"): _cmd_train_resume,

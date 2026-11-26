@@ -42,6 +42,8 @@ model_lanes:
       nemo_commit: 0305e4b15ac2924219536da44d315397d92ee769
       codec: nvidia/nemo-nano-codec-22khz-1.89kbps-21.5fps
       codec_sample_rate: 22050
+      text_conditioning_tokenizer: google/byt5-small
+      tokenizer_revision: 68377bdc18a2ffec8a0533fef03b1c513a4dd49d
     artifacts:
       model_path: data/artifacts/magpie-v2607/magpie_tts_multilingual_357m.nemo
       model_sha256: ec675fa8c02b9c1d5382c5c2b5a6acec6492c1e8344866c07cf3892185d18953
