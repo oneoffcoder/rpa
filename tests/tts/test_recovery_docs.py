@@ -61,6 +61,8 @@ def test_evidence_index_is_valid_and_covers_the_implemented_gates():
 
 
 def test_evidence_paths_still_resolve_with_matching_hashes():
+    import subprocess
+
     from rpa_tts.hashing import sha256_file
 
     index = load_index(RECOVERY / "evidence-index.json", repo_root=ROOT)
@@ -68,6 +70,14 @@ def test_evidence_paths_still_resolve_with_matching_hashes():
         for recorded in entry["paths"]:
             path = ROOT / recorded["path"]
             assert path.is_file(), f"{entry['id']} references missing {recorded['path']}"
+            ignored = subprocess.run(
+                ["git", "-C", str(ROOT), "check-ignore", "-q", recorded["path"]],
+                capture_output=True,
+            )
+            assert ignored.returncode != 0, (
+                f"{entry['id']} hashes ignored artifact {recorded['path']}; "
+                "evidence must reference tracked, resolvable snapshots"
+            )
             assert sha256_file(path) == recorded["sha256"], f"{entry['id']} hash drift"
 
 

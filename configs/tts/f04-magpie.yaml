@@ -1,0 +1,81 @@
+# F-04 Magpie lane with resolved, hash-verified artifacts (issue F-04).
+# The artifacts themselves stay outside Git (data/artifacts/ is ignored); a
+# fresh worker must re-download the exact revisions and verify hashes before
+# using this file. See docs/tts/recovery/f04-artifact-inspection.md.
+schema_version: 1
+project:
+  name: rpa-tts
+  seed: 3407
+host:
+  profile: rtx-5090-win11
+  device: cuda:0
+  precision: fp32
+  roots:
+    workspace: data
+    artifacts: data/artifacts
+audio:
+  master_sample_rate: 48000
+  master_bit_depth: 24
+  model_sample_rate: 24000
+  channels: 1
+splits:
+  dev_fraction: 0.1
+  test_fraction: 0.2
+  bucket_field: bucket
+  group_field: group_id
+  buckets:
+  - ordinary_sentences
+  - targeted_contrasts
+  - questions_numbers_names
+  - continuous_passages
+  - calibration
+coverage:
+  min_examples_per_attested_cell: 5
+model_lanes:
+  magpie:
+    enabled: true
+    priority: 1
+    status: in_progress
+    upstream:
+      model: nvidia/magpie_tts_multilingual_357m
+      model_version: v2607
+      nemo_commit: 0305e4b15ac2924219536da44d315397d92ee769
+      codec: nvidia/nemo-nano-codec-22khz-1.89kbps-21.5fps
+      codec_sample_rate: 22050
+    artifacts:
+      model_path: data/artifacts/magpie-v2607/magpie_tts_multilingual_357m.nemo
+      model_sha256: ec675fa8c02b9c1d5382c5c2b5a6acec6492c1e8344866c07cf3892185d18953
+      codec_path: data/artifacts/nano-codec/nemo-nano-codec-22khz-1.89kbps-21.5fps.nemo
+      codec_sha256: 28c2518de3e3d5a2c7d9bca40a7ebc0644eb76c60b890970365325bdd8e9f099
+  vits:
+    enabled: true
+    priority: 2
+    status: standby
+    upstream:
+      original_commit: 2e561ba58618d021b5b8323d3765880f7e0ecfdb
+      implementation: idiap/coqui-ai-TTS
+      implementation_commit: null
+    artifacts:
+      model_path: null
+      model_sha256: null
+gates:
+  f04:
+    max_active_gpu_hours: 8
+    max_engineering_days: 2
+    max_compatibility_corrections: 1
+  f06:
+    bootstrap_resamples: 5000
+    min_relative_syllable_error_reduction: 0.2
+    min_naturalness_gain: 0.3
+  f07:
+    pooled_syllable_error_max: 0.05
+    bucket_syllable_error_max: 0.1
+    contrast_accuracy_min: 0.95
+    naturalness_mean_min: 4.0
+    naturalness_lower_bound_min: 3.8
+    naturalness_gap_max: 0.5
+    required_buckets:
+    - ordinary_sentences
+    - targeted_contrasts
+    - questions_numbers_names
+    - continuous_passages

@@ -141,15 +141,11 @@
       "created_at": "2026-11-26T08:10:35+00:00",
       "gate": "F-04",
       "id": "ev_0000000000000008",
-      "notes": "Artifacts unresolved (paths/hashes null), NeMo not installed, VITS implementation not pinned; train run/resume remain gated",
+      "notes": "Artifacts unresolved (paths/hashes null), NeMo not installed, VITS implementation not pinned; train run/resume remain gated Living/mutable documents are excluded from hashed evidence paths.",
       "paths": [
         {
           "path": "docs/tts/recovery/model-candidates.md",
           "sha256": "444ec16969a67d30534de28427c87353b59a8ad98289f57a5fb4569c52044f40"
-        },
-        {
-          "path": "configs/tts/default.yaml",
-          "sha256": "10bae50da5dca6f113c6e8bc835637b2f21099a41fbcc7cd2ce1c584aa254821"
         }
       ],
       "run_id": null,
@@ -160,19 +156,25 @@
       "created_at": "2026-11-26T08:10:40+00:00",
       "gate": "F-09",
       "id": "ev_0000000000000009",
-      "notes": "Local synthesis and approved static lesson audio are the delivery target; hosting becomes a separate authorized decision after F-08 acceptance",
+      "notes": "Local synthesis and approved static lesson audio are the delivery target; hosting becomes a separate authorized decision after F-08 acceptance Living/mutable documents are excluded from hashed evidence paths.",
+      "paths": [],
+      "run_id": null,
+      "status": "not_required"
+    },
+    {
+      "claim": "Pinned Magpie and NanoCodec artifacts downloaded and hash-verified; packaged config, weight shapes, ByT5 byte-tokenizer dependency and lane risks recorded; no model has loaded or trained",
+      "created_at": "2026-11-26T08:20:00+00:00",
+      "gate": "F-04",
+      "id": "ev_000000000000000a",
+      "notes": "Magpie revision 446bff55, .nemo sha256 ec675fa8...; codec revision fc00890b, .nemo sha256 28c2518d...; both match HF LFS ids. NeMo 2.8.0rc0 target, ByT5 text conditioning, 3359-row text embedding, five duplicate config members in one archive, external google/byt5-small tokenizer revision 68377bdc. NeMo not installed; Windows host support unproven; VITS fallback pin recorded Living/mutable documents are excluded from hashed evidence paths.",
       "paths": [
         {
-          "path": "docs/tts/recovery/README.md",
-          "sha256": "615f3146ac0948989a6a1e527b0c50eb69194f145fc4f607bd16edda6bde72a1"
-        },
-        {
-          "path": "docs/tts/recovery/decisions.jsonl",
-          "sha256": "74e8b28738652b0e68071bf65eb042fc69186af890b2cfabe511931dd16fcb79"
+          "path": "docs/tts/recovery/f04-artifact-inspection.md",
+          "sha256": "36a243f60b4b400ad96c4f4aa7dee879adb62d721cef631f078b1bb03413e37f"
         }
       ],
       "run_id": null,
-      "status": "not_required"
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

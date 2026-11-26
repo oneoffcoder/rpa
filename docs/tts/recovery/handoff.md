@@ -44,10 +44,27 @@ Written 2026-11-26 for the next worker. Read
   (manifest itself is under ignored `data/audit/`; reports are committed under
   `audit/repo-syllables/`). Speaker identity and dialect are unverified and this
   is **not** connected-speech training data.
+- **Downloaded lane artifacts (ignored by Git; owner backup required):**
+  - `data/artifacts/magpie-v2607/magpie_tts_multilingual_357m.nemo`,
+    1,470,208,000 B, SHA-256 `ec675fa8c02b9c1d5382c5c2b5a6acec6492c1e8344866c07cf3892185d18953`,
+    repo revision `446bff55e1fe3d3aa29c771574e7d2b0fa322990`.
+  - `data/artifacts/nano-codec/nemo-nano-codec-22khz-1.89kbps-21.5fps.nemo`,
+    425,021,440 B, SHA-256 `28c2518de3e3d5a2c7d9bca40a7ebc0644eb76c60b890970365325bdd8e9f099`,
+    repo revision `fc00890b604aa2de298d2641ffc6c5f6caf8c4d7`.
+  - `configs/tts/f04-magpie.yaml` points at these paths/hashes;
+    `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie`
+    reports five `passed` checks on this host. A fresh worker must re-download and
+    re-verify (commands in `f04-artifact-inspection.md`).
 - **Last completed run:** no model run. The only executed GPU work is the F-01
   kernel proof (8 AdamW steps, 15.68 s, peak 18.88 MB allocated).
 - **Resumable checkpoint:** none. Nothing is resumable because no training run
   started. Do not present a resumable command for a run that never existed.
+- **F-04 contract findings:** the `.nemo` contains five same-named
+  `model_config.yaml` members (last wins) and a 3359×768 `text_embedding`;
+  text conditioning uses the external `google/byt5-small` byte tokenizer
+  (inspected revision `68377bdc18a2ffec8a0533fef03b1c513a4dd49d`); config targets
+  NeMo `2.8.0rc0`; Hmong is not a supported language; the codec is 22,050 Hz
+  with 8 codebooks × 2,016 codes. Details in `f04-artifact-inspection.md`.
 
 ## Active processes and GPU budget
 
@@ -63,7 +80,7 @@ Written 2026-11-26 for the next worker. Read
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`) |
-| F-04 | Lane metadata and readiness check only (`…0008`) |
+| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts downloaded, hash-verified and packaged config inspected (`…000a`) |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
@@ -79,9 +96,10 @@ The book's `source/`, original audio and explorer are unchanged
 2. **Rights/people (F-03):** no source has cleared training/weight-distribution
    rights; CMU is blocked on source/text/rights match; outreach requires owner
    authorization and money where quoted.
-3. **Model artifacts (F-04):** Magpie artifacts unresolved (paths/hashes null),
-   NeMo Speech not installed, VITS implementation not pinned. `train run` and
-   `resume` correctly refuse (exit 3).
+3. **Model artifacts (F-04):** artifacts are now resolved and hash-verified (see
+   above), but NeMo Speech is not installed and the Windows host's NeMo support
+   is unproven. `train run` and `resume` correctly refuse (exit 3) until the
+   GPU gate passes and a tested wrapper exists.
 4. **Owner backup destination (F-01 completion).**
 5. **GitHub PR/auth:** branch can be pushed over SSH; PR creation needs owner
    authentication.
@@ -104,11 +122,14 @@ The book's `source/`, original audio and explorer are unchanged
    `rpa-tts evidence add --gate F-01 --claim "independent backup destination established at <owner path>" --status passed --path docs/tts/recovery/environment.md`
 2. Owner: open the PR for `feat/white-hmong-tts-recovery` → `main` and post the
    issue progress update linking `docs/tts/recovery/README.md`.
-3. Agent (no native dependency): prepare the F-04 Magpie inspection — resolve
-   the immutable model/codec artifacts and hashes, install NeMo Speech in the
-   TTS environment (or a separate lane environment), then run:
-   `.venv/Scripts/python -m rpa_tts model check --config configs/tts/default.yaml`
-   (current expected exit 1 with artifact checks `not_started`).
+3. Agent (no native dependency): resolve the F-04 runtime — install NeMo Speech
+   at pinned commit `0305e4b15ac2924219536da44d315397d92ee769` in a
+   Linux-compatible environment (WSL2/container or Linux worker) with CUDA 12.8,
+   then restore the hash-verified Magpie `.nemo` and record which of the five
+   packaged configs is effective, the tokenizer offsets, ByT5 byte-token IDs for
+   every RPA character and the `check_text_embedding_matches_tokenizer` result.
+   Re-run `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie`
+   to confirm hashes before loading.
 4. Before any learning run, write the stage decision with
    `.venv/Scripts/python -m rpa_tts train plan ...` (see `--help`), then append it
    to `stage-decisions.jsonl`.

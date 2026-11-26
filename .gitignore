@@ -21,6 +21,8 @@ data/checkpoints/
 data/runs/
 data/exports/
 data/private/
+data/audit/
+data/artifacts/
 docs/tts/recovery/evidence/audio/
 *.nemo
 *.ckpt

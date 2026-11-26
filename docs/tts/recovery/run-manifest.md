@@ -51,6 +51,12 @@ falsifiable claim, its gate, status, timestamp, optional run id and the files
 that support it (hashed). The entry with the latest `created_at` for a gate is
 the gate's effective status; corrections are appended, never deleted.
 
+Hashed evidence paths must be **tracked, non-ignored snapshots** (measurement
+files, frozen reports, protocol documents), never living documents such as the
+stage table (`README.md`), `decisions.jsonl` or mutable configs. Progress updates
+belong in those living documents; the evidence index records point-in-time facts.
+Tests enforce existence, non-ignored status and hash agreement.
+
 Status vocabulary: Not started / In progress / Passed / Failed / Inconclusive /
 Blocked / Not required. An unavailable listener, GPU, permission or right is a
 blocker for that gate, not a pass and not a reason to lower a threshold.
