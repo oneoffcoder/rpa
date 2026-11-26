@@ -771,6 +771,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Created deterministic chapter-grouped private splits for the 7,935-pair NT corpus: 184 train groups/5,761 rows, 28 dev/714, 48 test/1,460, no chapter leakage; single-chapter books remain training-only",
+      "created_at": "2026-11-26T14:40:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000035",
+      "notes": "Private development split only, not native-accepted/frozen or the F-07 locked suite. Split manifest SHA 5dd757ee; audio private.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-splits.md",
+          "sha256": "e81055974845de00f4b692a73279aafd1efa05e9d0c2504284abe931ca20441d"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
