@@ -24,7 +24,7 @@ class VitsLoopTests(unittest.TestCase):
         for position in (0, 9):
             epoch, cursor, order = m.resume_cursor(
                 dict(epoch=1, position=position, order=m.epoch_order(9, 0), seed=m.SEED), 9)
-            self.assertEqual((epoch, cursor, order), (1, 0, m.epoch_order(9, 1)))
+            self.assertEqual((epoch, cursor, order), (0, 9, m.epoch_order(9, 0)))
         with self.assertRaises(ValueError):
             m.resume_cursor(dict(epoch=1, position=4, order=list(range(9)), seed=m.SEED), 9)
 

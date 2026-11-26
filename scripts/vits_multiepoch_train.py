@@ -70,7 +70,9 @@ def resume_cursor(ck, size):
         # The initial loop stored the just-finished permutation at boundaries.
         if ("loop_version" not in ck and epoch > 0 and position in (0, size)
                 and ck["order"] == epoch_order(size, epoch - 1)):
-            return epoch, 0, expected
+            # The old boundary had no supervised dev result. Evaluate these
+            # exact weights once, then advance without another optimizer step.
+            return epoch - 1, size, ck["order"]
         raise ValueError("checkpoint shuffle does not match the training split")
     return epoch, position, expected
 
@@ -289,6 +291,10 @@ def main(argv=None):
         if "contract" in ck and contract != ck["contract"]:
             raise ValueError("corpus, batch settings or validation set changed since checkpoint")
         epoch, position, order = resume_cursor(ck, len(train))
+        if "unique_seen" in ck:
+            used = order[:position] if epoch == 0 else range(len(train))
+            if set(ck["unique_seen"]) != {train[i]["row"]["id"] for i in used}:
+                raise ValueError("legacy checkpoint IDs differ from the paired training split")
         step = ck["step"]
         origin = ck["start_checkpoint"]
         best, best_epoch, stale = (ck.get("best_score"), ck.get("best_epoch"), ck.get("stale_epochs", 0))
