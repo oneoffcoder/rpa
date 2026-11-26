@@ -148,7 +148,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (366 TTS tests), including two-adjudicator
+  ingestion implemented and tested (371 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -172,6 +172,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts corpus scripts --rst source/speaking.rst ...` | yes | Drafts candidate scripts from book examples (not approved) |
 | `rpa-tts corpus book-audio` | yes | Verifies existing syllable playback links against the 5,187 MP3 inventory |
 | `rpa-tts corpus book-html` | yes | Verifies built HTML local references, assets and generated-syllable links |
+| `rpa-tts corpus mwwhdv-chapter` | yes | Cuts a local authorized MWWHDV chapter into hashed verse rows |
 | `rpa-tts corpus review-sheet --draft ...` | yes | Writes a blank-decision native review CSV and instructions |
 | `rpa-tts corpus review-import --review ...` | yes | Validates a filled review sheet into an approved script set (none exists) |
 | `rpa-tts corpus freeze --manifest ... --version ...` | yes | Freezes an approved, coverage-passing dataset version (none exists) |

@@ -30,6 +30,8 @@ from .data.manifest import (
     validate_rows,
     write_manifest,
 )
+from .data.mwwhdv import build_chapter_manifest
+from .data.mwwhdv import write_manifest as write_verse_manifest
 from .data.split import assign_splits
 from .data.verify import verify_audio
 from .data.versioning import freeze_dataset, verify_dataset_config
@@ -157,6 +159,18 @@ def parser() -> argparse.ArgumentParser:
     book_html.add_argument("--build-dir", type=Path, default=Path("build/html"))
     book_html.add_argument("--output-json", type=Path, default=None)
     book_html.add_argument("--output-md", type=Path, default=None)
+    mwwhdv = corpus_commands.add_parser(
+        "mwwhdv-chapter",
+        help="cut a local MWWHDV chapter audio/text/timestamps into verse rows",
+    )
+    mwwhdv.add_argument("--audio", type=Path, required=True)
+    mwwhdv.add_argument("--text-json", type=Path, required=True)
+    mwwhdv.add_argument("--timestamps-json", type=Path, required=True)
+    mwwhdv.add_argument("--book", required=True)
+    mwwhdv.add_argument("--chapter", type=int, required=True)
+    mwwhdv.add_argument("--chapter-duration", type=float, required=True)
+    mwwhdv.add_argument("--output-dir", type=Path, required=True)
+    mwwhdv.add_argument("--manifest", type=Path, required=True)
     freeze = corpus_commands.add_parser(
         "freeze", help="freeze an approved accepted dataset version with hashes and coverage"
     )
@@ -550,6 +564,29 @@ def _cmd_corpus_book_html(args: argparse.Namespace) -> tuple[dict[str, Any], int
         output_md=args.output_md,
     )
     return report, 0 if report["ok"] else 1
+
+
+def _cmd_corpus_mwwhdv_chapter(
+    args: argparse.Namespace,
+) -> tuple[dict[str, Any], int]:
+    text_rows = json.loads(args.text_json.read_text(encoding="utf-8"))
+    timestamp_rows = json.loads(args.timestamps_json.read_text(encoding="utf-8"))
+    rows = build_chapter_manifest(
+        args.audio,
+        text_rows,
+        timestamp_rows,
+        args.output_dir,
+        book=args.book,
+        chapter=args.chapter,
+        chapter_duration=args.chapter_duration,
+    )
+    summary = write_verse_manifest(rows, args.manifest)
+    return {
+        "book": args.book,
+        "chapter": args.chapter,
+        **summary,
+        "private_training_data": True,
+    }, 0
 
 
 def _cmd_corpus_freeze(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
@@ -1048,6 +1085,7 @@ _DISPATCH = {
     ("corpus", "review-import"): _cmd_corpus_review_import,
     ("corpus", "book-audio"): _cmd_corpus_book_audio,
     ("corpus", "book-html"): _cmd_corpus_book_html,
+    ("corpus", "mwwhdv-chapter"): _cmd_corpus_mwwhdv_chapter,
     ("corpus", "freeze"): _cmd_corpus_freeze,
     ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
     ("corpus", "verify-audio"): _cmd_corpus_verify_audio,
