@@ -111,6 +111,9 @@ The TTS suite exercises normalization preservation, manifest/schema/leakage
 rules, split determinism, coverage accounting, pooled syllable errors, empty
 outputs in denominators, crossed listener/script bootstrap arithmetic, gate
 outcomes, evidence append-only behavior and CLI/gate refusals.
+`.github/workflows/tts.yml` runs the CPU test/lint suite and the pinned book
+build on pushes and PRs; this session could not read GitHub check status (no
+authenticated API session), so the workflow is added but not claimed green.
 
 ## Runbook index
 

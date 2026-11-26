@@ -11,7 +11,13 @@ import pytest
 
 from rpa_tts.data.audio import decode_audio, inspect_audio, probe_audio
 
-pytestmark = pytest.mark.integration
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.skipif(
+        shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None,
+        reason="ffmpeg and ffprobe are required for audio integration tests",
+    ),
+]
 
 
 def _write_wav(

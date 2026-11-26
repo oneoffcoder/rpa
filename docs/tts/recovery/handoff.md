@@ -17,6 +17,10 @@ Written 2026-11-26 for the next worker. Read
 - **PR to `main`:** not opened. This session had no authenticated GitHub API
   session (`gh` returned HTTP 401), so branch push succeeded over SSH but the PR
   must be opened by the owner. Do not auto-merge.
+- **CI:** `.github/workflows/tts.yml` runs the CPU TTS tests/lint and the pinned
+  book build on pushes and PRs. Its status could not be read from this session
+  (no GitHub API auth); do not claim green checks until the owner verifies the
+  workflow run.
 - **Retired archive:** `archive/pr1-96698f0` locally tags the unmerged PR #1
   commit `96698f0689a489b16868ee85046cac6604dfbb77`; it is inspected, not merged.
 
