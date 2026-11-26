@@ -213,6 +213,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Independent re-verification of CMU facts and acquisition leads: index hash/rows confirmed, downloader exit and F0-pruning-before-offsets defects confirmed, old start host dead, no source rights cleared, no audio retrieved",
+      "created_at": "2026-11-26T08:50:00+00:00",
+      "gate": "F-03",
+      "id": "ev_000000000000000d",
+      "notes": "CMU archive 116,131 B sha256 10528fc5..., 7,382 segments/260 parents/15.3988h; Pass 1 8,688 utterances/18:06:46; RFS 2,000/3.41h. do_found line 340 unconditional exit; prune_silences before offset reconstruction. listen.bible.is does not resolve; Bible Brain API 422 without credentials. Garellek 8-speaker read corpus, no explicit permission; UMN TLS failure; Yuhalu HEAD 405 / range 406; Pangeanic marketing only. No audio downloaded, no rights cleared.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f03-source-investigation-2026-11-26.md",
+          "sha256": "3dce99cca0046b9efed0486384e7737a1cbd1ca4a514b9d0e2de78d7de1811b8"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

@@ -24,7 +24,7 @@ Blocked / Not required. Evidence is append-only in
 | --- | --- | --- | --- | --- | --- |
 | **F-01** workspace, environment, evidence, compute | **In progress** | none | implementation agent | [`environment.md`](environment.md), [`evidence/f01-environment.json`](evidence/f01-environment.json), [`evidence/f01-gpu-kernel-proof.json`](evidence/f01-gpu-kernel-proof.json), [`run-manifest.md`](run-manifest.md), [`decisions.jsonl`](decisions.jsonl) | Establish the independent owner-controlled backup destination (100–200 GB workspace is measured); then append the F-01 completion entry |
 | **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready) | Approve dialect/voice and session scripts, enumerate attested contrast cells, adopt approved expansions, then run the calibration pack |
-| **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), repository syllable audit (below) | One-day bounded CMU source/text/rights investigation; request UMN/Garellek/Pangeanic terms; no corpus purchase without a prepared scope |
+| **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md), repository syllable audit (below) | CMU is blocked (dead start URL, broken downloader, offsets invalidated by F0 pruning, no rights); owner must authorize outreach/access to Bible Brain, Garellek/oral-history, UMN or Pangeanic; continue owned-recording planning |
 | **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), `configs/tts/f04-magpie.yaml`, `rpa-tts model check` | Owner chooses the Linux path (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); then load the hash-verified Magpie artifact and run the bounded two-day/8-GPU-hour gate |
 | **F-05** accepted corpus, coverage, frozen splits | **Not started** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), `rpa-tts corpus split` | Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **Not started** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) | Write the first stage decision before any 1/2-hour comparison |
@@ -55,6 +55,13 @@ Corrections are appended, not deleted.
   in [`f04-artifact-inspection.md`](f04-artifact-inspection.md);
   `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie`
   passes all lane checks. No model has loaded.
+- **F-03 source verification:** the CMU index archive was re-verified
+  (116,131 B, SHA-256 `10528f…`, 7,382 segments = 15.3988 h), the downloader's
+  unconditional exit and F0-pruning-before-offsets defects were confirmed, and
+  the old start host no longer resolves. Garellek materials expose RPA texts and
+  eight-speaker read folk tales with audio via a third party; UMN fails TLS;
+  Yuhalu blocks range requests; no rights are cleared. See
+  [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md).
 - **F-04 host constraint:** WSL2 is not enabled (`VirtualMachinePlatform`
   disabled, no distributions, no Docker) and the pinned NeMo stack resolves GPU
   PyTorch only on Linux. The owner must choose WSL2 or a Linux worker before the
@@ -108,6 +115,7 @@ outcomes, evidence append-only behavior and CLI/gate refusals.
 | [`listener-calibration.md`](listener-calibration.md) | F-02 session protocol, instrument checks, privacy |
 | [`listening-instrument.md`](listening-instrument.md) | Blinded pack builder, task order, ingestion rules and commands |
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |
+| [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md) | Verified CMU defects, rechecked lead access and rights status |
 | [`rights-matrix.csv`](rights-matrix.csv) | Per-source permission status and next actions |
 | [`model-candidates.md`](model-candidates.md) | F-04 Magpie/VITS lane contracts, gate checklist, budgets |
 | [`f04-artifact-inspection.md`](f04-artifact-inspection.md) | Verified artifact hashes, packaged config, text-tokenizer contract and risks |

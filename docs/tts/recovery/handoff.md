@@ -83,7 +83,7 @@ Written 2026-11-26 for the next worker. Read
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument implemented and tested (`…000c`) |
-| F-03 | Source/rights ledgers + syllable audit (`…0007`) |
+| F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts downloaded, hash-verified and packaged config inspected (`…000a`) |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
@@ -100,8 +100,12 @@ The book's `source/`, original audio and explorer are unchanged
    (`listening-instrument.md`), but **no pack has been run**; template sentences
    still need native approval and the calibration stimuli do not exist.
 2. **Rights/people (F-03):** no source has cleared training/weight-distribution
-   rights; CMU is blocked on source/text/rights match; outreach requires owner
-   authorization and money where quoted.
+   rights. CMU is blocked: the index hash/rows were re-verified, the old
+   downloader exits after its first page, it prunes with an F0 extractor before
+   applying offsets, and the recorded `listen.bible.is` host no longer resolves;
+   Bible Brain's API requires credentials and its terms do not grant training.
+   Garellek/oral-history, UMN and Pangeanic outreach still needs owner
+   authorization. See `f03-source-investigation-2026-11-26.md`.
 3. **Model runtime/host (F-04):** artifacts are resolved and hash-verified, but
    NeMo Speech is not installed and the host cannot run the pinned Linux GPU
    stack natively (no WSL2, no Docker). The owner must enable WSL2 or provide a
@@ -148,6 +152,10 @@ The book's `source/`, original audio and explorer are unchanged
    `.venv/Scripts/python -m rpa_tts evaluate ingest --pack <pack-dir> --responses <responses-dir> --output scores.json`,
    then run `evaluate metrics`/`gate`. Do not reuse exposed scripts for the locked
    test.
+7. Owner: authorize outreach/access requests for a permitted CMU/Bible Brain
+   current source and matching text, the Garellek/oral-history recordings, UMN
+   and Pangeanic. No purchase, account or audio retrieval is authorized yet; CMU
+   must not be re-attempted with the broken downloader or blind indices.
 
 ## Checkpoint
 
@@ -158,6 +166,8 @@ The book's `source/`, original audio and explorer are unchanged
     packaged-config inspection, F-04 lane config and refreshed handoff.
   - `ccd004820ce717e2906b0c4790c2e34740e121c4` — measured F-04 host-path
     constraint (WSL2/Linux requirement) and owner options.
+  - `07ff18f19d802a801345e0a881227bfa2ed02447` — blinded listening instrument,
+    schema and tests for F-02/F-07.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
