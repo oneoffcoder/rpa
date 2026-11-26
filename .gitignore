@@ -40,3 +40,4 @@ data/audit/
 *.log
 test-results.xml
 test-output.txt
+core-results.xml
