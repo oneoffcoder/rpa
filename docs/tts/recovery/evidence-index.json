@@ -349,6 +349,25 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Native review worksheet generated from the frozen 272-candidate draft pool: blank accept/edit/reject decisions, edited-text and notes columns, per-row contract issues, instructions and a blocked-row table; no row is approved or recorded",
+      "created_at": "2026-11-26T10:00:00+00:00",
+      "gate": "F-02",
+      "id": "ev_0000000000000015",
+      "notes": "270 rows await native approval; 2 are blocked on loanword/quote decisions (Mekas, Eeskiv, ASCII quotes). Identities stay in private records; the worksheet carries no names. Public book sentences are calibration/development material, not the locked test. Nothing recorded or recorded-approved.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/calibration-scripts.review.csv",
+          "sha256": "6a438e7ffc2ecfde293358191670a94ca04023efd4d0cd0e4434d7c99a62d759"
+        },
+        {
+          "path": "docs/tts/recovery/calibration-scripts.review.md",
+          "sha256": "8088d721e79c2291a3f20e45098f9ad22602c97cc6a97d48604f0d9909715ef7"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

@@ -95,7 +95,7 @@ Written 2026-11-26 for the next worker. Read
 | Gate | Evidence |
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
-| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); two-adjudicator error review and paragraph review (`…000f`) |
+| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); no dataset version exists |
@@ -114,12 +114,11 @@ The book's `source/`, original audio and explorer are unchanged
 1. **Native participants (F-02):** three fluent listeners, native language lead
    and adjudicators are not scheduled; no approvals, no attested contrast cells,
    no approved expansions. The blinded instrument is ready
-   (`listening-instrument.md`) and a 272-candidate draft script pool exists
-   (`calibration-scripts.draft.md`: 270 pending approval, 2 blocked on loanword/
-   quote decisions), but **no pack has been run**, no stimuli exist and nothing
-   has been recorded. The native lead must select/approve 100–150 scripts (the
-   public book sentences are calibration/development material, not the locked
-   test).
+   (`listening-instrument.md`), a 272-candidate draft pool exists, and a
+   blank-decision review worksheet awaits the native lead
+   (`calibration-scripts.review.csv`); **no row is approved, no pack has been
+   run**, no stimuli exist and nothing has been recorded. The public book
+   sentences are calibration/development material, not the locked test.
 2. **Rights/people (F-03):** no source has cleared training/weight-distribution
    rights. CMU is blocked: the index hash/rows were re-verified, the old
    downloader exits after its first page, it prunes with an F0 extractor before
@@ -169,9 +168,10 @@ The book's `source/`, original audio and explorer are unchanged
 5. Before any learning run, write the stage decision with
    `.venv/Scripts/python -m rpa_tts train plan ...` (see `--help`), then append it
    to `stage-decisions.jsonl`.
-6. Native lead: select/edit/approve 100–150 scripts from
-   `calibration-scripts.draft.jsonl` (decide `Mekas`, `Eeskiv` and the ASCII-quote
-   policy), then record the calibration set. After stimuli exist, build the pack
+6. Native lead: fill `calibration-scripts.review.csv` (accept/edit/reject,
+   edited text, notes) for the 272 candidates — 270 pending, 2 blocked on
+   `Mekas`/`Eeskiv`/ASCII quotes — then record the approved 100–150 calibration
+   scripts. After stimuli exist, build the pack
    with `.venv/Scripts/python -m rpa_tts evaluate pack --definition <definition.json> --output <pack-dir> --stage-audio <root>`,
    distribute phase A then phase B, ingest with
    `.venv/Scripts/python -m rpa_tts evaluate ingest --pack <pack-dir> --responses <responses-dir> --output scores.json`,

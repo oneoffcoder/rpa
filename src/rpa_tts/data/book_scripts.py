@@ -14,6 +14,7 @@ proper names/loanwords instead of the tool silently dropping them.
 
 from __future__ import annotations
 
+import csv
 import json
 import re
 from collections import Counter
@@ -25,6 +26,21 @@ from ..hashing import sha256_file
 from ..text.normalize import normalize_rpa
 
 SCHEMA_VERSION = 1
+REVIEW_COLUMNS = [
+    "script_id",
+    "source_page",
+    "source_line",
+    "section",
+    "bucket",
+    "status",
+    "syllable_count",
+    "text",
+    "issues",
+    "decision",
+    "edited_text",
+    "notes",
+]
+DRAFT_STATUSES = {"pending_native_approval", "blocked_contract_review"}
 # Matches RST links such as: `Nyob zoo, Oo. <generate.html?q=nyob+zoo+oo>`_
 _LINK = re.compile(r"`([^`<>]+?)\s*<generate\.html\?q=[^>]*>`_")
 
@@ -204,3 +220,182 @@ def _render_report_markdown(report: dict[str, Any]) -> str:
         ]
     )
     return "\n".join(lines)
+
+
+def load_draft_rows(path: str | Path) -> list[dict[str, Any]]:
+    draft = Path(path)
+    if not draft.is_file():
+        raise InputError(f"draft script JSONL does not exist: {draft}")
+    rows: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for number, line in enumerate(draft.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise InputError(f"{draft}:{number}: invalid JSON: {exc.msg}") from None
+        if not isinstance(row, dict):
+            raise InputError(f"{draft}:{number}: expected a JSON object")
+        for field in (
+            "script_id",
+            "text",
+            "status",
+            "source",
+            "bucket",
+            "syllable_count",
+            "issues",
+        ):
+            if field not in row:
+                raise InputError(f"{draft}:{number}: missing {field!r}")
+        script_id = str(row["script_id"])
+        if script_id in seen:
+            raise InputError(f"{draft}:{number}: duplicate script_id {script_id!r}")
+        seen.add(script_id)
+        if row["status"] not in DRAFT_STATUSES:
+            raise InputError(f"{draft}:{number}: unknown draft status {row['status']!r}")
+        source = row["source"]
+        if not isinstance(source, dict) or "page" not in source or "line" not in source:
+            raise InputError(f"{draft}:{number}: source must contain page and line")
+        issues = row["issues"]
+        if not isinstance(issues, list):
+            raise InputError(f"{draft}:{number}: issues must be a list")
+        if row["status"] == "blocked_contract_review" and not issues:
+            raise InputError(f"{draft}:{number}: blocked row must list its contract issues")
+        rows.append(row)
+    if not rows:
+        raise InputError(f"draft script JSONL contains no rows: {draft}")
+    rows.sort(
+        key=lambda row: (
+            str(row["source"]["page"]),
+            int(row["source"]["line"]),
+            str(row["script_id"]),
+        )
+    )
+    return rows
+
+
+def _issue_text(issues: list[dict[str, Any]]) -> str:
+    parts = []
+    for issue in issues:
+        token = issue.get("token") or ""
+        parts.append(f"{issue.get('code', 'issue')}:{token}@{issue.get('position', '?')}")
+    return "; ".join(parts)
+
+
+def write_review_sheet(
+    draft_path: str | Path,
+    csv_path: str | Path,
+    report_path: str | Path,
+    *,
+    overwrite: bool = False,
+) -> dict[str, Any]:
+    """Write a reviewer CSV (decisions blank) and an instructions report."""
+    draft = Path(draft_path)
+    rows = load_draft_rows(draft)
+    csv_destination = Path(csv_path)
+    report_destination = Path(report_path)
+    if not overwrite:
+        for destination in (csv_destination, report_destination):
+            if destination.exists():
+                raise InputError(
+                    f"{destination} already exists; a filled review sheet must not be overwritten "
+                    "(use --overwrite only for a deliberate regeneration)"
+                )
+    csv_destination.parent.mkdir(parents=True, exist_ok=True)
+    with csv_destination.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=REVIEW_COLUMNS)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(
+                {
+                    "script_id": row["script_id"],
+                    "source_page": row["source"]["page"],
+                    "source_line": row["source"]["line"],
+                    "section": row["source"].get("section", ""),
+                    "bucket": row["bucket"],
+                    "status": row["status"],
+                    "syllable_count": row["syllable_count"],
+                    "text": row["text"],
+                    "issues": _issue_text(row["issues"]),
+                    "decision": "",
+                    "edited_text": "",
+                    "notes": "",
+                }
+            )
+    status_counts: dict[str, int] = {}
+    bucket_counts: dict[str, int] = {}
+    blocked_tokens: dict[str, int] = {}
+    blocked_rows = []
+    for row in rows:
+        status_counts[row["status"]] = status_counts.get(row["status"], 0) + 1
+        bucket_counts[row["bucket"]] = bucket_counts.get(row["bucket"], 0) + 1
+        for issue in row["issues"]:
+            token = issue.get("token") or ""
+            if token:
+                blocked_tokens[token] = blocked_tokens.get(token, 0) + 1
+        if row["status"] == "blocked_contract_review":
+            blocked_rows.append(row)
+    lines = [
+        "# Native review worksheet — draft calibration/development scripts",
+        "",
+        f"Draft JSONL: `{draft.as_posix()}`.",
+        f"Review CSV: `{csv_destination.as_posix()}`.",
+        f"Rows: {len(rows)}; pending approval: {status_counts.get('pending_native_approval', 0)}; "
+        f"blocked: {status_counts.get('blocked_contract_review', 0)}.",
+        "",
+        "**Draft only. No row is approved or recorded. These public book sentences are",
+        "calibration/development material, not the locked 300-item test.**",
+        "",
+        "## Reviewer instructions",
+        "",
+        "1. Set `decision` on every row to `accept`, `edit` or `reject`.",
+        "2. For `edit`, put the approved RPA text in `edited_text`; it must pass",
+        "   `rpa-norm-1` with no digits, foreign text or unapproved punctuation.",
+        "3. Blocked rows need a spelling/product decision (approved spelling or",
+        "   explicit rejection); record it in `notes` and, if editing, `edited_text`.",
+        "4. Record reviewer identity/consent separately under stable private IDs; do",
+        "   not put names or contact details in this worksheet.",
+        "5. Selected scripts still need native approval and a consented speaker",
+        "   recording before any pack or training use.",
+        "",
+        "## Counts by bucket",
+        "",
+    ]
+    for bucket, count in sorted(bucket_counts.items()):
+        lines.append(f"- `{bucket}`: {count}")
+    lines.extend(["", "## Blocked rows (decision required)", ""])
+    if blocked_rows:
+        lines.append("| Script | Line | Text | Issues |")
+        lines.append("| --- | ---: | --- | --- |")
+        for row in blocked_rows:
+            text = str(row["text"]).replace("|", "\\|")
+            lines.append(
+                f"| {row['script_id']} | {row['source']['line']} | {text} | "
+                f"{_issue_text(row['issues'])} |"
+            )
+    else:
+        lines.append("None.")
+    lines.extend(
+        [
+            "",
+            "## Blocked tokens",
+            "",
+            ", ".join(f"`{token}` ({count})" for token, count in sorted(blocked_tokens.items()))
+            if blocked_tokens
+            else "None.",
+            "",
+        ]
+    )
+    report_destination.parent.mkdir(parents=True, exist_ok=True)
+    report_destination.write_text("\n".join(lines), encoding="utf-8")
+    return {
+        "csv": csv_destination.as_posix(),
+        "report": report_destination.as_posix(),
+        "rows": len(rows),
+        "status_counts": dict(sorted(status_counts.items())),
+        "bucket_counts": dict(sorted(bucket_counts.items())),
+        "blocked_tokens": dict(sorted(blocked_tokens.items())),
+        "csv_sha256": sha256_file(csv_destination),
+        "report_sha256": sha256_file(report_destination),
+    }
