@@ -229,6 +229,8 @@ The book's `source/`, original audio and explorer are unchanged
     suite composition.
   - `1225de9b3105720a25a5750cd1d867c70f123c24` — native review worksheet for
     the 272-candidate draft pool.
+  - `177644251a9dcb2f983cbb18c16a587201e67631` — F-08 package manifest schema
+    and inspection.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
