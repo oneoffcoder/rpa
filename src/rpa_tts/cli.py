@@ -18,7 +18,7 @@ from typing import Any
 from . import __version__
 from .config import load_config
 from .data.audit import audit_corpus
-from .data.book_scripts import draft_scripts, write_review_sheet
+from .data.book_scripts import draft_scripts, import_review, write_review_sheet
 from .data.contract import LanguageContract
 from .data.coverage import coverage_from_contract, render_coverage_markdown
 from .data.manifest import (
@@ -127,6 +127,15 @@ def parser() -> argparse.ArgumentParser:
     review_sheet.add_argument("--csv", type=Path, required=True)
     review_sheet.add_argument("--report", type=Path, required=True)
     review_sheet.add_argument("--overwrite", action="store_true")
+    review_import = corpus_commands.add_parser(
+        "review-import", help="validate a filled review sheet into an approved script set"
+    )
+    review_import.add_argument("--draft", type=Path, required=True)
+    review_import.add_argument("--review", type=Path, required=True)
+    review_import.add_argument("--output-jsonl", type=Path, required=True)
+    review_import.add_argument("--output-report", type=Path, required=True)
+    review_import.add_argument("--reviewer-id", required=True)
+    review_import.add_argument("--overwrite", action="store_true")
     freeze = corpus_commands.add_parser(
         "freeze", help="freeze an approved accepted dataset version with hashes and coverage"
     )
@@ -439,6 +448,20 @@ def _cmd_corpus_review_sheet(args: argparse.Namespace) -> tuple[dict[str, Any], 
             args.draft,
             args.csv,
             args.report,
+            overwrite=args.overwrite,
+        ),
+        0,
+    )
+
+
+def _cmd_corpus_review_import(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    return (
+        import_review(
+            args.draft,
+            args.review,
+            args.output_jsonl,
+            args.output_report,
+            reviewer_id=args.reviewer_id,
             overwrite=args.overwrite,
         ),
         0,
@@ -811,6 +834,7 @@ _DISPATCH = {
     ("corpus", "coverage"): _cmd_corpus_coverage,
     ("corpus", "scripts"): _cmd_corpus_scripts,
     ("corpus", "review-sheet"): _cmd_corpus_review_sheet,
+    ("corpus", "review-import"): _cmd_corpus_review_import,
     ("corpus", "freeze"): _cmd_corpus_freeze,
     ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
     ("corpus", "verify-audio"): _cmd_corpus_verify_audio,

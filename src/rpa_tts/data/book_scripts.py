@@ -21,7 +21,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from ..errors import InputError
+from ..errors import InputError, ValidationError
 from ..hashing import sha256_file
 from ..text.normalize import normalize_rpa
 
@@ -281,6 +281,206 @@ def _issue_text(issues: list[dict[str, Any]]) -> str:
         token = issue.get("token") or ""
         parts.append(f"{issue.get('code', 'issue')}:{token}@{issue.get('position', '?')}")
     return "; ".join(parts)
+
+
+REVIEW_DECISIONS = ("accept", "edit", "reject")
+REVIEWER_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{1,31}$")
+
+
+def _load_review_rows(path: Path) -> list[dict[str, str]]:
+    required = ["script_id", "status", "text", "decision", "edited_text", "notes"]
+    if not path.is_file():
+        raise InputError(f"review sheet does not exist: {path}")
+    with path.open(encoding="utf-8", newline="") as stream:
+        reader = csv.DictReader(stream)
+        if reader.fieldnames is None:
+            raise InputError(f"review sheet has no header: {path}")
+        missing = [column for column in required if column not in reader.fieldnames]
+        if missing:
+            raise InputError(f"{path} is missing columns: {missing}")
+        rows = []
+        for row in reader:
+            if any((value or "").strip() for value in row.values()):
+                rows.append({key: (value or "").strip() for key, value in row.items()})
+    if not rows:
+        raise InputError(f"review sheet contains no rows: {path}")
+    return rows
+
+
+def import_review(
+    draft_path: str | Path,
+    review_path: str | Path,
+    output_jsonl: str | Path,
+    output_report: str | Path,
+    *,
+    reviewer_id: str,
+    overwrite: bool = False,
+) -> dict[str, Any]:
+    """Validate a filled review sheet into an approved script set for recording."""
+    if not REVIEWER_ID.fullmatch(reviewer_id):
+        raise InputError(
+            "reviewer_id must be a stable identifier such as 'N-01' (not a name or contact detail)"
+        )
+    draft = Path(draft_path)
+    review = Path(review_path)
+    draft_rows = load_draft_rows(draft)
+    by_id = {str(row["script_id"]): row for row in draft_rows}
+    review_rows = _load_review_rows(review)
+    seen: set[str] = set()
+    problems: list[str] = []
+    approved: list[dict[str, Any]] = []
+    counts = {"accept": 0, "edit": 0, "reject": 0}
+    edited_rows: list[dict[str, Any]] = []
+    rejected_rows: list[dict[str, Any]] = []
+
+    for line, row in enumerate(review_rows, 2):
+        script_id = row["script_id"]
+        if script_id not in by_id:
+            problems.append(f"line {line}: unknown script_id {script_id!r}")
+            continue
+        if script_id in seen:
+            problems.append(f"line {line}: duplicate script_id {script_id!r}")
+            continue
+        seen.add(script_id)
+        draft_row = by_id[script_id]
+        if row["text"] != str(draft_row["text"]):
+            problems.append(f"line {line}: text differs from the frozen draft for {script_id!r}")
+            continue
+        if row["status"] != str(draft_row["status"]):
+            problems.append(f"line {line}: status differs from the frozen draft for {script_id!r}")
+            continue
+        decision = row["decision"].strip().lower()
+        if decision not in REVIEW_DECISIONS:
+            problems.append(
+                f"line {line}: {script_id!r} is undecided or has an unknown decision "
+                f"({row['decision']!r}; expected accept/edit/reject)"
+            )
+            continue
+        counts[decision] += 1
+        if decision == "reject":
+            rejected_rows.append(
+                {"script_id": script_id, "text": draft_row["text"], "notes": row["notes"]}
+            )
+            continue
+        if decision == "accept":
+            candidate_text = str(draft_row["text"])
+            if draft_row["status"] == "blocked_contract_review":
+                problems.append(
+                    f"line {line}: blocked row {script_id!r} cannot be accepted unchanged; "
+                    "edit it to an approved RPA form or reject it"
+                )
+                continue
+        else:
+            candidate_text = row["edited_text"].strip()
+            if not candidate_text:
+                problems.append(f"line {line}: edit decision for {script_id!r} has no edited_text")
+                continue
+            edited_rows.append(
+                {
+                    "script_id": script_id,
+                    "original": draft_row["text"],
+                    "edited": candidate_text,
+                    "notes": row["notes"],
+                }
+            )
+        try:
+            normalized = normalize_rpa(candidate_text, strict=True)
+        except Exception as exc:
+            problems.append(f"line {line}: {script_id!r} approved text is not valid: {exc}")
+            continue
+        approved.append(
+            {
+                "script_id": script_id,
+                "text": normalized.normalized,
+                "original_text": draft_row["text"],
+                "decision": decision,
+                "reviewer_id": reviewer_id,
+                "status": draft_row["status"],
+                "bucket": draft_row["bucket"],
+                "source": draft_row["source"],
+                "syllable_count": len(normalized.syllables),
+                "normalization_version": normalized.version,
+            }
+        )
+
+    missing = sorted(set(by_id) - seen)
+    if missing:
+        problems.append(f"review sheet is missing draft rows: {missing[:10]}")
+    if problems:
+        raise ValidationError("review import failed validation: " + "; ".join(problems[:12]))
+
+    output = Path(output_jsonl)
+    report_path = Path(output_report)
+    if not overwrite:
+        for destination in (output, report_path):
+            if destination.exists():
+                raise InputError(
+                    f"{destination} already exists; an approved set must not be overwritten "
+                    "(use --overwrite only for a deliberate regeneration)"
+                )
+    approved.sort(key=lambda row: str(row["script_id"]))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        "".join(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n" for row in approved),
+        encoding="utf-8",
+    )
+    lines = [
+        "# Approved calibration/development scripts (from native review)",
+        "",
+        f"Draft JSONL: `{draft.as_posix()}` (SHA-256 `{sha256_file(draft)}`).",
+        f"Review sheet: `{review.as_posix()}` (SHA-256 `{sha256_file(review)}`).",
+        f"Reviewer id: `{reviewer_id}` (identity/consent remain in private records).",
+        "",
+        f"Review rows: {len(review_rows)}; accepted: {counts['accept']}; edited: "
+        f"{counts['edit']}; rejected: {counts['reject']}; approved scripts: "
+        f"{len(approved)}.",
+        "",
+        "**This records native review decisions. It does not record consent, speaker "
+        "selection, audio, or a locked test, and these public book sentences remain "
+        "calibration/development material.**",
+        "",
+        "## Edited scripts",
+        "",
+    ]
+    if edited_rows:
+        lines.append("| Script | Original | Approved | Notes |")
+        lines.append("| --- | --- | --- | --- |")
+        for row in edited_rows:
+            lines.append(
+                f"| {row['script_id']} | {row['original']} | {row['edited']} | {row['notes']} |"
+            )
+    else:
+        lines.append("None.")
+    lines.extend(["", "## Rejected scripts", ""])
+    if rejected_rows:
+        for row in rejected_rows:
+            lines.append(f"- `{row['script_id']}`: {row['text']} ({row['notes'] or 'no note'})")
+    else:
+        lines.append("None.")
+    lines.extend(
+        [
+            "",
+            "## Output",
+            "",
+            f"Approved JSONL: `{output.as_posix()}` (SHA-256 `{sha256_file(output)}`).",
+            "",
+            "Next: a native lead records the approved 100–150 calibration scripts with a "
+            "consented speaker; build the listening pack only after stimuli exist.",
+            "",
+        ]
+    )
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text("\n".join(lines), encoding="utf-8")
+    return {
+        "approved_jsonl": output.as_posix(),
+        "approved_sha256": sha256_file(output),
+        "report": report_path.as_posix(),
+        "report_sha256": sha256_file(report_path),
+        "reviewer_id": reviewer_id,
+        "rows": len(review_rows),
+        "counts": counts,
+        "approved": len(approved),
+    }
 
 
 def write_review_sheet(

@@ -23,7 +23,7 @@ Blocked / Not required. Evidence is append-only in
 | Stage | State | Dependencies | Responsible | Evidence | Next action |
 | --- | --- | --- | --- | --- | --- |
 | **F-01** workspace, environment, evidence, compute | **In progress** | none | implementation agent | [`environment.md`](environment.md), [`evidence/f01-environment.json`](evidence/f01-environment.json), [`evidence/f01-gpu-kernel-proof.json`](evidence/f01-gpu-kernel-proof.json), [`run-manifest.md`](run-manifest.md), [`decisions.jsonl`](decisions.jsonl) | Establish the independent owner-controlled backup destination (100–200 GB workspace is measured); then append the F-01 completion entry |
-| **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready), [`calibration-scripts.review.csv`](calibration-scripts.review.csv) (272 rows, blank decisions) | Native lead fills the review sheet (270 pending, 2 blocked on loanwords/quotes), approves 100–150 scripts, then records and runs the calibration pack |
+| **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started), [`listening-instrument.md`](listening-instrument.md) (software ready), [`calibration-scripts.review.csv`](calibration-scripts.review.csv) (272 rows, blank decisions), [`review-import.md`](review-import.md) (validation ready) | Native lead fills the review sheet (270 pending, 2 blocked), imports decisions, approves 100–150 scripts, then records and runs the calibration pack |
 | **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md), repository syllable audit (below) | CMU is blocked (dead start URL, broken downloader, offsets invalidated by F0 pruning, no rights); owner must authorize outreach/access to Bible Brain, Garellek/oral-history, UMN or Pangeanic; continue owned-recording planning |
 | **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `configs/tts/f04-vits.yaml`, `rpa-tts model check` | Owner chooses the Linux path for Magpie (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); the VITS standby environment now imports on Windows and its `rpa-chars-1` text contract is verified, but no lane has run |
 | **F-05** accepted corpus, coverage, frozen splits | **In progress** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), [`dataset-lifecycle.md`](dataset-lifecycle.md), [`audio-verification.md`](audio-verification.md), `rpa-tts corpus split/freeze/verify-audio` | Freeze, verify and byte-level audio checks are ready; no accepted corpus exists. Admit a 30–60 minute native-confirmed pilot after rights clear |
@@ -58,8 +58,11 @@ Corrections are appended, not deleted.
 - **F-02 native review worksheet:** the 272-candidate draft pool now has a
   blank-decision review CSV (accept/edit/reject, edited text, notes) and
   instructions; 270 rows await approval and 2 are blocked on loanword/quote
-  decisions. No row is approved and nothing is recorded. See
-  [`calibration-scripts.review.md`](calibration-scripts.review.md).
+  decisions. `review-import` validates a filled sheet into an approved set
+  (matching draft ids/text, all rows decided, strict normalization, no silent
+  drops). No row is approved, imported or recorded. See
+  [`calibration-scripts.review.md`](calibration-scripts.review.md) and
+  [`review-import.md`](review-import.md).
 - **F-03 source verification:** the CMU index archive was re-verified
   (116,131 B, SHA-256 `10528f…`, 7,382 segments = 15.3988 h), the downloader's
   unconditional exit and F0-pruning-before-offsets defects were confirmed, and
@@ -105,7 +108,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (318 TTS tests), including two-adjudicator
+  ingestion implemented and tested (327 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -128,6 +131,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts corpus coverage --manifest ... --contract ...` | yes | Coverage ledger |
 | `rpa-tts corpus scripts --rst source/speaking.rst ...` | yes | Drafts candidate scripts from book examples (not approved) |
 | `rpa-tts corpus review-sheet --draft ...` | yes | Writes a blank-decision native review CSV and instructions |
+| `rpa-tts corpus review-import --review ...` | yes | Validates a filled review sheet into an approved script set (none exists) |
 | `rpa-tts corpus freeze --manifest ... --version ...` | yes | Freezes an approved, coverage-passing dataset version (none exists) |
 | `rpa-tts corpus verify-dataset --config ...` | yes | Re-hashes a frozen dataset config |
 | `rpa-tts corpus verify-audio --manifest ... --audio-root ...` | yes | Re-hashes and re-decodes every manifest audio file (no real corpus yet) |
@@ -169,6 +173,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`calibration-scripts.draft.jsonl`](calibration-scripts.draft.jsonl) | Per-candidate normalized text, source line/section and issue status |
 | [`calibration-scripts.review.csv`](calibration-scripts.review.csv) | Native review worksheet with blank decisions and edit columns |
 | [`calibration-scripts.review.md`](calibration-scripts.review.md) | Review instructions, counts and blocked rows |
+| [`review-import.md`](review-import.md) | Validation and provenance for importing filled review decisions |
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |
 | [`f03-source-investigation-2026-11-26.md`](f03-source-investigation-2026-11-26.md) | Verified CMU defects, rechecked lead access and rights status |
 | [`rights-matrix.csv`](rights-matrix.csv) | Per-source permission status and next actions |

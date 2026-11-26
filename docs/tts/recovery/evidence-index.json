@@ -387,6 +387,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Review-import validation implemented: filled native decisions are checked against the frozen draft, every row must be decided, blocked rows require an edit or rejection, edited text must pass rpa-norm-1, and provenance/hashes are recorded; no approved set exists",
+      "created_at": "2026-11-26T10:20:00+00:00",
+      "gate": "F-02",
+      "id": "ev_0000000000000017",
+      "notes": "Software only; the repository worksheet is blank (270 pending, 2 blocked). Import is exercised on synthetic review data in tests. It records script approval only, not consent, speaker choice, audio or a locked test; outputs are not overwritten without explicit --overwrite.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/review-import.md",
+          "sha256": "3f60096f3749fe89b23ffad7b4732bedc64926f0324c4efb0009baf7fa5aacfb"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

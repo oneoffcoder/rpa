@@ -95,7 +95,7 @@ Written 2026-11-26 for the next worker. Read
 | Gate | Evidence |
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
-| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); two-adjudicator error review and paragraph review (`…000f`) |
+| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); validated review import (`…0017`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); no dataset version exists |
@@ -174,8 +174,10 @@ The book's `source/`, original audio and explorer are unchanged
    to `stage-decisions.jsonl`.
 6. Native lead: fill `calibration-scripts.review.csv` (accept/edit/reject,
    edited text, notes) for the 272 candidates — 270 pending, 2 blocked on
-   `Mekas`/`Eeskiv`/ASCII quotes — then record the approved 100–150 calibration
-   scripts. After stimuli exist, build the pack
+   `Mekas`/`Eeskiv`/ASCII quotes — then validate it with
+   `corpus review-import --draft ... --review ... --reviewer-id N-01`, which
+   writes the approved script set and report. Record the approved 100–150
+   calibration scripts. After stimuli exist, build the pack
    with `.venv/Scripts/python -m rpa_tts evaluate pack --definition <definition.json> --output <pack-dir> --stage-audio <root>`,
    distribute phase A then phase B, ingest with
    `.venv/Scripts/python -m rpa_tts evaluate ingest --pack <pack-dir> --responses <responses-dir> --output scores.json`,
