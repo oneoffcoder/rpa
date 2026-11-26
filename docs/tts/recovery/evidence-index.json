@@ -666,6 +666,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Resumed the private 1,000-step checkpoint and ran 2,000 more steps (total 3,000) on the authorized NT corpus; held-out mean improved 10.9937 -> 10.9656 (base 11.7113), with validation plateauing at 10.9346 and a verified resumable checkpoint",
+      "created_at": "2026-11-26T13:40:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000028",
+      "notes": "Development only; random verse split has chapter/voice leakage; no native listening/WER/accepted data. Checkpoint 08fd04cf; audio/weights private.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-val-3000.md",
+          "sha256": "827cd0665f0de4c2bca432ebf33493cc0d3bf21744fd0ee3144e384a3c247e42"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
