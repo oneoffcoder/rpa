@@ -64,6 +64,15 @@ Remaining warning classes:
 - `source/_static/js/custom.js` still drives the syllable playback and existing
   `generate.html?q=...` links; no redirect to an unqualified neural model was
   added.
+- **Playback reference check:** `rpa-tts corpus book-audio` found 281
+  `generate.html?q=...` links with 3,690 query tokens; 3,688 are playable
+  syllables, the audio file set exactly matches the 5,187-syllable inventory,
+  and no link has zero playable tokens. One link
+  (`kuv+nyob+washington+dc`) contains the non-inventory tokens `washington` and
+  `dc`, which the existing player silently drops; that pre-existing behavior is
+  disclosed, not changed by this branch. Full report:
+  [`book-audio-references.md`](book-audio-references.md). This checks static
+  references, not browser playback or pronunciation.
 - `source/_static/js/viz.js` and `source/viz.rst` are untouched.
 - 10 content pages build: `index`, `counting`, `cvt`, `enunciation`, `grammar`,
   `speaking`, `spelling`, `syllables`, `viz`, `vocabulary` (plus `genindex` and

@@ -94,7 +94,7 @@ Written 2026-11-26 for the next worker. Read
 
 | Gate | Evidence |
 | --- | --- |
-| F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
+| F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); playback reference check (`…0018`); backup item open (`…0005`) |
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); validated review import (`…0017`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
@@ -105,8 +105,10 @@ Written 2026-11-26 for the next worker. Read
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
-(the F-01 checkpoint recorded 179 tests then; the current suite is 318 passed,
-1 skipped, ruff clean). Book build: 0 errors / 10 warnings.
+(the F-01 checkpoint recorded 179 tests then; the current suite is 335 passed,
+1 skipped, ruff clean). Book build: 0 errors / 10 warnings; playback reference
+check: 281 links, 3,688 playable tokens, exact 5,187-file inventory match, no
+zero-playable links (`book-audio-references.md`).
 The book's `source/`, original audio and explorer are unchanged
 (`git diff --stat origin/main -- source Makefile` is empty).
 

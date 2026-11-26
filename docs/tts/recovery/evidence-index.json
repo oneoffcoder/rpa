@@ -402,6 +402,25 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Existing book syllable playback references verified without modifying the book: 281 generate.html links, 3,688 playable tokens, exact 5,187-file inventory match, no zero-playable links; two non-inventory tokens in one pre-existing link are disclosed",
+      "created_at": "2026-11-26T10:30:00+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000018",
+      "notes": "Static reference integrity only, not browser playback, pronunciation or native acceptance. The one pre-existing link with washington/dc is unchanged; the existing player silently drops those tokens. Exact commands: rpa-tts corpus book-audio.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/book-audio-references.md",
+          "sha256": "27650aae4bb51dfcd76d314738c54a558cbf380621d1c17c3dcc806ffd74fae9"
+        },
+        {
+          "path": "docs/tts/recovery/book-regression.md",
+          "sha256": "6030198ba67c4e8dcba32c1bb033abb04fade9112886c5ac7a38abaf2201616a"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

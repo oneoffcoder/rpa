@@ -75,9 +75,13 @@ Corrections are appended, not deleted.
   PyTorch only on Linux. The owner must choose WSL2 or a Linux worker before the
   Magpie GPU gate; evidence and options are in
   [`f04-host-path.md`](f04-host-path.md).
-- **Book regression:** the pinned Sphinx environment builds `source/` with no
-  lesson/audio regressions (see [`book-regression.md`](book-regression.md)).
-  Building is not publishing.
+- **Book regression:** the pinned Sphinx environment builds with no lesson/audio
+  regressions (see [`book-regression.md`](book-regression.md)). A playback
+  reference check found 281 links / 3,688 playable tokens, an exact 5,187-file
+  inventory match, no zero-playable links and two disclosed non-inventory tokens
+  (`washington`, `dc`) in one pre-existing link; see
+  [`book-audio-references.md`](book-audio-references.md). Building is not
+  publishing, and static references are not browser playback.
 - **Draft script pool:** 272 native-authored book sentences extracted with source
   line/section, normalized under `rpa-norm-1` (270 pending native approval, 2
   blocked on loanword/quote decisions), totaling 3,633 syllables ≈18 minutes at
@@ -108,7 +112,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (327 TTS tests), including two-adjudicator
+  ingestion implemented and tested (335 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -130,6 +134,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts corpus split --manifest ... --output ...` | yes | Deterministic grouped split |
 | `rpa-tts corpus coverage --manifest ... --contract ...` | yes | Coverage ledger |
 | `rpa-tts corpus scripts --rst source/speaking.rst ...` | yes | Drafts candidate scripts from book examples (not approved) |
+| `rpa-tts corpus book-audio` | yes | Verifies existing syllable playback links against the 5,187 MP3 inventory |
 | `rpa-tts corpus review-sheet --draft ...` | yes | Writes a blank-decision native review CSV and instructions |
 | `rpa-tts corpus review-import --review ...` | yes | Validates a filled review sheet into an approved script set (none exists) |
 | `rpa-tts corpus freeze --manifest ... --version ...` | yes | Freezes an approved, coverage-passing dataset version (none exists) |
@@ -182,6 +187,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`f04-host-path.md`](f04-host-path.md) | WSL2/Linux requirement, measured host facts and owner options |
 | [`f04-vits-standby.md`](f04-vits-standby.md) | Standby VITS pin, `rpa-chars-1` text contract and measured import environment |
 | [`book-regression.md`](book-regression.md) | Pinned Sphinx build, warnings and reference checks |
+| [`book-audio-references.md`](book-audio-references.md) | Static syllable playback link/inventory verification |
 | [`audit/repo-syllables/report.md`](audit/repo-syllables/report.md) | Technical audit of the 5,187 isolated-syllable recordings |
 | [`run-manifest.md`](run-manifest.md) | Schemas, reproducibility fields, evidence and storage rules |
 | [`dataset-lifecycle.md`](dataset-lifecycle.md) | Immutable dataset freeze/verify and validated learning-curve records |
