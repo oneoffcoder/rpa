@@ -786,6 +786,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Clean private train/dev run on the chapter-grouped split: 5,761 train rows, 714 dev; dev mean improved 11.9123 -> 11.0115 after 2,000 steps (7.6%), with a resumable checkpoint (a16f4cb3) and the test split untouched",
+      "created_at": "2026-11-26T14:50:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000036",
+      "notes": "Chapter-disjoint dev but same drama voices; no native/WER/preference/release claim. Test split not used.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-split-train.md",
+          "sha256": "aee472054181d169f5180f31217285de752fd1608764b66f76f7e0f3ee68db3f"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
