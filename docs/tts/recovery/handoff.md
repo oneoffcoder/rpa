@@ -268,7 +268,7 @@ See the [pinned VITS recipe](https://github.com/idiap/coqui-ai-TTS/blob/7d547eed
 and [Coqui language guidance](https://coqui-tts.readthedocs.io/en/latest/faq.html#how-can-i-train-in-a-different-language).
 
 **Ready on Radiance, with training stopped.** The fresh config is
-`data/runs/vits-coqui-rpa-handoff-v1/config.json`. Its readiness receipt binds
+`data/runs/vits-coqui-rpa-handoff-v2/config.json`. Its readiness receipt binds
 the source manifests, metadata, config, and package pins. Preparation checked
 all 7,933 audio SHA-256 hashes, mono PCM16 WAV format at 22,050 Hz, and lexical
 letter preservation. The loader accepts 5,759 train and 714 dev utterances.
@@ -279,7 +279,7 @@ The production config starts from fresh weights. It uses the stock VITS
 AdamW and ExponentialLR pairs, upstream spectral settings, and the full
 audited dev split. Platform settings are batch 4, dev batch 2, float32, and
 zero auxiliary data loader workers on Windows. The cap is 100 epochs.
-The 36-token Coqui vocabulary has its own IDs and the three preview prompts
+The 37-token Coqui vocabulary includes the stock VITS blank. The preview prompts
 are RPA. Preview audio is development evidence.
 
 A separate small upstream CLI smoke performed optimizer steps and validation,
@@ -294,7 +294,7 @@ $ff = (Get-ChildItem data/artifacts/ffmpeg-shared/extracted81 -Recurse -Filter f
 $env:PATH = "$ff;$env:PATH"
 $env:PYTHONPATH = (Resolve-Path src).Path
 $env:CUDA_VISIBLE_DEVICES = '0'
-$config = 'data/runs/vits-coqui-rpa-handoff-v1/config.json'
+$config = 'data/runs/vits-coqui-rpa-handoff-v2/config.json'
 .venv-vits/Scripts/python.exe scripts/vits_coqui_setup.py train --config $config --check
 .venv-vits/Scripts/python.exe scripts/vits_coqui_setup.py train --config $config
 ```

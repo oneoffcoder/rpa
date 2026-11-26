@@ -15,13 +15,7 @@ BOS_TOKEN = "<bos>"
 
 
 class RpaCharacters(BaseCharacters):
-    """Coqui character vocabulary for ``rpa-chars-1`` (36 tokens, no UNK).
-
-    ``rpa-norm-1`` rejects characters outside this set before tokenization, so
-    an UNK token is unnecessary. The ordering follows Coqui's
-    ``[PAD, EOS, BOS, characters, punctuations]`` contract rather than the
-    project's internal 37-token ID order; symbols and normalization are shared.
-    """
+    """Coqui character vocabulary with the upstream VITS blank token."""
 
     def __init__(self) -> None:
         super().__init__(
@@ -30,7 +24,7 @@ class RpaCharacters(BaseCharacters):
             pad=PAD_TOKEN,
             eos=EOS_TOKEN,
             bos=BOS_TOKEN,
-            blank=None,
+            blank="<blank>",
             is_unique=True,
             is_sorted=False,
         )

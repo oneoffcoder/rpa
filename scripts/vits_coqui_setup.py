@@ -137,7 +137,7 @@ def settings(run: Path, *, epochs: int, batch_size: int) -> VitsConfig:
     config.print_eval = config.run_eval = True
     config.test_delay_epochs = -1
     config.test_sentences = [project_text(text)[0] for text in PREVIEW_TEXTS]
-    config.use_phonemes = config.add_blank = config.enable_eos_bos_chars = False
+    config.use_phonemes = False
     config.text_cleaner = None
     config.mixed_precision = False
     config.compute_input_seq_cache = False
@@ -168,7 +168,8 @@ def load_recipe(config_path: Path) -> tuple:
         # The stock LJSpeech formatter includes the record delimiter in its text field.
         text = sample["text"].strip()
         ids = model.tokenizer.text_to_ids(text)
-        if not ids or model.tokenizer.ids_to_text(ids) != text:
+        plain_ids = [index for index in ids if index != model.tokenizer.characters.blank_id]
+        if not plain_ids or model.tokenizer.ids_to_text(plain_ids) != text:
             raise ValueError(f"Non-reversible tokenizer input: {sample['audio_file']}")
         sample["text"] = text
     return config, model, train, dev
