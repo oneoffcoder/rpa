@@ -148,6 +148,8 @@ The book's `source/`, original audio and explorer are unchanged
     CLI, tests and runbook.
   - `e52b7f61c09b522719ed6ba7ac306d5b22f91481` — pinned artifact download,
     packaged-config inspection, F-04 lane config and refreshed handoff.
+  - `ccd004820ce717e2906b0c4790c2e34740e121c4` — measured F-04 host-path
+    constraint (WSL2/Linux requirement) and owner options.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
