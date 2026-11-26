@@ -681,6 +681,36 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Book-disjoint private test: training on all NT except Mark (7,259 rows) reduced held-out Mark mean loss from 11.9279 to 11.1840 over 2,000 steps, with a verified resumable checkpoint (e69d6018) and a private unlistened sample",
+      "created_at": "2026-11-26T13:50:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000029",
+      "notes": "Book-disjoint but not speaker-disjoint; same drama voices appear in training. Development only; no native/WER/quality claim.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-mark-holdout.md",
+          "sha256": "249f01e2b9f289a1b42d14dca6bdc12a5cce1ff4a29fc4d6f4e6d99356b7a2f2"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Verified all 7,935 corpus WAVs (hash, 22.05kHz mono, decodability, duration within 0.02s): 0 errors, 22.523h; parsed text covers 1,186 inventory syllables with 0 unexpected and 4,001 inventory syllables absent",
+      "created_at": "2026-11-26T13:51:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000030",
+      "notes": "Coverage count excludes tokens that are not single CVT syllables; native coverage review still required. Not accepted/frozen; audio private.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-corpus-verification.md",
+          "sha256": "d916bac0bfa1fd4e913a2b280040b8ecb77dc257aeb28c8e88e94261b85b1d8a"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
