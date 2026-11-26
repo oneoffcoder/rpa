@@ -37,6 +37,7 @@ from .data.verify import verify_audio
 from .data.versioning import freeze_dataset, verify_dataset_config
 from .environment import collect_environment, gpu_kernel_proof, write_json_report
 from .errors import GateNotPassedError, InputError, RpaTtsError
+from .evaluation.ab_player import write_ab_player
 from .evaluation.gate import evaluate_release
 from .evaluation.metrics import contrast_summary, naturalness_summary, score_transcriptions
 from .evaluation.pack import build_pack, load_definition, load_responses, stage_audio
@@ -345,6 +346,12 @@ def parser() -> argparse.ArgumentParser:
     paragraphs.add_argument("--reviews", type=Path, required=True)
     paragraphs.add_argument("--pack", type=Path, default=None)
     paragraphs.add_argument("--output", type=Path, required=True)
+    ab_player = evaluate_commands.add_parser(
+        "ab-player", help="write a local blinded A/B listening page from an answer key"
+    )
+    ab_player.add_argument("--answer-key", type=Path, required=True)
+    ab_player.add_argument("--output", type=Path, required=True)
+    ab_player.add_argument("--title", default="Private blinded A/B")
 
     # evidence --------------------------------------------------------------
     evidence = commands.add_parser("evidence", help="append to the evidence index")
@@ -1047,6 +1054,13 @@ def _cmd_evaluate_paragraphs(args: argparse.Namespace) -> tuple[dict[str, Any], 
     return {"output": str(args.output), **summary}, 0
 
 
+def _cmd_evaluate_ab_player(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    return (
+        write_ab_player(args.answer_key, args.output, title=args.title),
+        0,
+    )
+
+
 def _cmd_evidence_add(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     root = _repo_root(args)
     index_path = args.index or evidence_index_path(root)
@@ -1114,6 +1128,7 @@ _DISPATCH = {
     ("evaluate", "ingest"): _cmd_evaluate_ingest,
     ("evaluate", "adjudicate"): _cmd_evaluate_adjudicate,
     ("evaluate", "paragraphs"): _cmd_evaluate_paragraphs,
+    ("evaluate", "ab-player"): _cmd_evaluate_ab_player,
     ("evidence", "add"): _cmd_evidence_add,
     ("package", "build"): _cmd_package,
     ("package", "inspect"): _cmd_package_inspect,

@@ -148,7 +148,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (377 TTS tests), including two-adjudicator
+  ingestion implemented and tested (380 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -189,6 +189,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts synthesize` | **gated (F-07)** | Refuses until F-07 passes and a package is accepted |
 | `rpa-tts evaluate metrics/gate` | yes | Scoring and F-07 gate; needs real listening data |
 | `rpa-tts evaluate pack` | yes | Builds a blinded pack; qualification packs must meet the 300/80/60/60 + 20-paragraph/12-listener composition |
+| `rpa-tts evaluate ab-player` | yes | Writes a local blinded A/B listening page from an answer key |
 | `rpa-tts evaluate ingest` | yes | Validates completed sheets into a scores payload |
 | `rpa-tts evaluate adjudicate` | yes | Merges two-adjudicator critical-error decisions; preserves raw choices |
 | `rpa-tts evaluate paragraphs` | yes | Merges human clause/language-switch paragraph review |
