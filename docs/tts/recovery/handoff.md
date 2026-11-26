@@ -86,7 +86,7 @@ Written 2026-11-26 for the next worker. Read
 | Gate | Evidence |
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); backup item open (`…0005`) |
-| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`) |
+| F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts downloaded, hash-verified and packaged config inspected (`…000a`) |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
@@ -160,8 +160,9 @@ The book's `source/`, original audio and explorer are unchanged
    with `.venv/Scripts/python -m rpa_tts evaluate pack --definition <definition.json> --output <pack-dir> --stage-audio <root>`,
    distribute phase A then phase B, ingest with
    `.venv/Scripts/python -m rpa_tts evaluate ingest --pack <pack-dir> --responses <responses-dir> --output scores.json`,
-   then run `evaluate metrics`/`gate`. Do not reuse exposed scripts for the locked
-   test.
+   then merge two-adjudicator critical-error decisions with `evaluate adjudicate`
+   and human paragraph findings with `evaluate paragraphs`, then run
+   `evaluate metrics`/`gate`. Do not reuse exposed scripts for the locked test.
 7. Owner: authorize outreach/access requests for a permitted CMU/Bible Brain
    current source and matching text, the Garellek/oral-history recordings, UMN
    and Pangeanic. No purchase, account or audio retrieval is authorized yet; CMU

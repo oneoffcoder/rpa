@@ -212,6 +212,7 @@ def evaluate_release(
 
     missing_clauses = int(paragraphs.get("missing_clauses", 0))
     repeated_clauses = int(paragraphs.get("repeated_clauses", 0))
+    language_switch_items = int(paragraphs.get("language_switch_items", 0))
     paragraph_items = int(paragraphs.get("items", 0))
     if paragraph_items == 0:
         inconclusive.append("paragraph_no_data")
@@ -222,14 +223,15 @@ def evaluate_release(
                 "detail": "no continuous paragraphs were evaluated",
             }
         )
-    elif missing_clauses or repeated_clauses:
+    elif missing_clauses or repeated_clauses or language_switch_items:
         rejects.append("paragraph_clauses")
         reasons.append(
             {
                 "code": "paragraph_clauses",
                 "kind": "rejected",
-                "detail": f"paragraphs show {missing_clauses} missing and "
-                f"{repeated_clauses} repeated clause(s)",
+                "detail": f"paragraphs show {missing_clauses} missing, "
+                f"{repeated_clauses} repeated clause(s) and "
+                f"{language_switch_items} unintended language-switch item(s)",
             }
         )
 
@@ -279,6 +281,7 @@ def evaluate_release(
             "catastrophic_outputs": catastrophic_outputs,
             "missing_clauses": missing_clauses,
             "repeated_clauses": repeated_clauses,
+            "language_switch_items": language_switch_items,
             "panel_acceptance": panel_acceptance,
         },
         "thresholds": dict(thresholds),

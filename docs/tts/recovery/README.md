@@ -76,8 +76,10 @@ Corrections are appended, not deleted.
   4 s/script. Drafts only; no recording or approval exists. See
   [`calibration-scripts.draft.md`](calibration-scripts.draft.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (217 TTS tests); see
-  [`listening-instrument.md`](listening-instrument.md). No session, stimuli or
+  ingestion implemented and tested (239 TTS tests), including two-adjudicator
+  critical-error merging and human paragraph clause/language-switch review; see
+  [`listening-instrument.md`](listening-instrument.md) and
+  [`listening-review.md`](listening-review.md). No session, stimuli or
   responses exist, and the template sentences are not native-approved.
 - **Retired PR #1 archive** inspected selectively; see
   [`archive-pr1.md`](archive-pr1.md).
@@ -103,6 +105,8 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts evaluate metrics/gate` | yes | Scoring and F-07 gate; needs real listening data |
 | `rpa-tts evaluate pack` | yes | Builds a blinded, counterbalanced listener pack (no audio or session yet) |
 | `rpa-tts evaluate ingest` | yes | Validates completed sheets into a scores payload |
+| `rpa-tts evaluate adjudicate` | yes | Merges two-adjudicator critical-error decisions; preserves raw choices |
+| `rpa-tts evaluate paragraphs` | yes | Merges human clause/language-switch paragraph review |
 | `rpa-tts evidence add` | yes | Hash-checked append |
 | `rpa-tts package build` | **gated (F-08)** | Refuses before F-08 |
 
@@ -123,6 +127,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`language-contract.yaml`](language-contract.yaml) | Draft dialect, normalization, scoring, buckets, attested cells (native work) |
 | [`listener-calibration.md`](listener-calibration.md) | F-02 session protocol, instrument checks, privacy |
 | [`listening-instrument.md`](listening-instrument.md) | Blinded pack builder, task order, ingestion rules and commands |
+| [`listening-review.md`](listening-review.md) | Two-adjudicator critical-error review and paragraph clause/language-switch review |
 | [`calibration-scripts.draft.md`](calibration-scripts.draft.md) | Draft script pool extracted from the book (not approved, not recorded) |
 | [`calibration-scripts.draft.jsonl`](calibration-scripts.draft.jsonl) | Per-candidate normalized text, source line/section and issue status |
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |

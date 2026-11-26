@@ -140,6 +140,20 @@ def test_paragraph_clause_failures_reject():
     assert "paragraph_clauses" in verdict["failed_rules"]
 
 
+def test_paragraph_language_switch_rejects():
+    verdict = _call(
+        paragraphs={
+            "items": 20,
+            "missing_clauses": 0,
+            "repeated_clauses": 0,
+            "language_switch_items": 1,
+        }
+    )
+    assert verdict["verdict"] == "rejected"
+    assert "paragraph_clauses" in verdict["failed_rules"]
+    assert verdict["metrics"]["language_switch_items"] == 1
+
+
 def test_missing_panel_acceptance_is_inconclusive():
     verdict = _call(panel_acceptance=None)
     assert verdict["verdict"] == "inconclusive"

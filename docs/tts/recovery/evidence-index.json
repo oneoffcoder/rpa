@@ -247,6 +247,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Post-scoring native review implemented and tested: confirmed critical-contrast errors require two distinct adjudicators and block release when repeated; rejected/uncertain decisions preserve raw choices; paragraph review merges human clause and language-switch findings into the F-07 gate",
+      "created_at": "2026-11-26T09:10:00+00:00",
+      "gate": "F-02",
+      "id": "ev_000000000000000f",
+      "notes": "Software only: no adjudication or paragraph review data exists and no native reviewers are scheduled. The gate now rejects any missing/repeated clause or unintended language-switch item. Raw listener responses are copied, never rewritten; unreviewed wrong critical responses are counted and reported.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/listening-review.md",
+          "sha256": "215396310c0cc30385d267370ece074dc143df2b36b8822692c6a01b8b7ff831"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

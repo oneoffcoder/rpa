@@ -34,6 +34,7 @@ from .errors import GateNotPassedError, InputError, RpaTtsError
 from .evaluation.gate import evaluate_release
 from .evaluation.metrics import contrast_summary, naturalness_summary, score_transcriptions
 from .evaluation.pack import build_pack, load_definition, load_responses, stage_audio
+from .evaluation.review import apply_adjudications, apply_paragraph_reviews
 from .evaluation.uncertainty import mean_with_interval
 from .evidence import append_entry, make_entry
 from .evidence import gate_status as evidence_gate_status
@@ -191,6 +192,19 @@ def parser() -> argparse.ArgumentParser:
     ingest.add_argument("--pack", type=Path, required=True)
     ingest.add_argument("--responses", type=Path, required=True)
     ingest.add_argument("--output", type=Path, required=True)
+    adjudicate = evaluate_commands.add_parser(
+        "adjudicate", help="merge native adjudications of critical-contrast errors"
+    )
+    adjudicate.add_argument("--scores", type=Path, required=True)
+    adjudicate.add_argument("--adjudications", type=Path, required=True)
+    adjudicate.add_argument("--output", type=Path, required=True)
+    paragraphs = evaluate_commands.add_parser(
+        "paragraphs", help="merge human paragraph clause/language-switch review"
+    )
+    paragraphs.add_argument("--scores", type=Path, required=True)
+    paragraphs.add_argument("--reviews", type=Path, required=True)
+    paragraphs.add_argument("--pack", type=Path, default=None)
+    paragraphs.add_argument("--output", type=Path, required=True)
 
     # evidence --------------------------------------------------------------
     evidence = commands.add_parser("evidence", help="append to the evidence index")
@@ -625,6 +639,22 @@ def _cmd_evaluate_ingest(args: argparse.Namespace) -> tuple[dict[str, Any], int]
     return payload, 0
 
 
+def _cmd_evaluate_adjudicate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    scores = _scores_payload(args.scores)
+    merged = apply_adjudications(scores, args.adjudications)
+    write_json_report(merged, args.output)
+    summary = merged["adjudications"]
+    return {"output": str(args.output), **summary}, 0
+
+
+def _cmd_evaluate_paragraphs(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    scores = _scores_payload(args.scores)
+    merged = apply_paragraph_reviews(scores, args.reviews, pack_dir=args.pack)
+    write_json_report(merged, args.output)
+    summary = merged["paragraphs"]
+    return {"output": str(args.output), **summary}, 0
+
+
 def _cmd_evidence_add(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     root = _repo_root(args)
     index_path = args.index or evidence_index_path(root)
@@ -672,6 +702,8 @@ _DISPATCH = {
     ("evaluate", "gate"): _cmd_evaluate_gate,
     ("evaluate", "pack"): _cmd_evaluate_pack,
     ("evaluate", "ingest"): _cmd_evaluate_ingest,
+    ("evaluate", "adjudicate"): _cmd_evaluate_adjudicate,
+    ("evaluate", "paragraphs"): _cmd_evaluate_paragraphs,
     ("evidence", "add"): _cmd_evidence_add,
     ("package", "build"): _cmd_package,
     ("run-manifest", "validate"): _cmd_run_manifest_validate,
