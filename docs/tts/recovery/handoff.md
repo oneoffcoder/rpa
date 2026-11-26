@@ -233,6 +233,8 @@ The book's `source/`, original audio and explorer are unchanged
     the 272-candidate draft pool.
   - `177644251a9dcb2f983cbb18c16a587201e67631` — F-08 package manifest schema
     and inspection.
+  - `95be0b3a85b196cad48b546f7dc217713f20dbad` — validated native review import
+    into an approved script set.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
