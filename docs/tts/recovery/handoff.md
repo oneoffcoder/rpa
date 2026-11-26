@@ -267,13 +267,13 @@ loader, optimization, scheduling, evaluation, checkpointing, and resume.
 See the [pinned VITS recipe](https://github.com/idiap/coqui-ai-TTS/blob/7d547eed8580be4fbcd409b7f3082d1d44acbe64/recipes/ljspeech/vits_tts/train_vits.py)
 and [Coqui language guidance](https://coqui-tts.readthedocs.io/en/latest/faq.html#how-can-i-train-in-a-different-language).
 
-**Launched on Radiance; live.**
+**Initial run stopped for RTX 5090 tuning.** See the tuning section below.
 
-**Live run (verified):**
+**Original run (historical launch record):**
 - **Config:** `data/runs/vits-coqui-rpa-handoff-v2/config.json`; readiness
   receipt binds the source manifests, metadata, config and package pins.
 - **Wrapper PID** `40488`; **actual trainer PID** `32512`; one RTX 5090
-  trainer, no competing process.
+  trainer during the original run.
 - **Saved run location:**
   `data/runs/vits-coqui-rpa-handoff-v2/output/vits_coqui_rpa-November-26-2026_07+19AM-5ab5cf8`.
 - **Logs:** `data/runs/vits-coqui-rpa-handoff-v2/train.stderr.log` (Coqui
@@ -286,8 +286,7 @@ and [Coqui language guidance](https://coqui-tts.readthedocs.io/en/latest/faq.htm
   `best_model_1440.pth`; `checkpoint_250` has been rotated out.
 - **First eval:** step 1,440, `EvalStats/avg_loss_1=46.5028`,
   `avg_loss_mel=36.2806`, `avg_loss_duration=1.9377`, `avg_loss_kl=1.3923`,
-  `avg_loss_disc=2.1895`; `best_model_1440.pth` was selected. Process remains
-  live beyond that boundary.
+  `avg_loss_disc=2.1895`; `best_model_1440.pth` was selected at that boundary.
 
 A separate small upstream CLI smoke performed optimizer steps and validation,
 saved a checkpoint, and restored model, optimizer, scheduler and best loss
@@ -317,6 +316,48 @@ For a fresh reproducible preparation, use `scripts/vits_coqui_setup.py prepare
 --run <new-run-dir>` in the same environment. To resume, use `train
 --continue-path <new-trainer-output-directory>` with this pipeline's Trainer
 output. Native listening and F-07 qualification remain open.
+
+
+## RTX 5090 tuning and continuation
+
+The original Coqui run was stopped at the owner's request. Its latest complete
+checkpoint was `checkpoint_4500.pth`, copied and checksum-verified as
+`data/runs/vits-coqui-tuning-20261126/tuning-source.pth`. The fixed validation
+split and the original best checkpoint were retained.
+
+`scripts/vits_coqui_benchmark.py` runs a bounded cohort through the stock Coqui
+Trainer and restores both optimizer states from the same source checkpoint.
+Each within-cohort comparison uses the same 480 or 512 utterances and includes
+the longest 32 items. The trial receipts report throughput, peak memory,
+and finite losses. These are training throughput measurements.
+
+| Settings | Utterances/s | Peak board MiB |
+| --- | ---: | ---: |
+| Batch 4 FP32, 512 items | 8.90 | 9,696 |
+| Batch 8 FP32, 512 items | 13.97 | 17,790 |
+| Batch 16 FP32, 512 items | 20.02 | 30,626 |
+| Batch 16 FP32 with TF32, 512 items | 22.06 | 28,065 |
+| Batch 12 FP32 with TF32, 480 items | 18.63 | 20,764 |
+| Batch 16 FP32 with TF32, 480 items | 19.53 | 28,982 |
+| Batch 20 FP32 with TF32, 480 items | 17.34 | 32,128 |
+
+Batch 32 spilled to shared memory with FP32 and BF16. FP16 and BF16
+at batch 16, and two Windows loader workers, reduced throughput.
+
+The prepared continuation is `data/runs/vits-coqui-rpa-batch16-tf32`.
+It uses batch 16, TF32 enabled, FP32 training, zero loader workers and the
+original 100-epoch limit. Coqui's continue path starts from the retained
+production checkpoint. It re-enters the checkpoint's numbered epoch and
+uses the new batch schedule, so optimizer progress and validation should be
+tracked from the continuation's own receipts.
+
+Use the same FFmpeg, PYTHONPATH and CUDA environment above:
+
+```powershell
+$run = 'data/runs/vits-coqui-rpa-batch16-tf32'
+.venv-vits/Scripts/python.exe scripts/vits_coqui_setup.py train --continue-path $run --check
+.venv-vits/Scripts/python.exe scripts/vits_coqui_setup.py train --continue-path $run
+```
 
 
 ## Retired custom-loop run (historical)
