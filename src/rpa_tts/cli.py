@@ -18,6 +18,7 @@ from typing import Any
 from . import __version__
 from .config import load_config
 from .data.audit import audit_corpus
+from .data.book_scripts import draft_scripts
 from .data.contract import LanguageContract
 from .data.coverage import coverage_from_contract, render_coverage_markdown
 from .data.manifest import (
@@ -108,6 +109,13 @@ def parser() -> argparse.ArgumentParser:
     coverage.add_argument("--output-md", type=Path, required=True)
     coverage.add_argument("--output-json", type=Path, default=None)
     coverage.add_argument("--min-examples", type=int, default=None)
+    scripts = corpus_commands.add_parser(
+        "scripts", help="draft calibration/development scripts from the book's examples"
+    )
+    scripts.add_argument("--rst", type=Path, default=Path("source/speaking.rst"))
+    scripts.add_argument("--output-jsonl", type=Path, required=True)
+    scripts.add_argument("--output-report", type=Path, required=True)
+    scripts.add_argument("--min-words", type=int, default=3)
 
     # model -----------------------------------------------------------------
     model = commands.add_parser("model", help="model-lane and artifact readiness")
@@ -349,6 +357,16 @@ def _cmd_corpus_coverage(args: argparse.Namespace) -> tuple[dict[str, Any], int]
         write_json_report(report, args.output_json)
     exit_code = 0 if report["screening_passed"] else 1
     return report, exit_code
+
+
+def _cmd_corpus_scripts(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    report = draft_scripts(
+        args.rst,
+        args.output_jsonl,
+        args.output_report,
+        min_words=args.min_words,
+    )
+    return report, 0
 
 
 def _cmd_model_check(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
@@ -644,6 +662,7 @@ _DISPATCH = {
     ("corpus", "audit"): _cmd_corpus_audit,
     ("corpus", "split"): _cmd_corpus_split,
     ("corpus", "coverage"): _cmd_corpus_coverage,
+    ("corpus", "scripts"): _cmd_corpus_scripts,
     ("model", "check"): _cmd_model_check,
     ("train", "plan"): _cmd_train_plan,
     ("train", "run"): _cmd_train_run,
