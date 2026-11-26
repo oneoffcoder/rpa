@@ -313,6 +313,12 @@ and permission exist.
     paused owner-unblock brief.
   - `6a316c9d2e82100aeac304c25bf8ffc4ba4b4956` — real F-04 runner, capacity
     constraint and corrected `mww` existing-source investigation.
+  - `9add5016784f2000b7faf9ff79981b1f12fe9b13` — torch-optional test boundary;
+    CI run 45789357474 passed.
+  - `5491e4e1b80b00f86610d1014d277d595ff97435` — real CPU Magpie load,
+    private generation and bit-exact `.nemo` round trip.
+  - `639a6ddea916620958f87df3d83163c056377d56` — remove accidental JUnit output;
+    CI run 45791014812 passed.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
