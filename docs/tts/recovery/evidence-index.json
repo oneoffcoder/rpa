@@ -175,6 +175,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "The pinned NeMo GPU stack requires Linux/WSL2 and this host cannot run it natively: VirtualMachinePlatform is disabled, no WSL distro or Docker exists, and NeMo resolves GPU torch only on Linux; owner host-path choice recorded",
+      "created_at": "2026-11-26T08:30:00+00:00",
+      "gate": "F-04",
+      "id": "ev_000000000000000b",
+      "notes": "CPU/BIOS virtualization and SLAT enabled; VirtualMachinePlatform disabled; WSL2 unsupported; no distributions; no Docker. NeMo pin torch==2.11+cu129/2.12+cu132 only on linux, non-linux uses pytorch-cpu index. Options: enable WSL2 (recommended, no purchase), Linux worker, or cloud contingency.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f04-host-path.md",
+          "sha256": "4e6b3db03c17b0d4d9bbe9a1276673ff97a6b5a161e3c2819eae9348d319bad1"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

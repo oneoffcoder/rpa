@@ -25,7 +25,7 @@ Blocked / Not required. Evidence is append-only in
 | **F-01** workspace, environment, evidence, compute | **In progress** | none | implementation agent | [`environment.md`](environment.md), [`evidence/f01-environment.json`](evidence/f01-environment.json), [`evidence/f01-gpu-kernel-proof.json`](evidence/f01-gpu-kernel-proof.json), [`run-manifest.md`](run-manifest.md), [`decisions.jsonl`](decisions.jsonl) | Establish the independent owner-controlled backup destination (100–200 GB workspace is measured); then append the F-01 completion entry |
 | **F-02** language/voice contract, calibration, scoring | **In progress** | native participants | Jee + native White Hmong lead | [`language-contract.yaml`](language-contract.yaml) (draft), [`listener-calibration.md`](listener-calibration.md) (Not started) | Hold the three-listener calibration session, approve dialect/voice, enumerate attested contrast cells, adopt approved expansions |
 | **F-03** source acquisition, rights, pilot manifest | **In progress** | rights/outreach; owner decisions | data engineer + native QA; Jee for permissions | [`source-ledger.md`](source-ledger.md), [`rights-matrix.csv`](rights-matrix.csv), repository syllable audit (below) | One-day bounded CMU source/text/rights investigation; request UMN/Garellek/Pangeanic terms; no corpus purchase without a prepared scope |
-| **F-04** one model proves 5090 load/train/generate | **Not started** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), `rpa-tts model check` | Resolve Magpie artifact versions/hashes; install NeMo Speech; run the bounded two-day/8-GPU-hour gate |
+| **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), `configs/tts/f04-magpie.yaml`, `rpa-tts model check` | Owner chooses the Linux path (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); then load the hash-verified Magpie artifact and run the bounded two-day/8-GPU-hour gate |
 | **F-05** accepted corpus, coverage, frozen splits | **Not started** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), `rpa-tts corpus split` | Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **Not started** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) | Write the first stage decision before any 1/2-hour comparison |
 | **F-07** independent native qualification | **Not started** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | `rpa-tts evaluate gate` (implemented, no data) | Staff the 12-listener plan only after a candidate and protocol are frozen |
@@ -48,6 +48,18 @@ Corrections are appended, not deleted.
   [`audit/repo-syllables/report.md`](audit/repo-syllables/report.md). This is
   lexicon/reference material with unverified speaker identity and dialect, not
   connected-speech training hours.
+- **Pinned model/codec artifacts:** Magpie `446bff55…` (`.nemo` SHA-256
+  `ec675fa8…`, 1.47 GB) and NanoCodec `fc00890b…` (`.nemo` SHA-256 `28c2518d…`,
+  425 MB) downloaded and hash-verified against the published LFS ids. The
+  packaged config, weight shapes and ByT5 byte-token conditioning are recorded
+  in [`f04-artifact-inspection.md`](f04-artifact-inspection.md);
+  `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie`
+  passes all lane checks. No model has loaded.
+- **F-04 host constraint:** WSL2 is not enabled (`VirtualMachinePlatform`
+  disabled, no distributions, no Docker) and the pinned NeMo stack resolves GPU
+  PyTorch only on Linux. The owner must choose WSL2 or a Linux worker before the
+  Magpie GPU gate; evidence and options are in
+  [`f04-host-path.md`](f04-host-path.md).
 - **Book regression:** the pinned Sphinx environment builds `source/` with no
   lesson/audio regressions (see [`book-regression.md`](book-regression.md)).
   Building is not publishing.
@@ -91,6 +103,10 @@ outcomes, evidence append-only behavior and CLI/gate refusals.
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |
 | [`rights-matrix.csv`](rights-matrix.csv) | Per-source permission status and next actions |
 | [`model-candidates.md`](model-candidates.md) | F-04 Magpie/VITS lane contracts, gate checklist, budgets |
+| [`f04-artifact-inspection.md`](f04-artifact-inspection.md) | Verified artifact hashes, packaged config, text-tokenizer contract and risks |
+| [`f04-host-path.md`](f04-host-path.md) | WSL2/Linux requirement, measured host facts and owner options |
+| [`book-regression.md`](book-regression.md) | Pinned Sphinx build, warnings and reference checks |
+| [`audit/repo-syllables/report.md`](audit/repo-syllables/report.md) | Technical audit of the 5,187 isolated-syllable recordings |
 | [`run-manifest.md`](run-manifest.md) | Schemas, reproducibility fields, evidence and storage rules |
 | [`coverage-ledger.md`](coverage-ledger.md) | Coverage screen rule and current (empty) data |
 | [`decisions.jsonl`](decisions.jsonl) | Product/project decisions, append-only |

@@ -22,8 +22,12 @@ Written 2026-11-26 for the next worker. Read
 
 ## Host and environment
 
-- **Host:** `Desktop-W9QAA` (Windows 11, AMD64, 127.9 GB RAM), RTX 5090 with
-  32,607 MiB and compute capability 12.0, driver 621.35.
+- **Host:** `Desktop-W9QAA` (Windows 11, AMD64, 127.9 GB RAM, Ryzen 9 5950X),
+  RTX 5090 with 32,607 MiB and compute capability 12.0, driver 621.35.
+  Firmware virtualization and SLAT are enabled, but the `VirtualMachinePlatform`
+  feature is disabled, no WSL distribution or Docker is installed, and the pinned
+  NeMo stack resolves GPU PyTorch only on Linux. F-04 therefore needs an owner
+  host-path choice (WSL2 or Linux worker); see `f04-host-path.md`.
 - **TTS env:** `.venv` (uv, Python 3.12.16), `torch==2.9.1+cu128`, CUDA runtime
   12.8, ffmpeg 9.0.2. Full inventory:
   `evidence/f01-environment.json`; versions: `evidence/f01-pip-freeze.txt`.
@@ -96,10 +100,11 @@ The book's `source/`, original audio and explorer are unchanged
 2. **Rights/people (F-03):** no source has cleared training/weight-distribution
    rights; CMU is blocked on source/text/rights match; outreach requires owner
    authorization and money where quoted.
-3. **Model artifacts (F-04):** artifacts are now resolved and hash-verified (see
-   above), but NeMo Speech is not installed and the Windows host's NeMo support
-   is unproven. `train run` and `resume` correctly refuse (exit 3) until the
-   GPU gate passes and a tested wrapper exists.
+3. **Model runtime/host (F-04):** artifacts are resolved and hash-verified, but
+   NeMo Speech is not installed and the host cannot run the pinned Linux GPU
+   stack natively (no WSL2, no Docker). The owner must enable WSL2 or provide a
+   Linux worker before the GPU gate. `train run` and `resume` correctly refuse
+   (exit 3) until the gate passes and a tested wrapper exists.
 4. **Owner backup destination (F-01 completion).**
 5. **GitHub PR/auth:** branch can be pushed over SSH; PR creation needs owner
    authentication.
@@ -122,15 +127,17 @@ The book's `source/`, original audio and explorer are unchanged
    `rpa-tts evidence add --gate F-01 --claim "independent backup destination established at <owner path>" --status passed --path docs/tts/recovery/environment.md`
 2. Owner: open the PR for `feat/white-hmong-tts-recovery` → `main` and post the
    issue progress update linking `docs/tts/recovery/README.md`.
-3. Agent (no native dependency): resolve the F-04 runtime — install NeMo Speech
-   at pinned commit `0305e4b15ac2924219536da44d315397d92ee769` in a
-   Linux-compatible environment (WSL2/container or Linux worker) with CUDA 12.8,
-   then restore the hash-verified Magpie `.nemo` and record which of the five
-   packaged configs is effective, the tokenizer offsets, ByT5 byte-token IDs for
-   every RPA character and the `check_text_embedding_matches_tokenizer` result.
-   Re-run `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie`
-   to confirm hashes before loading.
-4. Before any learning run, write the stage decision with
+3. Owner: choose the F-04 host path in `f04-host-path.md` (recommended: enable
+   WSL2; the CPU/BIOS virtualization flags are already on), or provide a Linux
+   worker. This blocks the Magpie GPU gate, not F-02/F-03 preparation.
+4. Agent (after the host path exists): install NeMo Speech at pinned commit
+   `0305e4b15ac2924219536da44d315397d92ee769` with CUDA 12.8, restore the
+   hash-verified Magpie `.nemo`, record which of the five packaged configs is
+   effective, the tokenizer offsets, ByT5 byte-token IDs for every RPA character
+   and the `check_text_embedding_matches_tokenizer` result. Re-run
+   `rpa-tts model check --config configs/tts/f04-magpie.yaml --lane magpie` to
+   confirm hashes before loading.
+5. Before any learning run, write the stage decision with
    `.venv/Scripts/python -m rpa_tts train plan ...` (see `--help`), then append it
    to `stage-decisions.jsonl`.
 
