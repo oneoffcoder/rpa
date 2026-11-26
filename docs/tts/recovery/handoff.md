@@ -99,7 +99,7 @@ Written 2026-11-26 for the next worker. Read
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`); corrected mww/MWWHDVN2DA identity, FCBH terms and minutes-by-source investigation (`…001b`); downloadable-pair vs index/training-terms distinction (`…0020`); first-party training permission + verified live source (`…0021`); full authorized NT acquired (`…0024`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`); real runner and defect chain (`…001c`); CPU load/inference/bit-exact `.nemo` round trip (`…001e`); private 5090 load/inference (`…001f`); real MAT 1:1 optimizer/resume steps and pilot finetune (`…0022`); 100/300/500-step private finetunes (`…0025`) |
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); private 314-pair MAT 1–10 pilot (`…0023`); full 7,935-pair / 22.523 h authorized NT corpus (`…0026`); no accepted/frozen dataset |
-| F-06 | Learning-curve recording (`…0012`); no learning row or stage decision exists |
+| F-06 | Learning-curve recording (`…0012`); private 200-verse validation 11.7113 → 10.9937 after 1,000 steps (`…0027`); no stage decision, judged row or native comparison |
 | F-07 | Blinded instrument (`…000c`, `…000f`); qualification composition enforced (`…0014`); no candidate, stimuli or panel |
 | F-08 | Package contract and inspection (`…0016`); no accepted checkpoint, package, benchmark or rights |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
