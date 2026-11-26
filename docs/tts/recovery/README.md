@@ -29,7 +29,7 @@ Blocked / Not required. Evidence is append-only in
 | **F-05** accepted corpus, coverage, frozen splits | **In progress** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), [`dataset-lifecycle.md`](dataset-lifecycle.md), [`audio-verification.md`](audio-verification.md), `rpa-tts corpus split/freeze/verify-audio` | Freeze, verify and byte-level audio checks are ready; no accepted corpus exists. Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **In progress** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) (header), [`dataset-lifecycle.md`](dataset-lifecycle.md) | Record a stage decision before any comparison; `train record` now enforces unique, bounded learning-curve rows |
 | **F-07** independent native qualification | **In progress** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), [`listening-review.md`](listening-review.md), [`qualification-suite.md`](qualification-suite.md), `rpa-tts evaluate gate` (implemented, no data) | Build the 300-sentence + 20-paragraph suite with the enforced composition contract once scripts, contrast pairs and stimuli are frozen; recruit 12 listeners |
-| **F-08** reproducible package + approved lesson audio | **Not started** | F-07 passed + distribution rights | ML/application engineer + native content reviewer | `rpa-tts package build` (gated) | Not actionable before F-07 |
+| **F-08** reproducible package + approved lesson audio | **In progress** | F-07 passed + distribution rights | ML/application engineer + native content reviewer | [`f08-packaging.md`](f08-packaging.md), `rpa-tts package inspect` | Package contract and inspection are ready; no accepted checkpoint, package, benchmark or distribution rights exists. Not actionable before F-07 |
 | **F-09** online serving | **Not required** (deferred) | F-08 acceptance + concrete hosting requirement | operations | decision D-05 in [`decisions.jsonl`](decisions.jsonl) | Becomes required only if arbitrary-text serving is authorized |
 
 Keyboard rule: an unavailable native participant, right, GPU or recording is a
@@ -93,6 +93,11 @@ Corrections are appended, not deleted.
   all-role), ≥40 critical contrast items and a `candidate` condition; the
   manifest records the design check. No suite, stimuli or candidate exists.
   See [`qualification-suite.md`](qualification-suite.md).
+- **F-08 package contract:** a schema-validated `model-manifest.json` records the
+  accepted checkpoint/config hashes, text front end, voice policy, benchmark
+  verdict and rights id; `package inspect` verifies all of them, while
+  `package build` and synthesis remain gated. No package or accepted model
+  exists. See [`f08-packaging.md`](f08-packaging.md).
 - **VITS standby preparation:** the `rpa-chars-1` character contract (37 tokens)
   round-trips all 5,187 documented syllables, and a separate `.venv-vits` imports
   `coqui-tts 0.28.0` with `torch 2.9.1+cu128` on this Windows host after pinning
@@ -100,7 +105,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (304 TTS tests), including two-adjudicator
+  ingestion implemented and tested (318 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -138,6 +143,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts evaluate paragraphs` | yes | Merges human clause/language-switch paragraph review |
 | `rpa-tts evidence add` | yes | Hash-checked append |
 | `rpa-tts package build` | **gated (F-08)** | Refuses before F-08 |
+| `rpa-tts package inspect` | yes | Validates package manifest, hashes, rights and benchmark verdict (no package exists) |
 
 Tests: `.venv/Scripts/python -m pytest` (TTS) — the book environment is separate.
 The TTS suite exercises normalization preservation, manifest/schema/leakage
@@ -158,6 +164,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`listening-instrument.md`](listening-instrument.md) | Blinded pack builder, task order, ingestion rules and commands |
 | [`listening-review.md`](listening-review.md) | Two-adjudicator critical-error review and paragraph clause/language-switch review |
 | [`qualification-suite.md`](qualification-suite.md) | Enforced F-07 suite composition and remaining prerequisites |
+| [`f08-packaging.md`](f08-packaging.md) | Package contents, manifest schema, inspection checks, reproduction and release rules |
 | [`calibration-scripts.draft.md`](calibration-scripts.draft.md) | Draft script pool extracted from the book (not approved, not recorded) |
 | [`calibration-scripts.draft.jsonl`](calibration-scripts.draft.jsonl) | Per-candidate normalized text, source line/section and issue status |
 | [`calibration-scripts.review.csv`](calibration-scripts.review.csv) | Native review worksheet with blank decisions and edit columns |

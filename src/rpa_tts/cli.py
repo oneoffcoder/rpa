@@ -41,8 +41,8 @@ from .evaluation.uncertainty import mean_with_interval
 from .evidence import append_entry, make_entry
 from .evidence import gate_status as evidence_gate_status
 from .hashing import sha256_file
+from .inference.synthesize import inspect_package, synthesize
 from .inference.synthesize import package as build_package
-from .inference.synthesize import synthesize
 from .paths import evidence_index_path, find_repo_root, recovery_dir, workspace_root
 from .schemas import STAGE_DECISION
 from .text.normalize import normalize_rpa
@@ -283,6 +283,10 @@ def parser() -> argparse.ArgumentParser:
     package_build = package_commands.add_parser("build", help="build the accepted package")
     package_build.add_argument("--checkpoint", type=Path, required=True)
     package_build.add_argument("--output", type=Path, required=True)
+    package_inspect = package_commands.add_parser(
+        "inspect", help="validate a package's manifest, hashes, rights and benchmark verdict"
+    )
+    package_inspect.add_argument("--checkpoint", type=Path, required=True)
 
     # run manifest ----------------------------------------------------------
     run_manifest = commands.add_parser("run-manifest", help="inspect run manifests")
@@ -788,6 +792,11 @@ def _cmd_package(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     return build_package(args.checkpoint, args.output, repo_root=find_repo_root()), 0
 
 
+def _cmd_package_inspect(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    report = inspect_package(args.checkpoint)
+    return report, 0 if report["ok"] else 1
+
+
 def _cmd_run_manifest_validate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     manifest = load_run_manifest(args.path)
     return manifest, 0
@@ -819,6 +828,7 @@ _DISPATCH = {
     ("evaluate", "paragraphs"): _cmd_evaluate_paragraphs,
     ("evidence", "add"): _cmd_evidence_add,
     ("package", "build"): _cmd_package,
+    ("package", "inspect"): _cmd_package_inspect,
     ("run-manifest", "validate"): _cmd_run_manifest_validate,
 }
 

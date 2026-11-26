@@ -1,0 +1,141 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/model-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Package record for an F-07-accepted checkpoint: text front end, voice policy, inference configuration, hashes and the qualification verdict. Paths are relative to the package directory.",
+  "properties": {
+    "benchmark": {
+      "additionalProperties": false,
+      "properties": {
+        "gate_verdict": {
+          "enum": [
+            "accepted",
+            "rejected",
+            "inconclusive"
+          ],
+          "type": "string"
+        },
+        "manifest_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "scores_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scores_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "manifest_path",
+        "manifest_sha256",
+        "scores_path",
+        "scores_sha256",
+        "gate_verdict"
+      ],
+      "type": "object"
+    },
+    "checkpoint_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "checkpoint_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "config_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "config_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "license": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "model_sample_rate": {
+      "maximum": 96000,
+      "minimum": 8000,
+      "type": "integer"
+    },
+    "model_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "normalization_version": {
+      "pattern": "^rpa-norm-[0-9]+$",
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "rights_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{3,127}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "schema_version": {
+      "enum": [
+        1
+      ],
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "accepted",
+        "rejected"
+      ],
+      "type": "string"
+    },
+    "text_contract": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "voice_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "voice_id",
+    "model_version",
+    "normalization_version",
+    "text_contract",
+    "model_sample_rate",
+    "checkpoint_path",
+    "checkpoint_sha256",
+    "config_path",
+    "config_sha256",
+    "created_at",
+    "license",
+    "rights_id",
+    "benchmark",
+    "notes"
+  ],
+  "title": "RPA TTS accepted local model package manifest",
+  "type": "object"
+}

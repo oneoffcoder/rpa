@@ -368,6 +368,25 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Local package contract implemented: schema-validated model-manifest, hash/rights/benchmark-verdict inspection, and explicit gating of package build and synthesis; no accepted checkpoint, package, benchmark or rights clearance exists",
+      "created_at": "2026-11-26T10:10:00+00:00",
+      "gate": "F-08",
+      "id": "ev_0000000000000016",
+      "notes": "Software only. Inspection is structural/hash-based, not a new native judgment; it does not reproduce audio or re-run the panel. package build refuses until F-08 passes and distribution rights resolve; synthesize still refuses at F-07. No model package exists.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f08-packaging.md",
+          "sha256": "0d7e4b4a30344d489e0a9524aeec2ea00f0980e779c8aad37f31becf1d3fd261"
+        },
+        {
+          "path": "configs/tts/schemas/model-manifest.schema.json",
+          "sha256": "5ae26780e411cfd8edf6823bda4383359cb3e3a5ccae15131dcca50d087412cc"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

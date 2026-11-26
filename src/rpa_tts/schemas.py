@@ -581,6 +581,76 @@ DATASET_VERSION: dict[str, Any] = {
     },
 }
 
+MODEL_MANIFEST: dict[str, Any] = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rpa.oneoffcoder.com/schemas/model-manifest.schema.json",
+    "title": "RPA TTS accepted local model package manifest",
+    "description": (
+        "Package record for an F-07-accepted checkpoint: text front end, voice policy, inference "
+        "configuration, hashes and the qualification verdict. Paths are relative to the package "
+        "directory."
+    ),
+    "type": "object",
+    "additionalProperties": False,
+    "required": [
+        "schema_version",
+        "status",
+        "voice_id",
+        "model_version",
+        "normalization_version",
+        "text_contract",
+        "model_sample_rate",
+        "checkpoint_path",
+        "checkpoint_sha256",
+        "config_path",
+        "config_sha256",
+        "created_at",
+        "license",
+        "rights_id",
+        "benchmark",
+        "notes",
+    ],
+    "properties": {
+        "schema_version": {"type": "integer", "enum": [1]},
+        "status": {"type": "string", "enum": ["candidate", "accepted", "rejected"]},
+        "voice_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "model_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "normalization_version": {"type": "string", "pattern": r"^rpa-norm-[0-9]+$"},
+        "text_contract": {"type": "string", "minLength": 1, "maxLength": 128},
+        "model_sample_rate": {"type": "integer", "minimum": 8000, "maximum": 96000},
+        "checkpoint_path": {"type": "string", "minLength": 1},
+        "checkpoint_sha256": {"type": "string", "pattern": SHA256_PATTERN},
+        "config_path": {"type": "string", "minLength": 1},
+        "config_sha256": {"type": "string", "pattern": SHA256_PATTERN},
+        "created_at": {"type": "string", "format": "date-time"},
+        "run_id": {"type": ["string", "null"], "pattern": r"^[a-z0-9][a-z0-9._-]{3,127}$"},
+        "license": {"type": "string", "minLength": 1},
+        "rights_id": {"type": "string", "minLength": 1},
+        "benchmark": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": [
+                "manifest_path",
+                "manifest_sha256",
+                "scores_path",
+                "scores_sha256",
+                "gate_verdict",
+            ],
+            "properties": {
+                "manifest_path": {"type": "string", "minLength": 1},
+                "manifest_sha256": {"type": "string", "pattern": SHA256_PATTERN},
+                "scores_path": {"type": "string", "minLength": 1},
+                "scores_sha256": {"type": "string", "pattern": SHA256_PATTERN},
+                "gate_verdict": {
+                    "type": "string",
+                    "enum": ["accepted", "rejected", "inconclusive"],
+                },
+            },
+        },
+        "notes": {"type": "string"},
+    },
+}
+
 SCHEMAS: dict[str, dict[str, Any]] = {
     "utterance-manifest.schema.json": UTTERANCE_MANIFEST,
     "run-manifest.schema.json": RUN_MANIFEST,
@@ -590,6 +660,7 @@ SCHEMAS: dict[str, dict[str, Any]] = {
     "evidence-index.schema.json": EVIDENCE_INDEX,
     "listening-pack.schema.json": LISTENING_PACK,
     "dataset-version.schema.json": DATASET_VERSION,
+    "model-manifest.schema.json": MODEL_MANIFEST,
 }
 
 LEARNING_CURVE_COLUMNS = [

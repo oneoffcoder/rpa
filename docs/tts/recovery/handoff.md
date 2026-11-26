@@ -101,11 +101,12 @@ Written 2026-11-26 for the next worker. Read
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); no dataset version exists |
 | F-06 | Learning-curve recording (`…0012`); no learning row or stage decision exists |
 | F-07 | Blinded instrument (`…000c`, `…000f`); qualification composition enforced (`…0014`); no candidate, stimuli or panel |
-| F-08 | Not started |
+| F-08 | Package contract and inspection (`…0016`); no accepted checkpoint, package, benchmark or rights |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
-(179 tests passed, 1 skipped; ruff clean; book build 0 errors / 10 warnings).
+(the F-01 checkpoint recorded 179 tests then; the current suite is 318 passed,
+1 skipped, ruff clean). Book build: 0 errors / 10 warnings.
 The book's `source/`, original audio and explorer are unchanged
 (`git diff --stat origin/main -- source Makefile` is empty).
 
@@ -134,7 +135,10 @@ The book's `source/`, original audio and explorer are unchanged
    fixes, but activation still requires a recorded Magpie failure and accepted
    F-02 data. `train run` and `resume` correctly refuse (exit 3).
 4. **Owner backup destination (F-01 completion).**
-5. **GitHub PR/auth:** branch can be pushed over SSH; PR creation needs owner
+5. **F-08 packaging:** `package inspect` exists, but packaging and synthesis
+   need an F-07-accepted model, distribution rights and a frozen benchmark; no
+   package exists and `package build` correctly refuses (exit 3).
+6. **GitHub PR/auth:** branch can be pushed over SSH; PR creation needs owner
    authentication.
 
 ## Approvals, money and test-set status
@@ -191,6 +195,10 @@ The book's `source/`, original audio and explorer are unchanged
    qualification scripts and contrast pairs, generate and stage the three
    conditions, build the pack (composition is enforced), recruit 12 listeners,
    then run ingest → adjudicate → paragraphs → metrics → gate. No suite exists.
+10. After F-07 acceptance and distribution rights: assemble the package
+    (`model-manifest.json`, checkpoint, config, benchmark hashes), run
+    `package inspect`, have a second worker reproduce the benchmark, and only then
+    consider authorized lesson-audio integration. No package exists.
 
 ## Checkpoint
 
