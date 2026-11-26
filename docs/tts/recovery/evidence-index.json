@@ -527,6 +527,40 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Private CUDA diagnostic loaded the real 372.9M-parameter Magpie on the RTX 5090 (all params cuda:0, 22.45s), generated 0.8824s of audio in 18.266s with 3,527.3 MiB peak allocated, and verified the waveform hash; no training step, resume, native listening or release occurred",
+      "created_at": "2026-11-26T12:40:00+00:00",
+      "gate": "F-04",
+      "id": "ev_000000000000001f",
+      "notes": "Shimmed diagnostic only; production runner still refuses native Windows. Audio was not listened to and carries no quality claim. F-04 still needs a training/optimizer step, PTL resume and permitted Hmong data.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f04-cuda-diagnostic.md",
+          "sha256": "0ac2e94b8dbd10dbc9a3f4e6578baddb095f9e3115103ffb568c1a1b14c61eb6"
+        },
+        {
+          "path": "docs/tts/recovery/evidence/f04-cuda-inference.json",
+          "sha256": "65f5bb9781d5d9a96a894359d2abd1d06a43857774dc0cba3fcda6f2010ff10d"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Separated downloadable audio-text pairs from indexes: CMU is index-only; FCBH audio is behind a key with personal-use-only terms; Pangeanic offers 43 transcribed hours under a commercial licence; Yuhalu is downloadable word-level audio with non-commercial redistribution wording but no explicit training grant; no sentence pair is training-usable now",
+      "created_at": "2026-11-26T12:41:00+00:00",
+      "gate": "F-03",
+      "id": "ev_0000000000000020",
+      "notes": "No audio downloaded for training and no chapter reconstructed. Next data action is a Pangeanic sample/per-speaker-hours/quote request and Yuhalu terms clarification; no owner recordings or worksheets.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/f03-downloadable-pairs-2026-11-26.md",
+          "sha256": "97dffdd64d879f5fad596d251030dac944625588afdf52afa007dad51a313edb"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

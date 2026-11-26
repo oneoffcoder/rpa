@@ -18,10 +18,9 @@ Written 2026-11-26 for the next worker. Read
   session (`gh` returned HTTP 401), so branch push succeeded over SSH but the PR
   must be opened by the owner. Do not auto-merge.
 - **CI:** `.github/workflows/tts.yml` runs the CPU TTS tests/lint and the pinned
-  book build on pushes and PRs. GitHub Actions run **45789357474 passed on
-  `9add501`** (torch-optional test boundary); the owner earlier verified run
-  45785823770 on `cfc2872`. Commits after `9add501` were not observed; do not
-  claim green beyond that run.
+  book build on pushes and PRs. GitHub Actions run **45791014812 passed on
+  `639a6dd`** (both jobs); run 45789357474 passed on `9add501`. Commits after
+  `639a6dd` were not observed from this session.
 - **Retired archive:** `archive/pr1-96698f0` locally tags the unmerged PR #1
   commit `96698f0689a489b16868ee85046cac6604dfbb77`; it is inspected, not merged.
 
@@ -97,8 +96,8 @@ Written 2026-11-26 for the next worker. Read
 | --- | --- |
 | F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); playback reference check (`…0018`); built-HTML reference check (`…0019`); backup item open (`…0005`) |
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); validated review import (`…0017`); two-adjudicator error review and paragraph review (`…000f`); **blocked on no-new-recording constraint** (`…001a`) |
-| F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`); corrected mww/MWWHDVN2DA identity, FCBH terms and minutes-by-source investigation (`…001b`) |
-| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`); real runner, diagnosis, finetune/private-render path and defect chain (`…001c`); CPU load/inference/bit-exact `.nemo` round trip (`…001e`) |
+| F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`); corrected mww/MWWHDVN2DA identity, FCBH terms and minutes-by-source investigation (`…001b`); downloadable-pair vs index/training-terms distinction (`…0020`) |
+| F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`); real runner, diagnosis, finetune/private-render path and defect chain (`…001c`); CPU load/inference/bit-exact `.nemo` round trip (`…001e`); private 5090 load/inference with VRAM/time (`…001f`) |
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); no dataset version exists |
 | F-06 | Learning-curve recording (`…0012`); no learning row or stage decision exists |
 | F-07 | Blinded instrument (`…000c`, `…000f`); qualification composition enforced (`…0014`); no candidate, stimuli or panel |
@@ -113,8 +112,11 @@ zero-playable links (`book-audio-references.md`); built HTML: 12 pages, 5,152
 audio references, 737 page links, 0 missing local references, sitemap present
 (`book-html-references.md`). F-04 diagnosis on this host: `platform_unsupported`;
 a shimmed **CPU diagnostic** loaded the real weights and generated 1.02 s of
-private audio (unlistened) and round-tripped a `.nemo` bit-exactly, but **no 5090
-GPU load, training step, resume or listening was run** (`f04-cpu-diagnostic.md`).
+private audio (unlistened) and round-tripped a `.nemo` bit-exactly. A bounded
+**RTX 5090 diagnostic** then loaded all 372.9 M parameters on `cuda:0` in 22.45 s
+and generated 0.8824 s in 18.27 s with 3,527.3 MiB peak allocated; audio was
+unlistened. **No training/optimizer step, PTL resume, native listening or release
+was run** (`f04-cuda-diagnostic.md`).
 The book's `source/`, original audio and explorer are unchanged
 (`git diff --stat origin/main -- source Makefile` is empty).
 
@@ -135,15 +137,13 @@ The book's `source/`, original audio and explorer are unchanged
    isolated words with no licence. No audio was retrieved or reconstructed. See
    `f03-existing-source-investigation-2026-11-26.md`.
 3. **Model runtime/host (F-04):** artifacts are resolved and hash-verified; the
-   real runner (`model diagnose`, `train gate`, `train finetune`,
-   `train render-private`) is implemented. A shimmed CPU diagnostic loaded the
-   real 372.9 M-parameter model, generated 1.02 s of private audio (unlistened) and
-   round-tripped a `.nemo` bit-exactly. Still missing: the qualified Linux/WSL2 GPU
-   stack, a training/optimizer step, PTL resume and permitted data. The VITS
-   standby environment imports with CUDA on native Windows after the recorded
-   torchcodec/FFmpeg fixes, but activation requires a recorded Magpie failure and
-   permitted data. `train run`/`resume` and release synthesis correctly refuse
-   (exit 3).
+   real runner is implemented. A shimmed CPU diagnostic loaded the 372.9 M model,
+   generated 1.02 s (unlistened) and round-tripped a `.nemo` bit-exactly; a bounded
+   RTX 5090 diagnostic loaded all parameters on `cuda:0`, generated 0.8824 s in
+   18.27 s with 3,527.3 MiB peak allocated (unlistened). Still missing: a real
+   training/optimizer step, PTL resume and permitted Hmong data; the qualified
+   Linux/WSL2 path is not installed. `train run`/`resume` and release synthesis
+   still refuse (exit 3).
 4. **Owner backup destination (F-01 completion).**
 5. **F-08 packaging:** `package inspect` exists, but packaging and synthesis
    need an F-07-accepted model, distribution rights and a frozen benchmark; no
