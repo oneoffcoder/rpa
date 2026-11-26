@@ -756,6 +756,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Acoustic sanity check of the corrected blinded A/B: all four base/trained pairs are byte-distinct and non-silent (RMS 0.067-0.211, mean-MFCC distances 82.7-184.1, differing durations), confirming the trained signal changed; no preference/quality claim",
+      "created_at": "2026-11-26T14:30:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000034",
+      "notes": "Private diagnostic only; acoustic difference does not establish quality. Audio/answer key under ignored data/runs/ab-private-cursor.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-ab-private.md",
+          "sha256": "ecf2576760fbce1268315041d1c2d8885bb1652a72fcb57262a1d5caa38532cb"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

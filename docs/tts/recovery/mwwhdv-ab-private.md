@@ -26,6 +26,14 @@ audio/weights private. Permission:
   mapping. Nothing was listened to.
 - The earlier A/B on the repeated-row checkpoint (`c382291d…`) is superseded.
 
+## Acoustic sanity check
+
+All four base/trained pairs are byte-distinct and non-silent. RMS spans
+0.067–0.211; mean-MFCC distances span 82.7–184.1; trained durations differ from
+base (for example 5.0 s vs 9.7 s on MRK 1:6). This only shows the trained weights
+changed the generated signal; it does **not** establish which is better. Details:
+`data/runs/ab-private-cursor/acoustic-check.json` (private).
+
 ## Caveat
 
 This is a private listening aid, not a quality/native evaluation. The corpus is a
