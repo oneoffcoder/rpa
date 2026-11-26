@@ -18,9 +18,10 @@ Written 2026-11-26 for the next worker. Read
   session (`gh` returned HTTP 401), so branch push succeeded over SSH but the PR
   must be opened by the owner. Do not auto-merge.
 - **CI:** `.github/workflows/tts.yml` runs the CPU TTS tests/lint and the pinned
-  book build on pushes and PRs. Its status could not be read from this session
-  (no GitHub API auth); do not claim green checks until the owner verifies the
-  workflow run.
+  book build on pushes and PRs. The owner independently verified GitHub Actions
+  run **45785823770 passed on `cfc2872`**. Commits after `cfc2872` (review
+  import, playback/built-HTML checks) have not been observed; do not claim green
+  beyond the verified run.
 - **Retired archive:** `archive/pr1-96698f0` locally tags the unmerged PR #1
   commit `96698f0689a489b16868ee85046cac6604dfbb77`; it is inspected, not merged.
 
@@ -94,7 +95,7 @@ Written 2026-11-26 for the next worker. Read
 
 | Gate | Evidence |
 | --- | --- |
-| F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); playback reference check (`…0018`); backup item open (`…0005`) |
+| F-01 | Environment/stack (`ev_…0001`), GPU kernel proof (`…0002`), book regression (`…0003`), tests/pins (`…0004`); playback reference check (`…0018`); built-HTML reference check (`…0019`); backup item open (`…0005`) |
 | F-02 | Draft `rpa-norm-1` contract and calibration protocol (`…0006`); blinded listening instrument (`…000c`); 272-candidate draft script pool (`…000e`); native review worksheet (`…0015`); validated review import (`…0017`); two-adjudicator error review and paragraph review (`…000f`) |
 | F-03 | Source/rights ledgers + syllable audit (`…0007`); independent CMU/lead re-verification (`…000d`) |
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
@@ -105,10 +106,12 @@ Written 2026-11-26 for the next worker. Read
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
 Verification commands and results: `evidence/f01-verification-log.md`
-(the F-01 checkpoint recorded 179 tests then; the current suite is 335 passed,
+(the F-01 checkpoint recorded 179 tests then; the current suite is 345 passed,
 1 skipped, ruff clean). Book build: 0 errors / 10 warnings; playback reference
 check: 281 links, 3,688 playable tokens, exact 5,187-file inventory match, no
-zero-playable links (`book-audio-references.md`).
+zero-playable links (`book-audio-references.md`); built HTML: 12 pages, 5,152
+audio references, 737 page links, 0 missing local references, sitemap present
+(`book-html-references.md`).
 The book's `source/`, original audio and explorer are unchanged
 (`git diff --stat origin/main -- source Makefile` is empty).
 
@@ -153,6 +156,73 @@ The book's `source/`, original audio and explorer are unchanged
 - **Test material:** the six personal regression sentences remain
   development/regression material only. No fresh final evaluation material has
   been recorded; the locked 300-item suite does not exist.
+
+## Owner unblock brief (round 11, paused here)
+
+### Exact native review return
+
+- Worksheet: `docs/tts/recovery/calibration-scripts.review.csv` (272 rows: 270
+  `pending_native_approval`, 2 `blocked_contract_review`).
+- For **every** row the reviewer sets `decision` to `accept`, `edit` or `reject`.
+  For `edit`, fill `edited_text` with approved RPA (must pass strict `rpa-norm-1`);
+  use `notes` for rationale. Blocked rows are `cal-006` (`Mekas`, `Eeskiv`) and
+  `cal-182` (ASCII double quotes); they need a spelling/product decision, not a
+  silent accept. Do not put names or contact details in the sheet.
+- Return: the filled CSV and a stable non-identifying reviewer id (e.g. `N-01`).
+  Then validate and produce the approved set:
+
+  ```text
+  rpa-tts corpus review-import \
+    --draft docs/tts/recovery/calibration-scripts.draft.jsonl \
+    --review <filled-review.csv> \
+    --output-jsonl <approved.jsonl> --output-report <approved.md> \
+    --reviewer-id N-01
+  ```
+
+- The native lead then approves/selects the 100–150 calibration scripts and
+  records 10–15 minutes at 48 kHz/24-bit mono from the consented selected
+  speaker (quiet space, stable setup, logged changes), with private consent/rights
+  IDs. Attested onset/vowel-by-tone cells and approved number expansions remain
+  separate native deliverables in `language-contract.yaml`.
+
+### 5090 host options (measured)
+
+1. **Enable WSL2 (recommended; no purchase).** CPU virtualization and SLAT are
+   enabled and the WSL feature is on, but `VirtualMachinePlatform` is disabled and
+   no distro exists. Requires an administrator command (`wsl --install
+   --no-distribution` or enabling the feature), a reboot, a distro, and the WSL
+   CUDA driver; then the pinned Linux NeMo/Magpie stack can use the 5090.
+2. **Linux worker** on the 5090 or another GPU (none available today); move the
+   hash-verified artifacts and NeMo environment.
+3. **VITS standby on native Windows** (`coqui-tts 0.28.0` + `torch 2.9.1+cu128`)
+   imports successfully with CUDA. It is still standby: activation requires a
+   recorded Magpie compatibility/codec failure per F-04 and the same F-02 data.
+4. **Cloud GPU** only as a contingency with an authorized budget; no account or
+   spend exists.
+
+### Authorized pilot data available
+
+**None.** The repository's 5,187 isolated syllable MP3s (0.6416 decoded hours)
+are reference/lexicon material with unverified speaker identity and dialect, not
+connected-speech training data. The CMU archive is metadata only with no rights
+clearance; the other sources are unresolved/unavailable. No consent, rights
+manifest, accepted corpus or dataset version exists.
+
+### Smallest owner decision that unlocks progress
+
+**Assign the native White Hmong lead and authorize the calibration script review
+plus the 10–15 minute recording session.** That is the earliest real dependency:
+F-04's gate needs F-02 calibration speech, and F-05–F-08 depend on accepted data;
+no agent-only step can substitute for it. Host enablement (WSL2) is the smallest
+*infrastructure* action and can run in parallel, but it is not sufficient alone.
+Rights/outreach authorization is also required before any external corpus use.
+
+### Paused
+
+Remaining critical work requires people (native reviewer, listeners, speaker),
+permission (rights/outreach), or infrastructure (WSL2/Linux worker, independent
+backup). No further agent-only change advances a gate; work is paused here per
+the steering request, with rights and native acceptance gates intact.
 
 ## Next smallest executable steps
 

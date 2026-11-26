@@ -80,7 +80,10 @@ Corrections are appended, not deleted.
   reference check found 281 links / 3,688 playable tokens, an exact 5,187-file
   inventory match, no zero-playable links and two disclosed non-inventory tokens
   (`washington`, `dc`) in one pre-existing link; see
-  [`book-audio-references.md`](book-audio-references.md). Building is not
+  [`book-audio-references.md`](book-audio-references.md). The built-HTML check
+  then verified 12 pages, 5,152 audio references, 737 page links, all styles/
+  scripts/images and the sitemap with 0 missing local references; see
+  [`book-html-references.md`](book-html-references.md). Building is not
   publishing, and static references are not browser playback.
 - **Draft script pool:** 272 native-authored book sentences extracted with source
   line/section, normalized under `rpa-norm-1` (270 pending native approval, 2
@@ -135,6 +138,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts corpus coverage --manifest ... --contract ...` | yes | Coverage ledger |
 | `rpa-tts corpus scripts --rst source/speaking.rst ...` | yes | Drafts candidate scripts from book examples (not approved) |
 | `rpa-tts corpus book-audio` | yes | Verifies existing syllable playback links against the 5,187 MP3 inventory |
+| `rpa-tts corpus book-html` | yes | Verifies built HTML local references, assets and generated-syllable links |
 | `rpa-tts corpus review-sheet --draft ...` | yes | Writes a blank-decision native review CSV and instructions |
 | `rpa-tts corpus review-import --review ...` | yes | Validates a filled review sheet into an approved script set (none exists) |
 | `rpa-tts corpus freeze --manifest ... --version ...` | yes | Freezes an approved, coverage-passing dataset version (none exists) |
@@ -160,8 +164,9 @@ rules, split determinism, coverage accounting, pooled syllable errors, empty
 outputs in denominators, crossed listener/script bootstrap arithmetic, gate
 outcomes, evidence append-only behavior and CLI/gate refusals.
 `.github/workflows/tts.yml` runs the CPU test/lint suite and the pinned book
-build on pushes and PRs; this session could not read GitHub check status (no
-authenticated API session), so the workflow is added but not claimed green.
+build on pushes and PRs. The owner independently verified Actions run
+**45785823770 passed on `cfc2872`**; commits after that were not observed from
+this session, so do not claim green beyond that run.
 
 ## Runbook index
 
@@ -188,6 +193,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`f04-vits-standby.md`](f04-vits-standby.md) | Standby VITS pin, `rpa-chars-1` text contract and measured import environment |
 | [`book-regression.md`](book-regression.md) | Pinned Sphinx build, warnings and reference checks |
 | [`book-audio-references.md`](book-audio-references.md) | Static syllable playback link/inventory verification |
+| [`book-html-references.md`](book-html-references.md) | Built-site local reference/asset verification |
 | [`audit/repo-syllables/report.md`](audit/repo-syllables/report.md) | Technical audit of the 5,187 isolated-syllable recordings |
 | [`run-manifest.md`](run-manifest.md) | Schemas, reproducibility fields, evidence and storage rules |
 | [`dataset-lifecycle.md`](dataset-lifecycle.md) | Immutable dataset freeze/verify and validated learning-curve records |

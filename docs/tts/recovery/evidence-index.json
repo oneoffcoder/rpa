@@ -421,6 +421,21 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Built Sphinx HTML reference integrity verified: 12 pages, 5,152 audio references, 737 page links, 27 images, 111 scripts, 36 styles, sitemap present, 0 missing local references, exact 5,187-file built MP3 inventory and no zero-playable generate links",
+      "created_at": "2026-11-26T10:40:00+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000019",
+      "notes": "Static built-HTML integrity only; JavaScript execution, audible playback, pronunciation and native acceptance are not tested. Build output is ignored by Git; regenerate with the pinned Sphinx environment before rerunning. The one pre-existing washington/dc generate link remains disclosed as before.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/book-html-references.md",
+          "sha256": "2d8816a30217c3b264ff465acf5930f682a360ed26f9f6ba2314a1f4cf79ca2b"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

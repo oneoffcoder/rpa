@@ -19,6 +19,7 @@ from . import __version__
 from .config import load_config
 from .data.audit import audit_corpus
 from .data.book_audio import write_reference_report
+from .data.book_html import write_html_reference_report
 from .data.book_scripts import draft_scripts, import_review, write_review_sheet
 from .data.contract import LanguageContract
 from .data.coverage import coverage_from_contract, render_coverage_markdown
@@ -144,6 +145,12 @@ def parser() -> argparse.ArgumentParser:
     book_audio.add_argument("--audio-dir", type=Path, default=Path("source/_static/mp3"))
     book_audio.add_argument("--output-json", type=Path, default=None)
     book_audio.add_argument("--output-md", type=Path, default=None)
+    book_html = corpus_commands.add_parser(
+        "book-html", help="check built HTML local references and generated-syllable links"
+    )
+    book_html.add_argument("--build-dir", type=Path, default=Path("build/html"))
+    book_html.add_argument("--output-json", type=Path, default=None)
+    book_html.add_argument("--output-md", type=Path, default=None)
     freeze = corpus_commands.add_parser(
         "freeze", help="freeze an approved accepted dataset version with hashes and coverage"
     )
@@ -480,6 +487,15 @@ def _cmd_corpus_book_audio(args: argparse.Namespace) -> tuple[dict[str, Any], in
     report = write_reference_report(
         args.page_dir,
         args.audio_dir,
+        output_json=args.output_json,
+        output_md=args.output_md,
+    )
+    return report, 0 if report["ok"] else 1
+
+
+def _cmd_corpus_book_html(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
+    report = write_html_reference_report(
+        args.build_dir,
         output_json=args.output_json,
         output_md=args.output_md,
     )
@@ -854,6 +870,7 @@ _DISPATCH = {
     ("corpus", "review-sheet"): _cmd_corpus_review_sheet,
     ("corpus", "review-import"): _cmd_corpus_review_import,
     ("corpus", "book-audio"): _cmd_corpus_book_audio,
+    ("corpus", "book-html"): _cmd_corpus_book_html,
     ("corpus", "freeze"): _cmd_corpus_freeze,
     ("corpus", "verify-dataset"): _cmd_corpus_verify_dataset,
     ("corpus", "verify-audio"): _cmd_corpus_verify_audio,
