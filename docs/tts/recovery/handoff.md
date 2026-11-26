@@ -208,6 +208,8 @@ The book's `source/`, original audio and explorer are unchanged
     review and paragraph clause/language-switch review.
   - `037352a4afa8ebf741d904c218e7740c70ec97b0` — VITS standby `rpa-chars-1`
     text contract, pinned environment and import proof.
+  - `bb8c625010c40338a17f18f4c5d0d2d61dc328ae` — immutable dataset freeze/verify
+    and validated learning-curve recording.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
