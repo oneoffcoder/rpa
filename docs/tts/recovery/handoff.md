@@ -309,6 +309,8 @@ the steering request, with rights and native acceptance gates intact.
     into an approved script set.
   - `698111d636b521d0880917668623af163d1f0fa2` — existing syllable playback
     reference verification.
+  - `b0ec3380d1c94fd9984847e3df29ef80692e83b0` — built-HTML reference check and
+    paused owner-unblock brief.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
