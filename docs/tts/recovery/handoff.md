@@ -236,6 +236,28 @@ an independent native reviewer, or infrastructure (WSL2/Linux worker, backup).
 The runner is implemented and ready; no agent-only step advances a gate until data
 and permission exist.
 
+## Owner listening checkpoint (round 30)
+
+- **Blinded A/B page:** `data/runs/ab-private-cursor/player.html`
+- **Answer key/reference text/hashes:** `data/runs/ab-private-cursor/answer-key.json`
+- **Audio:** `data/runs/ab-private-cursor/item01_A.wav` … `item04_B.wav`
+- **Current portable candidate:** `data/runs/f04-split-train/model.nemo`
+  (SHA-256 `87d16174…`); clean chapter-split dev mean 11.9123 → 11.0115 after
+  2,000 steps; two fresh processes synthesize byte-identically.
+- The A/B is base vs corrected checkpoint `3ede81ea…`; it is unlistened and is a
+  private listening aid, not a native result.
+
+Remaining acceptance work requires people/permission, not more agent-only
+training:
+
+1. Native listening/preference/error review of the candidate and corpus.
+2. F-07 native-authored locked suite, contrast items, and 12-listener panel.
+3. Distribution/weight-publication rights and F-08 second-worker inspection.
+4. Owner choice if the original product is not reachable (scope change/stop).
+
+No new recordings or worksheet work is requested from Jee; the independent
+reviewer path is required.
+
 ## Next smallest executable steps
 
 1. Owner: establish the independent backup destination, then append the F-01
