@@ -606,6 +606,51 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Authorized 2000 UBS Hmong Daw source fully acquired: 7,935 verse pairs / 22.523 hours across all 27 NT books, with audio, text and timestamp APIs matching the same fileset and edition; audio/weights private",
+      "created_at": "2026-11-26T13:20:00+00:00",
+      "gate": "F-03",
+      "id": "ev_0000000000000024",
+      "notes": "Permission: https://jeepower.atlassian.net/wiki/spaces/RPA/pages/2467102728. Training only; no distribution/weight publication; no owner recordings/forms; 2004 text excluded.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-nt.md",
+          "sha256": "a45e1606fd97b2d44f215af0e96c82cc0a156281e9f43a4026831052fca6b021"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Private 5090 training completed real MAT 1:1 optimizer/resume steps and 100/300/500-step finetunes on the authorized corpus; all losses finite, parameter changes observed, and optimizer/scheduler/step/RNG checkpoints verified resumable",
+      "created_at": "2026-11-26T13:21:00+00:00",
+      "gate": "F-04",
+      "id": "ev_0000000000000025",
+      "notes": "Checkpoints 7a0bd9cb, 547caf9e, abd5b0ae, 84b93e67. Not a quality/native claim; clean production environment and native listening remain open.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-nt.md",
+          "sha256": "a45e1606fd97b2d44f215af0e96c82cc0a156281e9f43a4026831052fca6b021"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Prepared the full authorized NT corpus: 7,935 verse pairs / 22.523 hours, 27 books, manifest SHA 3a21824f, max duration error 0.0161 s, no empty/missing/duplicate rows; 22 verses lack usable timestamps and the drama is multi-voice",
+      "created_at": "2026-11-26T13:22:00+00:00",
+      "gate": "F-05",
+      "id": "ev_0000000000000026",
+      "notes": "Not native-accepted, coverage-audited or frozen; audio under ignored data/raw. F-05 remains open.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-nt.md",
+          "sha256": "a45e1606fd97b2d44f215af0e96c82cc0a156281e9f43a4026831052fca6b021"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1
