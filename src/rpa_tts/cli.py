@@ -276,6 +276,7 @@ def parser() -> argparse.ArgumentParser:
     )
     render_private.add_argument("--config", type=Path, default=None)
     render_private.add_argument("--artifact", type=Path, required=True)
+    render_private.add_argument("--checkpoint", type=Path, default=None)
     render_private.add_argument("--text", required=True)
     render_private.add_argument("--output", type=Path, required=True)
     render_private.add_argument("--metadata", type=Path, required=True)
@@ -284,6 +285,11 @@ def parser() -> argparse.ArgumentParser:
     render_private.add_argument("--speaker-index", type=int, default=0)
     render_private.add_argument("--seed", type=int, default=3407)
     render_private.add_argument("--sample-rate", type=int, default=None)
+    render_private.add_argument(
+        "--allow-unapproved-text",
+        action="store_true",
+        help="private diagnostics only: render raw text with normalization issues recorded",
+    )
     resume = train_commands.add_parser("resume", help="resume a run (requires F-04)")
     resume.add_argument("--config", type=Path, default=None)
     resume.add_argument("--run-dir", type=Path, required=True)
@@ -747,7 +753,7 @@ def _cmd_train_render_private(args: argparse.Namespace) -> tuple[dict[str, Any],
         )
     from .training.magpie_runner import load_magpie
 
-    model = load_magpie(args.artifact, device=args.device)
+    model = load_magpie(args.artifact, device=args.device, checkpoint_path=args.checkpoint)
     report = render_private_audio(
         model,
         args.text,
@@ -758,9 +764,12 @@ def _cmd_train_render_private(args: argparse.Namespace) -> tuple[dict[str, Any],
         speaker_index=args.speaker_index,
         seed=args.seed,
         sample_rate=args.sample_rate,
+        strict_normalization=not args.allow_unapproved_text,
         extra_metadata={
             "artifact": str(args.artifact),
             "artifact_sha256": sha256_file(args.artifact),
+            "checkpoint": str(args.checkpoint) if args.checkpoint else None,
+            "checkpoint_sha256": sha256_file(args.checkpoint) if args.checkpoint else None,
         },
     )
     return report, 0

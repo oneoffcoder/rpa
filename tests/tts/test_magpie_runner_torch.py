@@ -67,6 +67,7 @@ class FakeTrainModel:
     def __init__(self):
         self.weight = torch.nn.Parameter(torch.tensor(1.0))
         self.tokenizer = self
+        self.seen = []
 
     def encode(self, text, tokenizer_name=None):
         return [ord(char) for char in text[:8]]
@@ -84,6 +85,7 @@ class FakeTrainModel:
         return self
 
     def training_step(self, batch, step):
+        self.seen.append(int(batch["text"][0, 0]))
         return self.weight * batch["audio"].abs().mean() + 1.0
 
     def process_batch(self, batch):
@@ -100,6 +102,37 @@ def test_read_pcm16_wav_and_batch(tmp_path):
     assert batch["text"].shape == (1, 3)
     assert batch["audio"].shape == (1, 22050)
     assert batch["text_lens"].item() == 3
+
+
+def test_interrupted_and_uninterrupted_rows_match(tmp_path):
+    path = _pcm_wav(tmp_path / "v.wav")
+    rows = [{"audio_path": str(path), "text": text} for text in ("a", "b", "c", "d")]
+    uninterrupted = FakeTrainModel()
+    torch.manual_seed(3407)
+    report = train_verse_steps(uninterrupted, rows, steps=4, device="cpu")
+    assert report["next_step"] == 4
+    assert report["next_row"] == 0
+    assert uninterrupted.seen == [ord(c) for c in ("a", "b", "c", "d")]
+
+    interrupted = FakeTrainModel()
+    torch.manual_seed(3407)
+    first = train_verse_steps(interrupted, rows, steps=2, device="cpu")
+    second = train_verse_steps(
+        interrupted,
+        rows,
+        steps=2,
+        device="cpu",
+        start_step=first["next_step"],
+        start_row=first["next_row"],
+        optimizer=first["optimizer"],
+        scheduler=first["scheduler"],
+    )
+    assert interrupted.seen == uninterrupted.seen
+    first_ids = set(uninterrupted.seen[:2])
+    second_ids = set(uninterrupted.seen[2:])
+    assert first_ids.isdisjoint(second_ids)
+    assert second["next_step"] == 4
+    assert second["next_row"] == 0
 
 
 def test_evaluate_and_train_verse_steps(tmp_path):
@@ -273,6 +306,21 @@ def test_private_render_refuses_book_source_path(tmp_path):
             repo / "data" / "meta.json",
             repo_root=repo,
         )
+
+
+def test_private_render_can_record_unapproved_private_text(tmp_path):
+    report = render_private_audio(
+        FakeModel(),
+        "hello 3",
+        tmp_path / "data" / "x.wav",
+        tmp_path / "data" / "x.json",
+        repo_root=tmp_path,
+        strict_normalization=False,
+    )
+    assert report["normalization"]["strict"] is False
+    assert report["normalization"]["valid"] is False
+    assert report["normalization"]["issues"]
+    assert report["release_eligible"] is False
 
 
 def test_private_render_rejects_invalid_text(tmp_path):

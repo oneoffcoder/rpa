@@ -726,6 +726,36 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Found and fixed the resume row-cursor bug: the prior 4,000-step Mark checkpoint repeated the first 2,000 rows. Corrected continuation from step 2000/row 2000 used the next 2,000 distinct rows (overlap 0) and reached held-out Mark mean 11.1562 (base 11.9279), with optimizer/scheduler/RNG checkpoint verification",
+      "created_at": "2026-11-26T14:10:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000032",
+      "notes": "Old checkpoint c382291d retained and labelled as repeated rows. Corrected checkpoint 3ede81ea. Book-disjoint, not speaker-disjoint; no native/WER/quality/release claim.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-cursor-resume.md",
+          "sha256": "d737169d61be40c24010661ba345db983c8130346a69c5299ee5813132910168"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "End-to-end private A/B check: loaded base and corrected checkpoint 3ede81ea via the pinned NeMo path, confirmed exact-parameter fingerprints differ and all params are CUDA, and rendered four blinded Mark prompts with matched seed/voice/settings plus an answer key; audio unlistened",
+      "created_at": "2026-11-26T14:20:00+00:00",
+      "gate": "F-06",
+      "id": "ev_0000000000000033",
+      "notes": "Private listening aid only; no native/WER/quality/release claim. Answer key/WAVs under ignored data/runs/ab-private-cursor. Supersedes the repeated-row A/B.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/mwwhdv-ab-private.md",
+          "sha256": "a58e046f05a1706236ef77704bcf3b32cf3bb7de8173867c4a6936bfb9a6b3ce"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

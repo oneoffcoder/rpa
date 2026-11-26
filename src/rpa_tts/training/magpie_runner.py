@@ -333,8 +333,18 @@ def diagnose_environment(
     }
 
 
-def load_magpie(artifact_path: str | Path, *, device: str = "cuda:0") -> Any:
-    """Restore the pinned Magpie model with NeMo (qualified Linux runtime only)."""
+def load_magpie(
+    artifact_path: str | Path,
+    *,
+    device: str = "cuda:0",
+    checkpoint_path: str | Path | None = None,
+) -> Any:
+    """Restore the pinned Magpie model, optionally loading trained weights.
+
+    Passing ``checkpoint_path`` loads the checkpoint's ``state_dict`` strictly and
+    moves every module to ``device`` before returning, so a caller can verify that
+    the trained weights (not just the base artifact) are in use.
+    """
     artifact = Path(artifact_path)
     if not artifact.is_file():
         raise MagpieRunnerError(f"model artifact does not exist: {artifact}")
@@ -346,7 +356,43 @@ def load_magpie(artifact_path: str | Path, *, device: str = "cuda:0") -> Any:
             f"NeMo/Magpie is not importable in this environment: {type(exc).__name__}: {exc}"
         ) from exc
     model = MagpieTTSModel.restore_from(str(artifact), map_location=torch.device(device))
+    if checkpoint_path is not None:
+        checkpoint = Path(checkpoint_path)
+        if not checkpoint.is_file():
+            raise MagpieRunnerError(f"training checkpoint does not exist: {checkpoint}")
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
+        state = payload.get("state_dict", payload) if isinstance(payload, dict) else None
+        if not isinstance(state, dict):
+            raise MagpieRunnerError("checkpoint does not contain a state_dict")
+        model.load_state_dict(state, strict=True)
+        model.to(device)
     return model
+
+
+def ensure_hmong_tokenizer_mapping(model: Any) -> bool:
+    """Add the Hmong byte-tokenizer mapping to Magpie's (possibly struct) config.
+
+    Returns True when a mapping change was made. The packaged config is a
+    structured OmegaConf DictConfig without an ``hmong`` key, so ordinary item
+    assignment raises ConfigKeyError; ``open_dict`` is required.
+    """
+    config = getattr(model, "cfg", None)
+    if config is None:
+        return False
+    mapping = config.get("language_to_tokenizer_mapping", None)
+    if mapping is None:
+        config["language_to_tokenizer_mapping"] = {"hmong": ["text_ce_tokenizer"]}
+        return True
+    if "hmong" in mapping:
+        return False
+    try:
+        mapping["hmong"] = ["text_ce_tokenizer"]
+    except Exception:
+        from omegaconf import open_dict
+
+        with open_dict(mapping):
+            mapping["hmong"] = ["text_ce_tokenizer"]
+    return True
 
 
 def parameter_fingerprint(model: Any) -> str:
@@ -534,12 +580,13 @@ def render_private_audio(
     seed: int = 3407,
     sample_rate: int | None = None,
     extra_metadata: dict[str, Any] | None = None,
+    strict_normalization: bool = True,
 ) -> dict[str, Any]:
     """Generate private evaluation audio (never release/lesson integration)."""
     import torch
 
     root = Path(repo_root) if repo_root else find_repo_root()
-    normalized = normalize_rpa(text, strict=True)
+    normalized = normalize_rpa(text, strict=strict_normalization)
     output = Path(output_path)
     metadata = Path(metadata_path)
     _guard_private_output(output, root)
@@ -547,6 +594,7 @@ def render_private_audio(
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+    ensure_hmong_tokenizer_mapping(model)
     started = time.perf_counter()
     audio, audio_len = model.do_tts(
         normalized.normalized,
@@ -576,6 +624,20 @@ def render_private_audio(
         "private_evaluation": True,
         "release_eligible": False,
         "text": normalized.normalized,
+        "normalization": {
+            "version": normalized.version,
+            "strict": strict_normalization,
+            "valid": not normalized.issues,
+            "issues": [
+                {
+                    "code": issue.code,
+                    "message": issue.message,
+                    "position": issue.position,
+                    "token": issue.token,
+                }
+                for issue in normalized.issues
+            ],
+        },
         "language": language,
         "apply_tn": apply_tn,
         "speaker_index": speaker_index,
@@ -820,8 +882,17 @@ def train_verse_steps(
     eval_rows: list[dict[str, Any]] | None = None,
     eval_every: int = 0,
     log_every: int = 0,
+    start_step: int = 0,
+    start_row: int = 0,
+    optimizer: Any | None = None,
+    scheduler: Any | None = None,
 ) -> dict[str, Any]:
-    """Run bounded private verse finetuning steps and return losses/history."""
+    """Run bounded private verse finetuning steps and return losses/history.
+
+    ``start_step``/``start_row`` resume the global step and data cursor. Resuming
+    must advance the row cursor, otherwise a long run silently repeats its first
+    epoch (the bug this API exists to prevent).
+    """
     import torch
 
     if steps <= 0:
@@ -831,32 +902,41 @@ def train_verse_steps(
     parameters = [p for p in model.parameters() if p.requires_grad]
     if not parameters:
         raise InputError("model has no trainable parameters")
-    optimizer = torch.optim.AdamW(parameters, lr=learning_rate)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=max(1, steps // 2), gamma=0.5)
+    if optimizer is None:
+        optimizer = torch.optim.AdamW(parameters, lr=learning_rate)
+    if scheduler is None:
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, step_size=max(1, steps // 2), gamma=0.5
+        )
     model.train()
     losses: list[float] = []
     history: list[dict[str, Any]] = []
-    for step in range(steps):
-        row = rows[step % len(rows)]
+    for offset in range(steps):
+        row = rows[(start_row + offset) % len(rows)]
+        global_step = start_step + offset
         optimizer.zero_grad(set_to_none=True)
-        loss = model.training_step(make_verse_batch(model, row, device=device), step)
+        loss = model.training_step(make_verse_batch(model, row, device=device), global_step)
         loss.backward()
         if clip_grad_norm > 0:
             torch.nn.utils.clip_grad_norm_(parameters, clip_grad_norm)
         optimizer.step()
         scheduler.step()
         losses.append(float(loss.detach().cpu()))
-        if eval_rows and eval_every and (step + 1) % eval_every == 0:
+        if eval_rows and eval_every and (offset + 1) % eval_every == 0:
             history.append(
                 {
-                    "step": step + 1,
+                    "step": global_step + 1,
                     "eval": evaluate_verse_loss(model, eval_rows, limit=None, device=device),
                 }
             )
-        if log_every and (step + 1) % log_every == 0:
-            history.append({"step": step + 1, "train_loss": losses[-1]})
+        if log_every and (offset + 1) % log_every == 0:
+            history.append({"step": global_step + 1, "train_loss": losses[-1]})
     return {
         "steps": steps,
+        "start_step": start_step,
+        "start_row": start_row,
+        "next_step": start_step + steps,
+        "next_row": (start_row + steps) % len(rows),
         "losses": losses,
         "losses_finite": all(float(np.isfinite(value)) for value in losses),
         "history": history,
@@ -939,6 +1019,7 @@ __all__ = [
     "capture_rng_state",
     "diagnose_environment",
     "effective_packaged_config",
+    "ensure_hmong_tokenizer_mapping",
     "evaluate_verse_loss",
     "load_magpie",
     "make_verse_batch",

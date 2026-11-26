@@ -1,5 +1,12 @@
 # MWWHDV held-out Mark: 4,000-step continuation
 
+> **Correction:** both this and the preceding script restarted the row cursor at 0,
+> so the 2,000 additional steps repeated the **first 2,000 non-Mark rows**. These
+> 4,000 optimizer steps cover only 2,000 distinct verses; the 11.1643 value is not
+> coverage of 4,000 distinct verses. The checkpoint is retained as `c382291d…` but
+> labelled accordingly. See `mwwhdv-cursor-resume.md` for the corrected run
+> (11.1562, overlap 0).
+
 Private development run; authorized 2000 UBS corpus; audio/weights private.
 Permission: <https://jeepower.atlassian.net/wiki/spaces/RPA/pages/2467102728>.
 
