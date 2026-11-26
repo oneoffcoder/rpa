@@ -1,0 +1,82 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/stage-decision.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Written before a learning run (issue F-06) so a run cannot start without a declared objective, baseline, cap, measurement set and next affordable increment.",
+  "properties": {
+    "baseline": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "dataset_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "decision": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^S-0[1-9][0-9]*$",
+      "type": "string"
+    },
+    "inference_policy": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "max_gpu_hours": {
+      "exclusiveMinimum": 0,
+      "type": "number"
+    },
+    "max_optimizer_updates": {
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "measurement_set": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "native_raters": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "next_increment": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "objective": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "stage": {
+      "pattern": "^F-0[1-9]$",
+      "type": "string"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "timestamp",
+    "stage",
+    "dataset_version",
+    "objective",
+    "baseline",
+    "max_gpu_hours",
+    "inference_policy",
+    "native_raters",
+    "measurement_set",
+    "next_increment",
+    "decision"
+  ],
+  "title": "RPA TTS learning-stage decision record",
+  "type": "object"
+}

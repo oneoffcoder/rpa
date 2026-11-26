@@ -1,0 +1,9 @@
+# Preserve exact bytes for content that is hashed in evidence/run manifests.
+# Without this, line-ending conversion would change recorded SHA-256 values.
+*.md -text
+*.json -text
+*.jsonl -text
+*.yaml -text
+*.yml -text
+*.csv -text
+*.txt -text

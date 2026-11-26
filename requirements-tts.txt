@@ -1,0 +1,9 @@
+# Measured core/dev pins for the TTS environment (F-01 inventory).
+# Install: uv pip install -r requirements-tts.txt  (after `uv pip install -e .`)
+# The GPU wheel is installed separately from requirements-gpu.txt.
+numpy==2.5.5
+PyYAML==6.0.4
+jsonschema==4.26.0
+pytest==9.2.0
+pytest-cov==7.1.0
+ruff==0.17.6

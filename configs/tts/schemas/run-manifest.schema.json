@@ -1,0 +1,348 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/run-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Reproducibility record for one experiment. Every later run records input/config/code/artifact hashes, device, precision, effective batch, seed, unique audio hours, optimizer updates, wall time, peak VRAM, complete output paths and failure counts.",
+  "properties": {
+    "code": {
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "commit": {
+          "pattern": "^[0-9a-f]{7,40}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dirty": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "commit",
+        "branch",
+        "dirty"
+      ],
+      "type": "object"
+    },
+    "command": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "config": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "dataset": {
+      "additionalProperties": false,
+      "properties": {
+        "manifest_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "rows": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "split_rows": {
+          "additionalProperties": false,
+          "properties": {
+            "dev": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "test": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "train": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "train",
+            "dev",
+            "test"
+          ],
+          "type": "object"
+        },
+        "unique_audio_hours": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "manifest_path",
+        "manifest_sha256",
+        "unique_audio_hours",
+        "rows",
+        "split_rows"
+      ],
+      "type": "object"
+    },
+    "environment": {
+      "additionalProperties": false,
+      "properties": {
+        "cuda": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "device": {
+          "type": "string"
+        },
+        "driver": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "gpu_memory_mb": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "gpu_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "precision": {
+          "enum": [
+            "fp32",
+            "bf16",
+            "fp16"
+          ],
+          "type": "string"
+        },
+        "python": {
+          "type": "string"
+        },
+        "torch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "hostname",
+        "os",
+        "python",
+        "device",
+        "gpu_name",
+        "gpu_memory_mb",
+        "driver",
+        "torch",
+        "cuda",
+        "precision"
+      ],
+      "type": "object"
+    },
+    "failures": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "count",
+        "notes"
+      ],
+      "type": "object"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "outputs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "checkpoint",
+              "log",
+              "audio",
+              "metrics",
+              "report",
+              "other"
+            ],
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "resources": {
+      "additionalProperties": false,
+      "properties": {
+        "peak_vram_mb": {
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "wall_time_seconds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "wall_time_seconds",
+        "peak_vram_mb"
+      ],
+      "type": "object"
+    },
+    "run_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{3,127}$",
+      "type": "string"
+    },
+    "schema_version": {
+      "enum": [
+        1
+      ],
+      "type": "integer"
+    },
+    "stage": {
+      "pattern": "^F-0[1-9]$",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "running",
+        "completed",
+        "failed",
+        "aborted"
+      ],
+      "type": "string"
+    },
+    "training": {
+      "additionalProperties": false,
+      "properties": {
+        "effective_batch_size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "gradient_accumulation": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "learning_rate": {
+          "exclusiveMinimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "max_steps": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "optimizer_updates": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "precision": {
+          "enum": [
+            "fp32",
+            "bf16",
+            "fp16"
+          ],
+          "type": "string"
+        },
+        "seed": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "seed",
+        "precision",
+        "effective_batch_size",
+        "gradient_accumulation",
+        "optimizer_updates",
+        "learning_rate",
+        "max_steps"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "stage",
+    "created_at",
+    "command",
+    "status",
+    "code",
+    "config",
+    "dataset",
+    "environment",
+    "training",
+    "resources",
+    "outputs",
+    "failures",
+    "notes"
+  ],
+  "title": "RPA TTS run manifest",
+  "type": "object"
+}

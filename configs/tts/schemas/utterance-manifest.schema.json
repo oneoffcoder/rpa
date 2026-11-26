@@ -1,0 +1,228 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/utterance-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One audited, native-reviewed connected-speech utterance. Related audio, passages and recording sessions share a group_id and are never split across train/dev/test.",
+  "properties": {
+    "audio_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "audio_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "bucket": {
+      "enum": [
+        "ordinary_sentences",
+        "targeted_contrasts",
+        "questions_numbers_names",
+        "continuous_passages",
+        "calibration"
+      ],
+      "type": "string"
+    },
+    "channels": {
+      "enum": [
+        1,
+        2
+      ],
+      "type": "integer"
+    },
+    "consent_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "duration_seconds": {
+      "exclusiveMinimum": 0,
+      "maximum": 600,
+      "type": "number"
+    },
+    "expansion_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "group_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+      "type": "string"
+    },
+    "normalization_version": {
+      "pattern": "^rpa-norm-[0-9]+$",
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "preprocessing_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "quality_tags": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "reviewer": {
+      "additionalProperties": false,
+      "properties": {
+        "decisions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "native_approved": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewer_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "native_approved"
+      ],
+      "type": "object"
+    },
+    "rights_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "sample_rate": {
+      "maximum": 192000,
+      "minimum": 8000,
+      "type": "integer"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "dialect": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "edition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "end_seconds": {
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "parent_passage_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "retrieval_date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "session_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "speaker_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "start_seconds": {
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "source_id",
+        "speaker_id"
+      ],
+      "type": "object"
+    },
+    "split": {
+      "enum": [
+        "train",
+        "dev",
+        "test"
+      ],
+      "type": "string"
+    },
+    "transcript_normalized": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "transcript_raw": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "audio_path",
+    "audio_sha256",
+    "duration_seconds",
+    "sample_rate",
+    "channels",
+    "group_id",
+    "bucket",
+    "transcript_raw",
+    "transcript_normalized",
+    "normalization_version",
+    "split",
+    "rights_id",
+    "consent_id",
+    "source",
+    "reviewer",
+    "quality_tags",
+    "preprocessing_version"
+  ],
+  "title": "RPA TTS accepted-utterance manifest row",
+  "type": "object"
+}

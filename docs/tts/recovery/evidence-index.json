@@ -1,0 +1,179 @@
+{
+  "entries": [
+    {
+      "claim": "Reproducible TTS environment with measured host inventory and a pinned Blackwell stack",
+      "created_at": "2026-11-26T08:10:00+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000001",
+      "notes": "Windows 11 host, Python 3.12.16, torch 2.9.1+cu128, CUDA 12.8; exact commands in f01-verification-log.md",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/environment.md",
+          "sha256": "72b196d2838a0409c5bc60db23800f7621ba77c4eace000eab1bea190160483a"
+        },
+        {
+          "path": "docs/tts/recovery/evidence/f01-environment.json",
+          "sha256": "bf79ad98ee98c95f7a3889e5a209e3fefcd491d92f49b433658df2faa5295176"
+        },
+        {
+          "path": "requirements-tts.txt",
+          "sha256": "ce55b9956f3fe4eeb8de7ba4f923ab67fc8bcb89923226fe113e826b409acc25"
+        },
+        {
+          "path": "requirements-gpu.txt",
+          "sha256": "6dfefc24dafae488afd0a8c28d4b03912faa96d4e74ddbb6f4feae97551d287f"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "8129d01bdbde22339d812b6dbadb01e18e54be92ff03d1845efdad79cccbef48"
+        }
+      ],
+      "run_id": null,
+      "status": "passed"
+    },
+    {
+      "claim": "Real FP32 forward/backward/AdamW kernels executed on the RTX 5090 with finite gradients, loss decrease and measured VRAM",
+      "created_at": "2026-11-26T08:10:05+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000002",
+      "notes": "8 optimizer steps, seed 3407, initial loss 1.0487 -> final 0.8429, peak allocated 18.88 MB; pipeline readiness only, not TTS model fit",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/evidence/f01-gpu-kernel-proof.json",
+          "sha256": "50feaf0cb834949eade3232ab4988bda019afd6329a291438b4269238dab330d"
+        }
+      ],
+      "run_id": null,
+      "status": "passed"
+    },
+    {
+      "claim": "Pinned Sphinx book environment builds with zero errors and no changed lesson sources",
+      "created_at": "2026-11-26T08:10:10+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000003",
+      "notes": "build succeeded, 10 pre-existing/extension warnings; build is not publishing",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/book-regression.md",
+          "sha256": "264410e9a35e496eb163f847aa70665301382cb2c57144dd3fd5b072f0708d48"
+        }
+      ],
+      "run_id": null,
+      "status": "passed"
+    },
+    {
+      "claim": "TTS CLI and 179-test suite pass; installed package pins recorded",
+      "created_at": "2026-11-26T08:10:15+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000004",
+      "notes": "pytest exit 0: 179 passed, 1 skipped (GPU test opt-in); ruff check/format clean",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/evidence/f01-verification-log.md",
+          "sha256": "1758d126e3f128f550524bb224327cfd5537de862da0a719c84ac86e3acd786d"
+        },
+        {
+          "path": "docs/tts/recovery/evidence/f01-pip-freeze.txt",
+          "sha256": "03adbb167318443defdae25be4d95ca779564801eb51861766dd48e4bb7eeca9"
+        }
+      ],
+      "run_id": null,
+      "status": "passed"
+    },
+    {
+      "claim": "F-01 remaining item: independent owner-controlled backup destination is not yet established",
+      "created_at": "2026-11-26T08:10:20+00:00",
+      "gate": "F-01",
+      "id": "ev_0000000000000005",
+      "notes": "556.13 GB free satisfies the 100-200 GB workspace reservation; the independent checksummed backup is an owner action and blocks F-01 completion, not F-02/F-03 preparation",
+      "paths": [],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Draft rpa-norm-1 language contract and listener calibration protocol recorded; native approval and calibration session outstanding",
+      "created_at": "2026-11-26T08:10:25+00:00",
+      "gate": "F-02",
+      "id": "ev_0000000000000006",
+      "notes": "Contract status draft; critical_contrasts intentionally empty and approved_expansions empty pending native work; no listening has occurred",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/language-contract.yaml",
+          "sha256": "aad3337f263951c20a094f50b43b620f6b0dcc48557cfbeb3d0c85dff95b66a1"
+        },
+        {
+          "path": "docs/tts/recovery/listener-calibration.md",
+          "sha256": "c3a17a15bd1955a3ff63a7fc81562d5e01f7dcc990bc56b4e274c757585d7c20"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Source/rights ledgers and a technical audit of the repository syllable recordings recorded; no source rights cleared and no pilot corpus",
+      "created_at": "2026-11-26T08:10:30+00:00",
+      "gate": "F-03",
+      "id": "ev_0000000000000007",
+      "notes": "5,187 isolated syllable MP3s audited: 0 decode errors, 0.6416 decoded hours, all lossy MP3; speaker identity and dialect unverified; not connected-speech training data",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/source-ledger.md",
+          "sha256": "215858a1d598085f42980145b4e2a1398b2a5474e7c5e19db1dfa29211bbfa98"
+        },
+        {
+          "path": "docs/tts/recovery/rights-matrix.csv",
+          "sha256": "10efeffcebb28d086c94b8751ec94645d3fa7c4628653bfae4f5951336eed39d"
+        },
+        {
+          "path": "docs/tts/recovery/audit/repo-syllables/report.json",
+          "sha256": "89d1befd3d183b6c6bb86fd428817625251ce919e2a7bd2b43dfb35db99ffe05"
+        },
+        {
+          "path": "docs/tts/recovery/audit/repo-syllables/report.md",
+          "sha256": "2d72ca40b68f9dd17c6499b38859ea915a7f1dcf76263428a52ba2b4eac43697"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Magpie and VITS lane metadata recorded and artifact-readiness check implemented; no GPU model gate has run",
+      "created_at": "2026-11-26T08:10:35+00:00",
+      "gate": "F-04",
+      "id": "ev_0000000000000008",
+      "notes": "Artifacts unresolved (paths/hashes null), NeMo not installed, VITS implementation not pinned; train run/resume remain gated",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/model-candidates.md",
+          "sha256": "444ec16969a67d30534de28427c87353b59a8ad98289f57a5fb4569c52044f40"
+        },
+        {
+          "path": "configs/tts/default.yaml",
+          "sha256": "10bae50da5dca6f113c6e8bc835637b2f21099a41fbcc7cd2ce1c584aa254821"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
+    },
+    {
+      "claim": "Online serving is not required for the accepted local/static product; deferred unless a concrete hosting requirement is authorized",
+      "created_at": "2026-11-26T08:10:40+00:00",
+      "gate": "F-09",
+      "id": "ev_0000000000000009",
+      "notes": "Local synthesis and approved static lesson audio are the delivery target; hosting becomes a separate authorized decision after F-08 acceptance",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/README.md",
+          "sha256": "615f3146ac0948989a6a1e527b0c50eb69194f145fc4f607bd16edda6bde72a1"
+        },
+        {
+          "path": "docs/tts/recovery/decisions.jsonl",
+          "sha256": "74e8b28738652b0e68071bf65eb042fc69186af890b2cfabe511931dd16fcb79"
+        }
+      ],
+      "run_id": null,
+      "status": "not_required"
+    }
+  ],
+  "schema_version": 1
+}

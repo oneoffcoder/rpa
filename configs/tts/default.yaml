@@ -1,0 +1,98 @@
+# Host and experiment configuration for the owned White Hmong TTS work.
+# Host-specific paths, devices and budgets live here, never in code.
+# Validated by rpa_tts.config.Config; see docs/tts/recovery/run-manifest.md.
+schema_version: 1
+
+project:
+  name: rpa-tts
+  seed: 3407
+
+host:
+  profile: rtx-5090-win11
+  # Actual support and memory fit are measured; this is the declared target.
+  device: cuda:0
+  precision: fp32
+  roots:
+    # Relative paths resolve against the repository root. Override with
+    # RPA_TTS_WORKSPACE for an external 100-200 GB workspace.
+    workspace: data
+    artifacts: data/artifacts
+
+audio:
+  master_sample_rate: 48000
+  master_bit_depth: 24
+  model_sample_rate: 24000
+  channels: 1
+
+splits:
+  dev_fraction: 0.10
+  test_fraction: 0.20
+  bucket_field: bucket
+  group_field: group_id
+  buckets:
+    - ordinary_sentences
+    - targeted_contrasts
+    - questions_numbers_names
+    - continuous_passages
+    - calibration
+  # Groups, passages and recording sessions are never divided across splits.
+
+coverage:
+  # Project screening count per prioritized attested cell, not a completeness
+  # guarantee (issue F-02). Missing cells are reported, never silently dropped.
+  min_examples_per_attested_cell: 5
+
+model_lanes:
+  magpie:
+    enabled: true
+    priority: 1
+    # not_started | standby | in_progress | gate_passed | failed
+    status: not_started
+    upstream:
+      model: nvidia/magpie_tts_multilingual_357m
+      model_version: v2607
+      nemo_commit: 0305e4b15ac2924219536da44d315397d92ee769
+      codec: nvidia/nemo-nano-codec-22khz-1.89kbps-21.5fps
+      codec_sample_rate: 22050
+    artifacts:
+      # Populated only after immutable artifact versions/hashes are resolved.
+      model_path: null
+      model_sha256: null
+      codec_path: null
+      codec_sha256: null
+  vits:
+    enabled: true
+    priority: 2
+    # Standby lane; only activated if Magpie fails a recorded compatibility gate.
+    status: standby
+    upstream:
+      original_commit: 2e561ba58618d021b5b8323d3765880f7e0ecfdb
+      implementation: idiap/coqui-ai-TTS
+      implementation_commit: null
+    artifacts:
+      model_path: null
+      model_sha256: null
+
+gates:
+  f04:
+    max_active_gpu_hours: 8
+    max_engineering_days: 2
+    max_compatibility_corrections: 1
+  f06:
+    bootstrap_resamples: 5000
+    min_relative_syllable_error_reduction: 0.20
+    min_naturalness_gain: 0.30
+  f07:
+    pooled_syllable_error_max: 0.05
+    bucket_syllable_error_max: 0.10
+    contrast_accuracy_min: 0.95
+    naturalness_mean_min: 4.0
+    naturalness_lower_bound_min: 3.8
+    naturalness_gap_max: 0.50
+    # Every one of these must have scored items; calibration is a recording
+    # stage bucket, not a locked-test bucket.
+    required_buckets:
+      - ordinary_sentences
+      - targeted_contrasts
+      - questions_numbers_names
+      - continuous_passages

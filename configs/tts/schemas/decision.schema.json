@@ -1,0 +1,73 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/decision.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "id": {
+      "pattern": "^(D-0[1-9]|F-0[1-9]-D[0-9]{2})$",
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "owner": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "rationale": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "stage": {
+      "pattern": "^(D-0[1-9]|F-0[1-9])$",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "settled",
+        "open",
+        "deferred",
+        "rejected",
+        "superseded"
+      ],
+      "type": "string"
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timestamp": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "timestamp",
+    "stage",
+    "title",
+    "decision",
+    "status",
+    "rationale",
+    "evidence",
+    "owner"
+  ],
+  "title": "RPA TTS decision record",
+  "type": "object"
+}

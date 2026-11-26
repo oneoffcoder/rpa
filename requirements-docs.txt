@@ -1,0 +1,11 @@
+# Pinned documentation (book) environment, kept separate from the TTS runtime.
+# Install: uv venv .venv-docs && uv pip install -r requirements-docs.txt
+# Build:   .venv-docs/Scripts/sphinx-build -M html source build   (Windows)
+Sphinx==7.4.7
+sphinx-rtd-theme==2.0.0
+sphinxcontrib-bibtex==2.6.2
+sphinx-sitemap==2.6.0
+sphinxcontrib-blockdiag==3.0.0
+blockdiag==3.0.0
+setuptools==80.9.0
+Pillow==9.5.0

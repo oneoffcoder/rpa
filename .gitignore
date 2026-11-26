@@ -1,3 +1,40 @@
 build/
 scratch/mp3/
 .vscode/
+
+# Python / tooling
+.venv/
+.venv-docs/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+*.egg-info/
+
+# TTS research artifacts: audio, derived data, checkpoints and run outputs stay
+# outside ordinary Git. Tracked manifests and configs reference them by hash.
+data/raw/
+data/derived/
+data/checkpoints/
+data/runs/
+data/exports/
+data/private/
+docs/tts/recovery/evidence/audio/
+*.nemo
+*.ckpt
+*.safetensors
+*.onnx
+
+# Owner-controlled consent records and unreleased credentials never enter Git.
+**/consent-records/
+**/credentials/
+.env
+
+data/audit/
+
+# transient local logs
+*.log
+test-results.xml
+test-output.txt

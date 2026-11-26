@@ -1,0 +1,52 @@
+{
+  "collected_at": "2026-11-26T08:04:42+00:00",
+  "cpu_count": 32,
+  "disks": {
+    "repo_root": {
+      "free_gb": 556.13,
+      "path": "C:\\Users\\jee\\git\\rpa",
+      "total_gb": 1862.07
+    },
+    "workspace": {
+      "free_gb": 556.13,
+      "path": "C:\\Users\\jee\\git\\rpa\\data",
+      "total_gb": 1862.07
+    }
+  },
+  "environment_variables": {
+    "CUDA_VISIBLE_DEVICES": null,
+    "RPA_TTS_WORKSPACE": null
+  },
+  "ffmpeg": "ffmpeg version 9.0.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+  "git": {
+    "branch": "feat/white-hmong-tts-recovery",
+    "commit": "5919bb0650737a1534dc5746e191714820039b7d",
+    "dirty": true
+  },
+  "gpu": {
+    "available": true,
+    "compute_capability": "12.0",
+    "driver_version": "621.35",
+    "memory_total_mb": 32607,
+    "name": "NVIDIA GeForce RTX 5090"
+  },
+  "hostname": "Desktop-W9QAA",
+  "packages": {
+    "PyYAML": "6.0.4",
+    "jsonschema": "4.26.0",
+    "numpy": "2.5.5",
+    "nvidia_nemo_toolkit": null,
+    "torch": "2.9.1+cu128",
+    "torch_cuda_runtime": "12.8"
+  },
+  "platform": {
+    "machine": "AMD64",
+    "processor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD",
+    "release": "11",
+    "system": "Windows"
+  },
+  "python": "3.12.16",
+  "python_executable": "C:\\Users\\jee\\git\\rpa\\.venv\\Scripts\\python.exe",
+  "schema_version": 1,
+  "total_ram_gb": 127.9
+}

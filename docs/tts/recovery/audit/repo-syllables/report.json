@@ -1,0 +1,44 @@
+{
+  "audio_directory": "source/_static/mp3",
+  "channels": {
+    "1": 5187
+  },
+  "codecs": {
+    "mp3": 5187
+  },
+  "counts_by_bucket": {
+    "unlabeled": 5187
+  },
+  "counts_by_status": {
+    "needs_transcript": 5187
+  },
+  "duplicate_groups": {
+    "pcm": [],
+    "source": []
+  },
+  "duplicate_ids": [],
+  "duration": {
+    "max_seconds": 1.3333106575963718,
+    "median_seconds": 0.4451473922902494,
+    "min_seconds": 0.15780045351473923,
+    "p95_seconds": 0.5757596371882087,
+    "total_seconds": 2309.5803401360545
+  },
+  "errors": [],
+  "files": 5187,
+  "flagged_files": 5187,
+  "interpretation": "Technical audit only; no native listening, rights clearance or accepted-hours claim.",
+  "labels_path": null,
+  "manifest_sha256": "d87289cbc97aef73594e5fcc8939e87f4a20afec988c57a7458ae09d3e5177ce",
+  "ok": false,
+  "quality_flag_counts": {
+    "lossy_source_review": 5187,
+    "near_full_scale_review": 8,
+    "very_short_review": 126
+  },
+  "sample_rates": {
+    "44100": 5187
+  },
+  "schema_version": 1,
+  "valid_files": 0
+}

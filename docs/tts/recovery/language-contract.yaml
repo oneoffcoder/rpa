@@ -1,0 +1,111 @@
+# White Hmong / Hmong Daw / Hmoob Dawb language contract — DRAFT
+#
+# Status: draft. Jee and a native White Hmong language lead must approve this
+# contract before F-02 can pass (issue F-02). Nothing here is a native judgment
+# by an agent. Approved expansion tables and attested contrast cells are added
+# only after a native reviewer supplies them with evidence.
+schema_version: 1
+status: draft
+
+dialect:
+  name: White Hmong / Hmong Daw / Hmoob Dawb
+  scope: >-
+    One clear, neutral White Hmong reading voice for RPA lessons and everyday
+    reading. Exact cloning of Jee or another narrator is not required.
+  accent_decision: null          # native decision; do not infer from a vendor or location
+  reading_style: null            # e.g. citation vs connected reading, pace
+  target_speaker_id: null        # stable private ID once selected and consented
+  approved_by: []                # native reviewer IDs (private records referenced separately)
+  approved_at: null
+
+normalization:
+  # Implemented and tested by src/rpa_tts/text/normalize.py.
+  version: rpa-norm-1
+  model_case: lowercase          # surface form keeps case; raw text always retained
+  unicode: NFC
+  preserved:
+    - every marked tone letter (j s v m g b)
+    - the unmarked tone
+    - multigraph onsets (e.g. nplh, ntsh, ntxh)
+    - all 13 vowel spellings
+    - punctuation . , ! ? ; :
+  mapped:
+    - typographic quotes, dashes, ellipsis and non-breaking spaces to ASCII equivalents
+  rejected_until_approved:
+    - digits and numeric/date/currency expressions (no expansion table adopted)
+    - non-RPA letters, foreign words and unsupported symbols
+  word_inventory: >-
+    The 5,187 strings recorded by the book's isolated-syllable recordings
+    (56 onsets + empty onset x 13 vowels x 7 tones). This is a project
+    inventory, not a complete validator of every Hmong dialect or spelling.
+  error_policy: >-
+    Reject with a precise error or route to an approved correction path.
+    Never silently apply an English cleaner or phonemizer.
+
+# Exact written form -> approved Hmong expansion. Empty until native approval.
+approved_expansions: {}
+
+speech_target:
+  intelligibility: >-
+    Human syllable error at most 5% overall and 10% per declared bucket.
+  lexical_fidelity: >-
+    Targeted lexical/tone/phonation accuracy at least 95% with no unresolved
+    systematic critical-contrast error.
+  naturalness: >-
+    Mean at least 4.0/5, crossed listener/utterance-aware 95% lower bound at
+    least 3.8, and gap from matched natural speech at most 0.5.
+  stability: >-
+    No catastrophic loops, truncation or unintended language switch in the
+    300-item suite; no missing or repeated clauses in continuous paragraphs.
+
+scoring:
+  naturalness_scale:
+    1: completely unnatural
+    2: mostly unnatural
+    3: mixed natural and unnatural
+    4: mostly natural
+    5: completely natural
+  separate_voice_preference: true
+  plays: >-
+    At most two complete plays per short item and one additional paragraph
+    replay; replays are logged.
+  task_order:
+    - blind transcription (listener hears one condition only)
+    - blind naturalness rating
+    - contrast identification after plausible alternatives are shown
+    - pronunciation review only after the intended text is revealed
+  calibration:
+    oral_fluency_screen: twenty fresh natural sentences, at least 300 reference units, at most 5% normalized error
+    contrast_screen: forty adjudicated neutral-context tokens, at least 95% identification
+  adjudication: >-
+    Two native adjudicators confirm repeatable critical-contrast errors after
+    legitimate variants are considered; disagreement is diagnosed, not averaged.
+
+# Buckets used by the split, coverage ledger and locked test.
+buckets:
+  - ordinary_sentences
+  - targeted_contrasts
+  - questions_numbers_names
+  - continuous_passages
+  - calibration
+
+# Empty by design: the native lead enumerates attested onset-by-tone and
+# vowel-by-tone cells, adjacent-tone contexts, lexical/grammatical sandhi
+# contexts and relevant -d vocabulary. Excluded/unattested cells are declared
+# explicitly. Proposed cell shape:
+#
+#   - id: C-01
+#     type: onset_tone        # or vowel_tone
+#     consonant: hl           # omit for vowel_tone
+#     vowel: u
+#     tone: b
+#     attested: true
+#     note: attested in the cited phonetic materials / native examples
+#
+critical_contrasts: []
+
+notes: >-
+  Recorded sources and their rights status are tracked in source-ledger.md and
+  rights-matrix.csv. Calibration protocol: listener-calibration.md. The
+  implementation of this contract is rpa-norm-1; changing it requires a new
+  version and re-validation of frozen material.

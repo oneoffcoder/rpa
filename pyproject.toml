@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rpa-tts"
+version = "0.1.0"
+description = "Owned White Hmong (Hmong Daw / Hmoob Dawb) TTS research toolkit for the RPA book"
+readme = "docs/tts/recovery/README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "One-Off Coder" }]
+dependencies = [
+  "numpy>=1.26",
+  "PyYAML>=6.0",
+  "jsonschema>=4.21",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+  "ruff>=0.6",
+]
+# The GPU lane is installed explicitly from the CUDA 12.8 wheel index; see
+# docs/tts/recovery/environment.md. Do not add torch to the default install.
+gpu = ["torch>=2.9"]
+
+[project.scripts]
+rpa-tts = "rpa_tts.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+  "gpu: requires a local CUDA device (deselect with -m 'not gpu')",
+  "integration: slower end-to-end check that shells out to ffmpeg",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]

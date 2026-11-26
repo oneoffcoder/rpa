@@ -1,0 +1,79 @@
+{
+  "$id": "https://rpa.oneoffcoder.com/schemas/evidence-entry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "claim": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "gate": {
+      "pattern": "^F-0[1-9]$",
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^ev_[0-9a-f]{16}$",
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "paths": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "not_started",
+        "in_progress",
+        "passed",
+        "failed",
+        "inconclusive",
+        "blocked",
+        "not_required"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "gate",
+    "claim",
+    "status",
+    "created_at",
+    "paths",
+    "notes"
+  ],
+  "title": "RPA TTS evidence index entry",
+  "type": "object"
+}
