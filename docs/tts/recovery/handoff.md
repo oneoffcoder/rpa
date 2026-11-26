@@ -185,6 +185,8 @@ The book's `source/`, original audio and explorer are unchanged
     script pool extracted from the book.
   - `87e97217aff98817e022906ee7f2c18295737a7a` — CI workflow for the CPU TTS
     suite and the pinned book build.
+  - `d0904f09c7ade2abea9819ae375f20647b7d67dc` — two-adjudicator critical-error
+    review and paragraph clause/language-switch review.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
   `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
