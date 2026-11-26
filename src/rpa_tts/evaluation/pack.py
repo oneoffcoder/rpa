@@ -35,6 +35,116 @@ TIE_TOKENS = {"", "uncertain", "tie", "unsure", "no_response"}
 PHASE_A_COLUMNS = ["code", "audio", "transcription", "naturalness", "replay_count", "comments"]
 PHASE_B_COLUMNS = ["code", "option_a", "option_b", "chosen", "confidence", "comments"]
 
+# F-07 locked-test composition: 300 sentence items split 100/80/60/60, plus 20
+# continuous paragraphs of 30-90 seconds. Twelve listeners are declared and at
+# least nine must be eligible for all three roles.
+QUALIFICATION_SENTENCE_TOTAL = 300
+QUALIFICATION_PARAGRAPH_TOTAL = 20
+QUALIFICATION_LISTENERS = 12
+QUALIFICATION_ELIGIBLE_ALL_ROLES = 9
+QUALIFICATION_MIN_CRITICAL = 40
+QUALIFICATION_PARAGRAPH_SECONDS = (30.0, 90.0)
+QUALIFICATION_BUCKETS = {
+    "ordinary_sentences": 100,
+    "targeted_contrasts": 80,
+    "questions_numbers_names": 60,
+    "continuous_passages": 60,
+}
+ALL_ROLES = {"transcription", "naturalness", "contrast"}
+
+
+def qualification_design_report(payload: dict[str, Any]) -> dict[str, Any]:
+    """Report F-07 suite composition and every shortfall; no silent acceptance."""
+    items = payload["items"]
+    sentences = [item for item in items if item.get("kind", "sentence") == "sentence"]
+    paragraphs = [item for item in items if item.get("kind") == "paragraph"]
+    by_bucket: dict[str, int] = {}
+    for item in sentences:
+        by_bucket[item["bucket"]] = by_bucket.get(item["bucket"], 0) + 1
+    listeners = payload["listeners"]
+    eligible_all_roles = sum(1 for listener in listeners if ALL_ROLES <= set(listener["roles"]))
+    critical = sum(1 for item in sentences if item.get("critical"))
+    targeted_without_contrast = [
+        item["script_id"]
+        for item in sentences
+        if item["bucket"] == "targeted_contrasts" and not item.get("contrast")
+    ]
+    violations: list[str] = []
+    if len(sentences) != QUALIFICATION_SENTENCE_TOTAL:
+        violations.append(f"sentences: {len(sentences)} != {QUALIFICATION_SENTENCE_TOTAL}")
+    for bucket, required in QUALIFICATION_BUCKETS.items():
+        actual = by_bucket.get(bucket, 0)
+        if actual != required:
+            violations.append(f"bucket {bucket}: {actual} != {required}")
+    if len(paragraphs) != QUALIFICATION_PARAGRAPH_TOTAL:
+        violations.append(f"paragraphs: {len(paragraphs)} != {QUALIFICATION_PARAGRAPH_TOTAL}")
+    for paragraph in paragraphs:
+        duration = paragraph.get("duration_seconds")
+        if duration is None:
+            violations.append(f"paragraph {paragraph['script_id']}: missing duration_seconds")
+        elif not (
+            QUALIFICATION_PARAGRAPH_SECONDS[0]
+            <= float(duration)
+            <= QUALIFICATION_PARAGRAPH_SECONDS[1]
+        ):
+            violations.append(
+                f"paragraph {paragraph['script_id']}: duration {duration}s outside "
+                f"{QUALIFICATION_PARAGRAPH_SECONDS[0]}-{QUALIFICATION_PARAGRAPH_SECONDS[1]}s"
+            )
+    if len(listeners) < QUALIFICATION_LISTENERS:
+        violations.append(f"listeners: {len(listeners)} < {QUALIFICATION_LISTENERS}")
+    if eligible_all_roles < QUALIFICATION_ELIGIBLE_ALL_ROLES:
+        violations.append(
+            f"listeners eligible for all three roles: {eligible_all_roles} < "
+            f"{QUALIFICATION_ELIGIBLE_ALL_ROLES}"
+        )
+    if critical < QUALIFICATION_MIN_CRITICAL:
+        violations.append(f"critical contrast items: {critical} < {QUALIFICATION_MIN_CRITICAL}")
+    if targeted_without_contrast:
+        violations.append(
+            "targeted_contrasts items without contrast options: "
+            + ", ".join(sorted(targeted_without_contrast)[:8])
+        )
+    conditions = [str(condition) for condition in payload["conditions"]]
+    if len(conditions) < 3:
+        violations.append(f"conditions: {len(conditions)} < 3")
+    if "candidate" not in conditions:
+        violations.append("conditions must include 'candidate' for gate scoring")
+    return {
+        "design": payload["design"],
+        "passed": not violations,
+        "violations": violations,
+        "counts": {
+            "sentences": len(sentences),
+            "paragraphs": len(paragraphs),
+            "listeners": len(listeners),
+            "eligible_all_roles": eligible_all_roles,
+            "critical": critical,
+            "by_bucket": dict(sorted(by_bucket.items())),
+            "conditions": conditions,
+        },
+        "requirements": {
+            "sentences": QUALIFICATION_SENTENCE_TOTAL,
+            "paragraphs": QUALIFICATION_PARAGRAPH_TOTAL,
+            "listeners": QUALIFICATION_LISTENERS,
+            "eligible_all_roles": QUALIFICATION_ELIGIBLE_ALL_ROLES,
+            "min_critical": QUALIFICATION_MIN_CRITICAL,
+            "paragraph_seconds": list(QUALIFICATION_PARAGRAPH_SECONDS),
+            "buckets": dict(sorted(QUALIFICATION_BUCKETS.items())),
+        },
+    }
+
+
+def design_check(payload: dict[str, Any]) -> dict[str, Any]:
+    if payload["design"] != "qualification":
+        return {
+            "design": payload["design"],
+            "passed": True,
+            "applicable": False,
+            "note": "Qualification composition requirements apply only to qualification packs.",
+        }
+    return {"applicable": True, **qualification_design_report(payload)}
+
 
 def _canonical_definition(data: dict[str, Any]) -> dict[str, Any]:
     # Underscore-prefixed keys are local metadata added by load_definition and
@@ -119,7 +229,12 @@ def _replay_cap(item: dict[str, Any], plays: dict[str, int]) -> int:
 
 def build_pack(definition: dict[str, Any], output_dir: str | Path) -> dict[str, Any]:
     """Materialize a pack directory: manifest, coordinator sheet, listener sheets."""
-    _canonical_definition(definition)
+    payload = _canonical_definition(definition)
+    check = design_check(payload)
+    if check.get("applicable") and not check["passed"]:
+        raise ValidationError(
+            "qualification suite composition failed: " + "; ".join(check["violations"][:8])
+        )
     destination = Path(output_dir)
     if destination.exists() and any(destination.iterdir()):
         raise InputError(f"pack output directory already exists and is not empty: {destination}")
@@ -209,6 +324,7 @@ def build_pack(definition: dict[str, Any], output_dir: str | Path) -> dict[str, 
         ],
         "assignments": assignments,
         "contrast_assignments": phase_b,
+        "design_check": check,
         "audio_staged": False,
     }
     _write_json(destination / "pack-manifest.json", manifest)
@@ -428,6 +544,7 @@ def pack_summary(manifest: dict[str, Any]) -> dict[str, Any]:
         "per_script": {
             key: dict(sorted(value.items())) for key, value in sorted(per_script.items())
         },
+        "design_check": manifest.get("design_check"),
         "warnings": warnings,
     }
 

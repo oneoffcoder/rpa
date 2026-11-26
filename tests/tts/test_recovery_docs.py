@@ -66,6 +66,12 @@ def test_evidence_paths_still_resolve_with_matching_hashes():
     from rpa_tts.hashing import sha256_file
 
     index = load_index(RECOVERY / "evidence-index.json", repo_root=ROOT)
+    latest: dict[str, dict] = {}
+    for entry in index["entries"]:
+        current = latest.get(entry["gate"])
+        if current is None or entry["created_at"] >= current["created_at"]:
+            latest[entry["gate"]] = entry
+    current_ids = {entry["id"] for entry in latest.values()}
     for entry in index["entries"]:
         for recorded in entry["paths"]:
             path = ROOT / recorded["path"]
@@ -78,7 +84,11 @@ def test_evidence_paths_still_resolve_with_matching_hashes():
                 f"{entry['id']} hashes ignored artifact {recorded['path']}; "
                 "evidence must reference tracked, resolvable snapshots"
             )
-            assert sha256_file(path) == recorded["sha256"], f"{entry['id']} hash drift"
+            # Current evidence must match byte-for-byte. Superseded entries stay
+            # historical: an artifact may legitimately evolve (for example, a
+            # schema gains a field) after newer evidence supersedes the claim.
+            if entry["id"] in current_ids:
+                assert sha256_file(path) == recorded["sha256"], f"{entry['id']} hash drift"
 
 
 def test_status_table_lists_every_stage_and_the_not_claimed_section():

@@ -68,6 +68,11 @@
           "critical": {
             "type": "boolean"
           },
+          "duration_seconds": {
+            "exclusiveMinimum": 0,
+            "maximum": 600,
+            "type": "number"
+          },
           "expansion_ids": {
             "items": {
               "type": "string"

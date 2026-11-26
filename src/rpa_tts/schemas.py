@@ -441,6 +441,11 @@ LISTENING_PACK: dict[str, Any] = {
                     "script_id": {"type": "string", "pattern": r"^[a-z0-9][a-z0-9_-]{0,63}$"},
                     "bucket": {"type": "string", "enum": BUCKETS},
                     "kind": {"type": "string", "enum": ["sentence", "paragraph"]},
+                    "duration_seconds": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 600,
+                    },
                     "text": {"type": "string", "minLength": 1},
                     "critical": {"type": "boolean"},
                     "contrast": {

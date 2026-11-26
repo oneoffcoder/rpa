@@ -270,3 +270,151 @@ def test_repository_template_definition_is_valid(repo_root):
     assert loaded["design"] == "calibration"
     assert len(loaded["listeners"]) == 3
     assert sum(1 for item in loaded["items"] if item.get("critical")) == 1
+
+
+def _qualification_definition(
+    *,
+    ordinary: int = 100,
+    targeted: int = 80,
+    questions: int = 60,
+    continuous: int = 60,
+    paragraphs: int = 20,
+    listeners: int = 12,
+    critical: int = 40,
+    paragraph_duration: float = 45.0,
+    conditions: list[str] | None = None,
+    drop_contrast_at: int | None = None,
+):
+    conditions = conditions or ["candidate", "natural", "baseline"]
+    items = []
+
+    def add(prefix: str, count: int, bucket: str, text: str):
+        for index in range(count):
+            script_id = f"{prefix}{index:03d}"
+            items.append(
+                {
+                    "script_id": script_id,
+                    "bucket": bucket,
+                    "text": text,
+                    "condition_audio": {
+                        condition: f"audio/{condition}/{script_id}.wav" for condition in conditions
+                    },
+                }
+            )
+
+    add("o", ordinary, "ordinary_sentences", "kuv hlub koj")
+    for index in range(targeted):
+        script_id = f"t{index:03d}"
+        extra: dict = {
+            "critical": index < critical,
+            "contrast": {"options": ["neeg", "nees"], "expected": "neeg"},
+        }
+        if drop_contrast_at is not None and index == drop_contrast_at:
+            extra.pop("contrast")
+            extra["critical"] = False
+        items.append(
+            {
+                "script_id": script_id,
+                "bucket": "targeted_contrasts",
+                "text": "nws yog ib tug neeg",
+                "condition_audio": {
+                    condition: f"audio/{condition}/{script_id}.wav" for condition in conditions
+                },
+                **extra,
+            }
+        )
+    add("q", questions, "questions_numbers_names", "koj puas nyob zoo")
+    add("c", continuous, "continuous_passages", "peb yuav mus tsev")
+    for index in range(paragraphs):
+        script_id = f"p{index:03d}"
+        items.append(
+            {
+                "script_id": script_id,
+                "bucket": "continuous_passages",
+                "kind": "paragraph",
+                "duration_seconds": paragraph_duration,
+                "text": "kuv hlub koj",
+                "condition_audio": {
+                    condition: f"audio/{condition}/{script_id}.wav" for condition in conditions
+                },
+            }
+        )
+    return {
+        "schema_version": 1,
+        "pack_id": "qualification-test-01",
+        "design": "qualification",
+        "seed": 3407,
+        "conditions": conditions,
+        "items": items,
+        "listeners": [
+            {
+                "listener_id": f"L-{index:02d}",
+                "roles": ["transcription", "naturalness", "contrast"],
+            }
+            for index in range(1, listeners + 1)
+        ],
+    }
+
+
+def test_complete_qualification_pack_builds(tmp_path):
+    _, result = _build(tmp_path, _qualification_definition())
+    manifest = result["manifest"]
+    check = manifest["design_check"]
+    assert check["applicable"] is True
+    assert check["passed"] is True
+    assert check["violations"] == []
+    assert check["counts"]["sentences"] == 300
+    assert check["counts"]["paragraphs"] == 20
+    assert check["counts"]["listeners"] == 12
+    assert check["counts"]["by_bucket"] == {
+        "continuous_passages": 60,
+        "ordinary_sentences": 100,
+        "questions_numbers_names": 60,
+        "targeted_contrasts": 80,
+    }
+    assert len(manifest["assignments"]) == 320 * 12
+    assert result["summary"]["design_check"]["passed"] is True
+
+
+def test_calibration_pack_is_exempt_from_qualification_composition(tmp_path, pack_definition):
+    _, result = _build(tmp_path, pack_definition())
+    assert result["manifest"]["design_check"]["applicable"] is False
+    assert result["summary"]["design_check"]["passed"] is True
+
+
+def test_qualification_requires_exact_sentence_total(tmp_path):
+    with pytest.raises(ValidationError, match="sentences: 299"):
+        _build(tmp_path, _qualification_definition(ordinary=99))
+
+
+def test_qualification_requires_exact_bucket_counts(tmp_path):
+    with pytest.raises(ValidationError, match="bucket targeted_contrasts: 79 != 80"):
+        _build(tmp_path, _qualification_definition(targeted=79))
+
+
+def test_qualification_requires_all_twenty_paragraphs(tmp_path):
+    with pytest.raises(ValidationError, match="paragraphs: 19 != 20"):
+        _build(tmp_path, _qualification_definition(paragraphs=19))
+
+
+def test_qualification_requires_paragraph_duration_range(tmp_path):
+    with pytest.raises(ValidationError, match="outside 30.0-90.0s"):
+        _build(tmp_path, _qualification_definition(paragraph_duration=20.0))
+
+
+def test_qualification_requires_twelve_listeners(tmp_path):
+    with pytest.raises(ValidationError, match="listeners: 11 < 12"):
+        _build(tmp_path, _qualification_definition(listeners=11))
+
+
+def test_qualification_requires_candidate_condition(tmp_path):
+    with pytest.raises(ValidationError, match="must include 'candidate'"):
+        _build(
+            tmp_path,
+            _qualification_definition(conditions=["natural", "baseline", "other"]),
+        )
+
+
+def test_qualification_targeted_items_need_contrast(tmp_path):
+    with pytest.raises(ValidationError, match="without contrast options"):
+        _build(tmp_path, _qualification_definition(drop_contrast_at=5))

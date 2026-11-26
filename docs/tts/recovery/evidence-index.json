@@ -330,6 +330,25 @@
       ],
       "run_id": null,
       "status": "in_progress"
+    },
+    {
+      "claim": "Locked qualification-suite composition enforced: exactly 300 sentences (100/80/60/60), 20 paragraphs of 30-90 s, at least 12 listeners (9 all-role), at least 40 critical contrast items and a candidate condition; manifest records the design check",
+      "created_at": "2026-11-26T09:50:00+00:00",
+      "gate": "F-07",
+      "id": "ev_0000000000000014",
+      "notes": "Software only. No suite, stimuli, candidate model or native panel exists; listeners are declared, not recruited. The validator does not prove script freshness/quality, contrast plausibility, audio pairing or retention. Calibration packs are exempt from these minimums.",
+      "paths": [
+        {
+          "path": "docs/tts/recovery/qualification-suite.md",
+          "sha256": "88c17a09d7eb5809a92d3260369dab945c4bce880a08d1acee16eca7cae690e9"
+        },
+        {
+          "path": "configs/tts/schemas/listening-pack.schema.json",
+          "sha256": "2e898df7c7630b580cbc385bf29107691edc0a6ff781d1a367c8e5ad42b428fa"
+        }
+      ],
+      "run_id": null,
+      "status": "in_progress"
     }
   ],
   "schema_version": 1

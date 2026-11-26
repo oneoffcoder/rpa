@@ -28,7 +28,7 @@ Blocked / Not required. Evidence is append-only in
 | **F-04** one model proves 5090 load/train/generate | **In progress** | F-01 environment, F-02 calibration | ML engineer (agent) | [`model-candidates.md`](model-candidates.md), [`f04-artifact-inspection.md`](f04-artifact-inspection.md), [`f04-host-path.md`](f04-host-path.md), [`f04-vits-standby.md`](f04-vits-standby.md), `configs/tts/f04-magpie.yaml`, `configs/tts/f04-vits.yaml`, `rpa-tts model check` | Owner chooses the Linux path for Magpie (enable WSL2 or a Linux worker; native Windows NeMo resolves CPU torch); the VITS standby environment now imports on Windows and its `rpa-chars-1` text contract is verified, but no lane has run |
 | **F-05** accepted corpus, coverage, frozen splits | **In progress** | F-02, F-03; expansion needs F-04 | data engineer + native QA | [`coverage-ledger.md`](coverage-ledger.md), [`dataset-lifecycle.md`](dataset-lifecycle.md), [`audio-verification.md`](audio-verification.md), `rpa-tts corpus split/freeze/verify-audio` | Freeze, verify and byte-level audio checks are ready; no accepted corpus exists. Admit a 30–60 minute native-confirmed pilot after rights clear |
 | **F-06** bounded learning comparisons, frozen candidate | **In progress** | F-04, F-05 | ML engineer + native development panel | [`stage-decisions.jsonl`](stage-decisions.jsonl) (empty), [`learning-curve.csv`](learning-curve.csv) (header), [`dataset-lifecycle.md`](dataset-lifecycle.md) | Record a stage decision before any comparison; `train record` now enforces unique, bounded learning-curve rows |
-| **F-07** independent native qualification | **Not started** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), `rpa-tts evaluate gate` (implemented, no data) | Staff the 12-listener plan only after a candidate and protocol are frozen |
+| **F-07** independent native qualification | **In progress** | F-05, F-06 frozen candidate; approved rights | evaluation lead (separate from checkpoint selection) | [`listening-instrument.md`](listening-instrument.md), [`listening-review.md`](listening-review.md), [`qualification-suite.md`](qualification-suite.md), `rpa-tts evaluate gate` (implemented, no data) | Build the 300-sentence + 20-paragraph suite with the enforced composition contract once scripts, contrast pairs and stimuli are frozen; recruit 12 listeners |
 | **F-08** reproducible package + approved lesson audio | **Not started** | F-07 passed + distribution rights | ML/application engineer + native content reviewer | `rpa-tts package build` (gated) | Not actionable before F-07 |
 | **F-09** online serving | **Not required** (deferred) | F-08 acceptance + concrete hosting requirement | operations | decision D-05 in [`decisions.jsonl`](decisions.jsonl) | Becomes required only if arbitrary-text serving is authorized |
 
@@ -83,6 +83,11 @@ Corrections are appended, not deleted.
   No dataset version or learning row exists. See
   [`dataset-lifecycle.md`](dataset-lifecycle.md) and
   [`audio-verification.md`](audio-verification.md).
+- **F-07 suite composition:** qualification packs must contain exactly 300
+  sentences (100/80/60/60), 20 paragraphs of 30–90 s, ≥12 listeners (≥9
+  all-role), ≥40 critical contrast items and a `candidate` condition; the
+  manifest records the design check. No suite, stimuli or candidate exists.
+  See [`qualification-suite.md`](qualification-suite.md).
 - **VITS standby preparation:** the `rpa-chars-1` character contract (37 tokens)
   round-trips all 5,187 documented syllables, and a separate `.venv-vits` imports
   `coqui-tts 0.28.0` with `torch 2.9.1+cu128` on this Windows host after pinning
@@ -90,7 +95,7 @@ Corrections are appended, not deleted.
   instantiated or trained, lane standby. See
   [`f04-vits-standby.md`](f04-vits-standby.md).
 - **Listening instrument:** blinded, counterbalanced pack builder and response
-  ingestion implemented and tested (289 TTS tests), including two-adjudicator
+  ingestion implemented and tested (298 TTS tests), including two-adjudicator
   critical-error merging and human paragraph clause/language-switch review; see
   [`listening-instrument.md`](listening-instrument.md) and
   [`listening-review.md`](listening-review.md). No session, stimuli or
@@ -121,7 +126,7 @@ Stable CLI (`rpa-tts`, also `python -m rpa_tts`). Exit status: 0 success,
 | `rpa-tts train run/resume` | **gated (F-04)** | Refuses until F-04 passes and a wrapper is tested |
 | `rpa-tts synthesize` | **gated (F-07)** | Refuses until F-07 passes and a package is accepted |
 | `rpa-tts evaluate metrics/gate` | yes | Scoring and F-07 gate; needs real listening data |
-| `rpa-tts evaluate pack` | yes | Builds a blinded, counterbalanced listener pack (no audio or session yet) |
+| `rpa-tts evaluate pack` | yes | Builds a blinded pack; qualification packs must meet the 300/80/60/60 + 20-paragraph/12-listener composition |
 | `rpa-tts evaluate ingest` | yes | Validates completed sheets into a scores payload |
 | `rpa-tts evaluate adjudicate` | yes | Merges two-adjudicator critical-error decisions; preserves raw choices |
 | `rpa-tts evaluate paragraphs` | yes | Merges human clause/language-switch paragraph review |
@@ -146,6 +151,7 @@ authenticated API session), so the workflow is added but not claimed green.
 | [`listener-calibration.md`](listener-calibration.md) | F-02 session protocol, instrument checks, privacy |
 | [`listening-instrument.md`](listening-instrument.md) | Blinded pack builder, task order, ingestion rules and commands |
 | [`listening-review.md`](listening-review.md) | Two-adjudicator critical-error review and paragraph clause/language-switch review |
+| [`qualification-suite.md`](qualification-suite.md) | Enforced F-07 suite composition and remaining prerequisites |
 | [`calibration-scripts.draft.md`](calibration-scripts.draft.md) | Draft script pool extracted from the book (not approved, not recorded) |
 | [`calibration-scripts.draft.jsonl`](calibration-scripts.draft.jsonl) | Per-candidate normalized text, source line/section and issue status |
 | [`source-ledger.md`](source-ledger.md) | Source facts, CMU findings, acquisition leads, audit rules |

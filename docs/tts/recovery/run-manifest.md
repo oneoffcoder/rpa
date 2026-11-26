@@ -55,7 +55,10 @@ Hashed evidence paths must be **tracked, non-ignored snapshots** (measurement
 files, frozen reports, protocol documents), never living documents such as the
 stage table (`README.md`), `decisions.jsonl` or mutable configs. Progress updates
 belong in those living documents; the evidence index records point-in-time facts.
-Tests enforce existence, non-ignored status and hash agreement.
+Tests enforce existence and non-ignored status for every entry, and hash
+agreement for the **current (latest) entry per gate**. A superseded entry remains
+historical: an artifact may legitimately evolve (for example, a schema gains a
+field) after newer evidence replaces the claim, so old hashes are not rewritten.
 
 Status vocabulary: Not started / In progress / Passed / Failed / Inconclusive /
 Blocked / Not required. An unavailable listener, GPU, permission or right is a

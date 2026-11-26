@@ -100,7 +100,7 @@ Written 2026-11-26 for the next worker. Read
 | F-04 | Lane metadata and readiness check (`…0008`); pinned artifacts and packaged config (`…000a`); host-path constraint (`…000b`); VITS standby text/environment (`…0010`) |
 | F-05 | Data lifecycle tooling: freeze/verify (`…0011`), byte-level audio verification (`…0013`); no dataset version exists |
 | F-06 | Learning-curve recording (`…0012`); no learning row or stage decision exists |
-| F-07 | Blinded instrument (`…000c`, `…000f`); no candidate or qualification data |
+| F-07 | Blinded instrument (`…000c`, `…000f`); qualification composition enforced (`…0014`); no candidate, stimuli or panel |
 | F-08 | Not started |
 | F-09 | Not required/deferred for local/static delivery (`…0009`) |
 
@@ -187,6 +187,10 @@ The book's `source/`, original audio and explorer are unchanged
    (`corpus freeze --version <v> --contract ...`) and then
    `corpus verify-dataset`. After each learning run, append a judged row with
    `train record`; do not edit the curve by hand.
+9. After a frozen candidate: author/approve the 300 sentence + 20 paragraph
+   qualification scripts and contrast pairs, generate and stage the three
+   conditions, build the pack (composition is enforced), recruit 12 listeners,
+   then run ingest → adjudicate → paragraphs → metrics → gate. No suite exists.
 
 ## Checkpoint
 
