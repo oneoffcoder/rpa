@@ -22,7 +22,7 @@ from TTS.tts.configs.vits_config import VitsConfig
 from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.vits import Vits
 
-from rpa_tts.text.coqui_characters import RpaCharacters, ordered_vocabulary
+from rpa_tts.text.coqui_characters import RpaCharacters, verify_checkpoint_tokenizer
 from rpa_tts.text.normalize import normalize_rpa
 
 SOURCE = Path("data/raw/mwwhdv-nt")
@@ -175,6 +175,19 @@ def load_recipe(config_path: Path) -> tuple:
     return config, model, train, dev
 
 
+def validate_resume_tokenizers(resume: Path, config: VitsConfig) -> None:
+    """Check both the restore checkpoint and historical best selected by Trainer."""
+    restore, best = get_last_checkpoint(str(resume))
+    for path in dict.fromkeys((restore, best)):
+        saved = torch.load(path, map_location="cpu", weights_only=False)
+        try:
+            verify_checkpoint_tokenizer(saved, config)
+        except ValueError as error:
+            raise ValueError(f"{path}: {error}") from error
+        finally:
+            del saved
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -226,15 +239,7 @@ def main() -> None:
     config_path = resume / "config.json" if resume else args.config.resolve(strict=True)
     config, model, train, dev = load_recipe(config_path)
     if resume is not None:
-        restore, best = get_last_checkpoint(str(resume))
-        tokens = tuple(model.tokenizer.characters.vocab)
-        for path in dict.fromkeys((restore, best)):
-            if not path:
-                continue
-            saved = torch.load(path, map_location="cpu", weights_only=False)
-            saved_map = saved.get("config", {}).get("characters", {}).get("vocab_dict")
-            if ordered_vocabulary(saved_map) != tokens:
-                raise ValueError(f"Checkpoint character map differs from launcher config: {path}")
+        validate_resume_tokenizers(resume, config)
     dataset = Path(config.datasets[0].path)
     receipt = json.loads(dataset.parent.joinpath("readiness.json").read_text(encoding="utf-8"))
     if any(

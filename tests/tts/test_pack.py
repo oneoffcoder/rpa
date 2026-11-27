@@ -536,7 +536,7 @@ def test_f07_full_pipeline_isolates_candidate_and_requires_complete_evidence(
     adjudication.write_text(
         "code,verdict,confirmed_by,notes\n"
         + "".join(
-            f"{x['code']},confirmed,ReviewerA|ReviewerB,\n" for x in contrasts[::10] if x["critical"]
+            f"{x['code']},confirmed,Jee|Reviewer,\n" for x in contrasts[::10] if x["critical"]
         )
     )
     broken = apply_adjudications(broken, adjudication)

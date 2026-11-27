@@ -14,7 +14,12 @@ from TTS.config import load_config
 from TTS.utils.synthesizer import Synthesizer
 from vits_coqui_setup import project_text, sha256
 
-from rpa_tts.text.coqui_characters import RpaCharacters, ordered_vocabulary, vocabulary_sha256
+from rpa_tts.text.coqui_characters import (
+    RpaCharacters,
+    ordered_vocabulary,
+    verify_checkpoint_tokenizer,
+    vocabulary_sha256,
+)
 
 SCHEMA = "rpa-coqui-vits-character-map-v1"
 
@@ -73,12 +78,29 @@ def load_bundle(bundle: Path, *, cuda: bool):
         or vocabulary_sha256(tokens) != manifest["vocabulary_sha256"]
     ):
         raise ValueError("Configured character map differs from the checkpoint manifest")
+    evidence = json.loads((bundle / "aba-provenance.json").read_bytes())
+    if (
+        evidence["checkpoint_sha256"] != manifest["checkpoint_sha256"]
+        or evidence["config_sha256"] != manifest["original_config_sha256"]
+        or evidence["B_candidate_vocab_sha256"] != manifest["vocabulary_sha256"]
+        or evidence["B_candidate_vocab"] != manifest["vocabulary"]
+    ):
+        raise ValueError("Legacy tokenizer map differs from its recovery evidence")
+    model = load_checked_model(checkpoint, config_path, cuda=cuda, legacy_settings=config.to_dict())
+    return model, manifest
+
+
+def load_checked_model(checkpoint: Path, config_path: Path, *, cuda: bool, legacy_settings=None):
+    config = load_config(str(config_path))
+    checkpoint_data = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    verify_checkpoint_tokenizer(checkpoint_data, config, verified_legacy_settings=legacy_settings)
+    del checkpoint_data
     model = Synthesizer(
         tts_checkpoint=checkpoint, tts_config_path=config_path, use_cuda=cuda
     ).tts_model
-    if tuple(model.tokenizer.characters.vocab) != tokens:
-        raise ValueError("Loaded tokenizer differs from the checkpoint manifest")
-    return model, manifest
+    if tuple(model.tokenizer.characters.vocab) != ordered_vocabulary(config.characters.vocab_dict):
+        raise ValueError("Loaded tokenizer differs from the verified configuration")
+    return model
 
 
 def render(bundle: Path, prompts: Path, output: Path, *, cuda: bool) -> None:
@@ -88,7 +110,14 @@ def render(bundle: Path, prompts: Path, output: Path, *, cuda: bool) -> None:
     projected = [project_text(sentence)[0] for sentence in sentences]
     if not projected or len(set(projected)) != len(projected):
         raise ValueError("Provide distinct, nonempty prompts")
-    model, manifest = load_bundle(bundle, cuda=cuda)
+    if bundle.is_file():
+        model = load_checked_model(bundle, bundle.with_name("config.json"), cuda=cuda)
+        manifest = {
+            "checkpoint_sha256": sha256(bundle),
+            "vocabulary_sha256": vocabulary_sha256(tuple(model.tokenizer.characters.vocab)),
+        }
+    else:
+        model, manifest = load_bundle(bundle, cuda=cuda)
     output.mkdir(parents=True)
     rows = []
     for number, (sentence, text) in enumerate(zip(sentences, projected, strict=True), start=1):
