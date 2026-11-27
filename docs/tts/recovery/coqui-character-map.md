@@ -1,25 +1,17 @@
-# Coqui VITS character map compatibility
+# Coqui VITS character map recovery
 
-Character IDs index the text embedding. A tokenizer must persist the exact ordered
-vocabulary with its configuration. In Coqui, `characters.vocab_dict` is an ordered
-list, with the list index serving as the token ID.
+The runtime character order for `best_model_35461.pth` was inferred from paired White Hmong audio using frozen model weights. Two independent fits converged on the same 27 shuffled IDs. The original checkpoint, run configuration and TensorBoard records examined contain no historical ordered map. The recovered order is verified for two prompts by the project owner's direct listening.
 
-The RPA recipe writes an explicit map for new runs. Resume checks both
-Trainer-selected checkpoints against the current config, including token order,
-reserved roles, blank and boundary flags, and the embedding's row count. Inference
-applies the same compatibility checks before loading model weights.
+For “peb mus tsev.” and “kuv yog hmoob.”, the A/B/A comparison used one loaded model, the same checkpoint, input, CUDA device, output encoder and Torch seed 42. The only intervention was assigning the ordered vocabulary. For both phrases, the original fresh map and its reversion reproduced the previously emailed unintelligible WAV byte for byte. The owner found both recovered-map WAVs intelligible and both failed controls unintelligible. The trainer previews also sounded decent to the owner. This establishes the effect of the map on these two phrases. Generalization is evaluated separately using 20 new prompts. [Investigation and evidence](https://docs.google.com/document/d/1IV09sUpHPPF0qBJnzJP8CCwSRutSAA757viA6oAswbY/edit)
 
-An older checkpoint without an explicit vocabulary requires a verified recovery
-bundle. Preserve the original model, configuration, and recovery receipt together.
+The recovery bundle on Radiance is `C:/Users/jee/git/rpa/data/artifacts/rpa-vits-step35461-listener-verified`. It contains a verified copy of the original checkpoint (SHA-256 `2919b47c677d103b8487462024efb468289335ae243d8de3fe18a4b1ed5e593e`), the original and recovered configs, the A/B/A provenance, and a checksum manifest. The recovered config stores the ordered token list in `characters.vocab_dict`. Each list index is the token ID. The manifest binds this order to the checkpoint using canonical digests.
 
-With the pinned Coqui environment and `src` on `PYTHONPATH`, use the checked
-inference path:
+The repository's recipe writes an explicit map for new runs. Resume verifies the ordered map embedded in the checkpoints Trainer selects against the launch config. A legacy checkpoint without an embedded map needs explicit recovery evidence for inference. The recovered checkpoint remains a legacy checkpoint with its original model bytes.
+
+With the pinned Coqui environment and `src` on `PYTHONPATH`, reproduce the frozen inference path:
 
 ```text
-python scripts/vits_character_map.py render <checkpoint-or-bundle> <sentences.txt> <output-dir>
+python scripts/vits_character_map.py render <bundle> <one-sentence-per-line.txt> <fresh-output-directory> --cuda
 ```
 
-A regular checkpoint must have its matching `config.json` alongside it. The
-render manifest records the checkpoint and vocabulary digests and the hash of
-each WAV. Formal listening qualification uses the staged pack and the
-[qualification workflow](listening-instrument.md).
+The loader verifies the checkpoint, map, and configuration before constructing the synthesizer. The output manifest records each WAV's sentence, model text, duration and hash.
