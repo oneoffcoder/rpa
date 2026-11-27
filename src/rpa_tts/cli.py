@@ -40,7 +40,13 @@ from .errors import GateNotPassedError, InputError, RpaTtsError
 from .evaluation.ab_player import write_ab_player
 from .evaluation.gate import evaluate_release
 from .evaluation.metrics import contrast_summary, naturalness_summary, score_transcriptions
-from .evaluation.pack import build_pack, load_definition, load_responses, stage_audio
+from .evaluation.pack import (
+    build_pack,
+    load_definition,
+    load_responses,
+    qualification_evidence,
+    stage_audio,
+)
 from .evaluation.review import apply_adjudications, apply_paragraph_reviews
 from .evaluation.uncertainty import mean_with_interval
 from .evidence import append_entry, make_entry
@@ -318,6 +324,7 @@ def parser() -> argparse.ArgumentParser:
     metrics.add_argument("--config", type=Path, default=None)
     gate = evaluate_commands.add_parser("gate", help="apply the F-07 release gate")
     gate.add_argument("--scores", type=Path, required=True)
+    gate.add_argument("--pack", type=Path, required=True)
     gate.add_argument("--output", type=Path, required=True)
     gate.add_argument("--config", type=Path, default=None)
     pack_build = evaluate_commands.add_parser(
@@ -945,13 +952,22 @@ def _compute_metrics(
     scores: dict[str, Any], config, *, with_intervals: bool = False
 ) -> dict[str, Any]:
     result: dict[str, Any] = {}
-    transcriptions = scores.get("transcriptions") or []
+
+    def candidate_rows(key):
+        records = scores.get(key) or []
+        if any("condition" in row for row in records):
+            return [row for row in records if row.get("condition") == "candidate"]
+        return records
+
+    transcriptions = candidate_rows("transcriptions")
     if transcriptions:
         result["syllable"] = score_transcriptions(transcriptions)
     if scores.get("naturalness"):
         result["naturalness"] = naturalness_summary(scores["naturalness"], condition="candidate")
-        if scores.get("natural"):
-            result["natural"] = naturalness_summary(scores["natural"], condition="natural")
+        anchors = [row for row in scores["naturalness"] if row.get("condition") == "natural"]
+        result["natural"] = naturalness_summary(
+            anchors or scores.get("natural") or [], condition="natural"
+        )
         if with_intervals:
             candidate_records = [
                 row for row in scores["naturalness"] if row.get("condition") == "candidate"
@@ -962,11 +978,18 @@ def _compute_metrics(
                     resamples=int(config.data["gates"]["f06"]["bootstrap_resamples"]),
                     seed=config.seed,
                 )
-    if scores.get("contrasts"):
-        result["contrast"] = contrast_summary(scores["contrasts"])
+    contrasts = candidate_rows("contrasts")
+    if contrasts:
+        result["contrast"] = contrast_summary(contrasts)
     if "paragraphs" in scores:
         result["paragraphs"] = scores["paragraphs"]
-    result["catastrophic_outputs"] = int(scores.get("catastrophic_outputs", 0))
+    if any("condition" in row for row in scores.get("transcriptions") or []):
+        result["catastrophic_outputs"] = sum(
+            isinstance(row["hypothesis"], str) and not row["hypothesis"].strip()
+            for row in transcriptions
+        )
+    else:
+        result["catastrophic_outputs"] = int(scores.get("catastrophic_outputs", 0))
     result["panel_acceptance"] = scores.get("panel_acceptance")
     return result
 
@@ -983,6 +1006,7 @@ def _cmd_evaluate_metrics(args: argparse.Namespace) -> tuple[dict[str, Any], int
 def _cmd_evaluate_gate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     config = _config(args)
     scores = _scores_payload(args.scores)
+    evidence = qualification_evidence(args.pack, scores)
     computed = _compute_metrics(scores, config, with_intervals=True)
     syllable = computed.get("syllable")
     if syllable is None:
@@ -1000,10 +1024,12 @@ def _cmd_evaluate_gate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
     contrast = computed.get("contrast")
     if contrast is None:
         raise InputError("F-07 gate requires contrast records")
-    paragraphs = computed.get("paragraphs") or {
-        "items": 0,
-        "missing_clauses": 0,
-        "repeated_clauses": 0,
+    reviews = scores["paragraphs"]["per_item"]
+    paragraphs = {
+        "items": len(reviews),
+        "missing_clauses": sum(row["missing_clauses"] for row in reviews),
+        "repeated_clauses": sum(row["repeated_clauses"] for row in reviews),
+        "language_switch_items": sum(row["language_switch"] for row in reviews),
     }
     verdict = evaluate_release(
         thresholds=config.gate_thresholds,
@@ -1016,7 +1042,7 @@ def _cmd_evaluate_gate(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
         panel_acceptance=computed["panel_acceptance"],
         required_buckets=list(config.data["gates"]["f07"]["required_buckets"]),
     )
-    report = {"verdict": verdict, "computed": computed}
+    report = {"verdict": verdict, "computed": computed, "qualification_evidence": evidence}
     write_json_report(report, args.output)
     report["output"] = str(args.output)
     exit_code = 0 if verdict["verdict"] == "accepted" else 1

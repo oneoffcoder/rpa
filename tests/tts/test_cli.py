@@ -169,7 +169,7 @@ def test_corpus_split_writes_manifest_and_report(
     assert (tmp_path / "split.report.json").is_file()
 
 
-def test_evaluate_metrics_and_gate_accept_a_passing_score_set(tmp_path, config_path, capsys):
+def test_evaluate_metrics_for_unbound_scores(tmp_path, config_path, capsys):
     scores_path = tmp_path / "scores.json"
     scores_path.write_text(json.dumps(_scores()), encoding="utf-8")
     metrics_output = tmp_path / "metrics.json"
@@ -193,45 +193,26 @@ def test_evaluate_metrics_and_gate_accept_a_passing_score_set(tmp_path, config_p
     assert metrics["contrast"]["accuracy"] == 1.0
     assert metrics["naturalness"]["interval"]["lower"] >= 3.8
 
-    gate_output = tmp_path / "gate.json"
-    assert (
-        main(
-            [
-                "evaluate",
-                "gate",
-                "--scores",
-                str(scores_path),
-                "--output",
-                str(gate_output),
-                "--config",
-                str(config_path),
-            ]
-        )
-        == 0
-    )
-    gate = json.loads(capsys.readouterr().out)
-    assert gate["verdict"]["verdict"] == "accepted"
 
-
-def test_evaluate_gate_rejects_panel_refusal(tmp_path, config_path, capsys):
-    scores_path = tmp_path / "scores.json"
-    scores_path.write_text(json.dumps(_scores(panel=False)), encoding="utf-8")
+def test_evaluate_gate_rejects_unbound_legacy_scores(tmp_path, config_path, capsys):
+    scores = tmp_path / "scores.json"
+    scores.write_text(json.dumps(_scores()), encoding="utf-8")
     code = main(
         [
             "evaluate",
             "gate",
             "--scores",
-            str(scores_path),
+            str(scores),
+            "--pack",
+            str(tmp_path),
             "--output",
             str(tmp_path / "gate.json"),
             "--config",
             str(config_path),
         ]
     )
-    assert code == 1
-    payload = json.loads(capsys.readouterr().out)
-    assert payload["verdict"]["verdict"] == "rejected"
-    assert "panel_rejected" in payload["verdict"]["failed_rules"]
+    assert code == 2
+    assert "staged qualification pack" in capsys.readouterr().err
 
 
 def test_evidence_add_appends_one_entry(tmp_path, capsys):

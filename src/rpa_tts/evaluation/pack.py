@@ -22,11 +22,12 @@ import hashlib
 import json
 import random
 import shutil
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from ..errors import InputError, ValidationError
-from ..hashing import sha256_file, sha256_json
+from ..hashing import is_sha256_hex, sha256_file, sha256_json
 from ..schemas import validate as validate_schema
 from ..text.normalize import normalize_rpa
 
@@ -108,8 +109,8 @@ def qualification_design_report(payload: dict[str, Any]) -> dict[str, Any]:
     conditions = [str(condition) for condition in payload["conditions"]]
     if len(conditions) < 3:
         violations.append(f"conditions: {len(conditions)} < 3")
-    if "candidate" not in conditions:
-        violations.append("conditions must include 'candidate' for gate scoring")
+    if not {"candidate", "natural"} <= set(conditions):
+        violations.append("conditions must include candidate and natural for gate scoring")
     return {
         "design": payload["design"],
         "passed": not violations,
@@ -303,12 +304,14 @@ def build_pack(definition: dict[str, Any], output_dir: str | Path) -> dict[str, 
         "plays": plays,
         "created_at": _utc_now(),
         "definition_sha256": definition.get("_definition_sha256"),
+        "candidate_model": definition.get("candidate_model"),
         "items": [
             {
                 "script_id": str(item["script_id"]),
                 "bucket": str(item["bucket"]),
                 "kind": str(item.get("kind", "sentence")),
                 "text": str(item["text"]),
+                "duration_seconds": item.get("duration_seconds"),
                 "critical": bool(item.get("critical", False)),
                 "contrast": item.get("contrast"),
                 "condition_audio": item["condition_audio"],
@@ -585,7 +588,7 @@ def load_responses(pack_dir: str | Path, responses_dir: str | Path) -> dict[str,
     naturalness: list[dict[str, Any]] = []
     contrasts: list[dict[str, Any]] = []
     problems: list[str] = []
-    empty_outputs = 0
+    empty_outputs: Counter[str] = Counter()
 
     for listener_id, listener in sorted(listeners.items()):
         phase_a_path = responses / f"{listener_id}-phase-a.csv"
@@ -632,9 +635,9 @@ def load_responses(pack_dir: str | Path, responses_dir: str | Path) -> dict[str,
                 )
                 continue
             transcription = row["transcription"]
-            if not transcription:
-                empty_outputs += 1
             role_flags = set(listener["roles"])
+            if not transcription and "transcription" in role_flags:
+                empty_outputs[assignment["condition"]] += 1
             if "transcription" in role_flags:
                 transcriptions.append(
                     {
@@ -675,7 +678,7 @@ def load_responses(pack_dir: str | Path, responses_dir: str | Path) -> dict[str,
                 seen_b: set[str] = set()
                 for row in phase_b_rows:
                     code = row["code"]
-                    if code not in contrast_by_code:
+                    if code not in expected_contrasts:
                         problems.append(f"{listener_id}: unknown contrast code {code!r}")
                         continue
                     if code in seen_b:
@@ -697,6 +700,7 @@ def load_responses(pack_dir: str | Path, responses_dir: str | Path) -> dict[str,
                         {
                             "utterance_id": entry["script_id"],
                             "listener_id": listener_id,
+                            "condition": assignments[(listener_id, code)]["condition"],
                             "expected": entry["expected"],
                             "chosen": chosen or None,
                             "critical": entry["critical"],
@@ -719,7 +723,8 @@ def load_responses(pack_dir: str | Path, responses_dir: str | Path) -> dict[str,
         "transcriptions": transcriptions,
         "naturalness": naturalness,
         "contrasts": contrasts,
-        "catastrophic_outputs": empty_outputs,
+        "catastrophic_outputs": sum(empty_outputs.values()),
+        "catastrophic_outputs_by_condition": dict(empty_outputs),
         "condition_roles": list(manifest["conditions"]),
         "notes": (
             "Phase-A transcription is blind and phase-B contrast follows separately. "
@@ -729,3 +734,144 @@ def load_responses(pack_dir: str | Path, responses_dir: str | Path) -> dict[str,
         ),
     }
     return scores
+
+
+def qualification_evidence(pack_dir: Path, scores: dict[str, Any]) -> dict[str, Any]:
+    """Verify that the scored rows, reviewed paragraphs and audio belong to one locked pack."""
+    path = pack_dir / "pack-manifest.json"
+    if not path.is_file():
+        raise InputError("F-07 requires its staged qualification pack")
+    digest = sha256_file(path)
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if manifest["design"] != "qualification" or not qualification_design_report(manifest)["passed"]:
+        raise ValidationError("F-07 requires a complete qualification design")
+    if scores.get("pack_manifest_sha256") != digest or scores.get("pack_id") != manifest["pack_id"]:
+        raise ValidationError("Scores do not match the qualification pack")
+    model = manifest.get("candidate_model") or {}
+    if not all(is_sha256_hex(model.get(key)) for key in ("checkpoint_sha256", "vocabulary_sha256")):
+        raise ValidationError("Qualification pack must identify the frozen checkpoint and map")
+    candidate_audio = model.get("audio_sha256") or {}
+    if set(candidate_audio) != {row["script_id"] for row in manifest["items"]}:
+        raise ValidationError("Qualification requires render hashes for every candidate item")
+    assignments = {row["code"]: row for row in manifest["assignments"]}
+    staged = manifest.get("staged_audio") or []
+    if (
+        not manifest.get("audio_staged")
+        or sha256_json(staged) != manifest.get("staged_audio_sha256")
+        or len(staged) != len(assignments)
+        or {row["code"] for row in staged} != set(assignments)
+    ):
+        raise ValidationError("Qualification audio staging is incomplete")
+    for row in staged:
+        assigned = assignments[row["code"]]
+        audio = pack_dir / assigned["blind_audio"]
+        if (
+            row["blind_audio"] != assigned["blind_audio"]
+            or not audio.is_file()
+            or audio.stat().st_size != row["bytes"]
+            or sha256_file(audio) != row["sha256"]
+        ):
+            raise ValidationError(f"Qualification audio changed for {row['code']}")
+
+        if (
+            assigned["condition"] == "candidate"
+            and row["sha256"] != candidate_audio[assigned["script_id"]]
+        ):
+            raise ValidationError(f"Candidate audio differs from its render for {row['code']}")
+
+    roles = {row["listener_id"]: set(row["roles"]) for row in manifest["listeners"]}
+    items = {row["script_id"]: row for row in manifest["items"]}
+    contrast = {row["code"]: row for row in manifest["contrast_assignments"]}
+    for key, role in (
+        ("transcriptions", "transcription"),
+        ("naturalness", "naturalness"),
+        ("contrasts", "contrast"),
+    ):
+        expected = {
+            code
+            for code, row in assignments.items()
+            if role in roles[row["listener_id"]] and (role != "contrast" or code in contrast)
+        }
+        records = scores.get(key) or []
+        if len(records) != len(expected) or {row.get("code") for row in records} != expected:
+            raise ValidationError(f"Incomplete or duplicate eligible {key}")
+        for row in records:
+            assigned = assignments[row["code"]]
+            if (
+                row.get("condition") != assigned["condition"]
+                or row.get("listener_id") != assigned["listener_id"]
+                or row.get("utterance_id") != assigned["script_id"]
+                or (
+                    role == "transcription"
+                    and (
+                        row.get("reference") != items[assigned["script_id"]]["text"]
+                        or row.get("bucket") != assigned["bucket"]
+                        or not isinstance(row.get("hypothesis"), str)
+                    )
+                )
+                or (
+                    role == "naturalness"
+                    and (type(row.get("score")) is not int or not 1 <= row["score"] <= 5)
+                )
+                or (
+                    role == "contrast"
+                    and (
+                        row.get("expected") != contrast[row["code"]]["expected"]
+                        or row.get("critical") is not contrast[row["code"]]["critical"]
+                        or str(row.get("chosen") or "").strip().lower()
+                        not in ({s.lower() for s in contrast[row["code"]]["options"]} | TIE_TOKENS)
+                    )
+                )
+            ):
+                raise ValidationError(
+                    f"Qualification response differs from its assignment in {key}"
+                )
+        coverage = Counter(
+            (assignments[code]["script_id"], assignments[code]["condition"]) for code in expected
+        )
+        script_ids = (
+            {row["script_id"] for row in contrast.values()} if role == "contrast" else set(items)
+        )
+        for script_id in script_ids:
+            for condition in manifest["conditions"]:
+                if coverage[script_id, condition] < 3:
+                    raise ValidationError(
+                        f"Insufficient eligible {key} for {script_id}/{condition}"
+                    )
+
+    paragraphs = {k for k, row in items.items() if row["kind"] == "paragraph"}
+    reviewed = (scores.get("paragraphs") or {}).get("per_item") or []
+    if len(reviewed) != len(paragraphs) or {row.get("script_id") for row in reviewed} != paragraphs:
+        raise ValidationError("F-07 requires reviews for every candidate paragraph")
+    if any(
+        row.get("condition") != "candidate"
+        or any(
+            type(row.get(field)) is not int or row[field] < 0
+            for field in ("missing_clauses", "repeated_clauses")
+        )
+        or type(row.get("language_switch")) is not bool
+        for row in reviewed
+    ):
+        raise ValidationError("Invalid candidate paragraph review")
+    for row in scores["contrasts"]:
+        if row["condition"] != "candidate" or not row["critical"]:
+            continue
+        if str(row.get("chosen") or "").lower() == row["expected"].lower():
+            continue
+        verdict = (row.get("adjudication") or {}).get("verdict")
+        if verdict == "rejected" and not row.get("adjudicated"):
+            continue
+        if verdict == "confirmed" and row.get("adjudicated") and len(set(row["confirmed_by"])) >= 2:
+            continue
+        raise ValidationError("Candidate critical-contrast error still needs adjudication")
+    if scores.get("panel_acceptance") is not None and type(scores["panel_acceptance"]) is not bool:
+        raise ValidationError("Panel acceptance must be a boolean")
+    return {
+        "pack_id": manifest["pack_id"],
+        "pack_manifest_sha256": digest,
+        "staged_audio_sha256": manifest["staged_audio_sha256"],
+        "candidate_model": model,
+        "eligible_ratings": {
+            key: len(scores[key]) for key in ("transcriptions", "naturalness", "contrasts")
+        },
+    }

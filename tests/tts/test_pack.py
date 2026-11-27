@@ -408,7 +408,7 @@ def test_qualification_requires_twelve_listeners(tmp_path):
 
 
 def test_qualification_requires_candidate_condition(tmp_path):
-    with pytest.raises(ValidationError, match="must include 'candidate'"):
+    with pytest.raises(ValidationError, match="must include candidate and natural"):
         _build(
             tmp_path,
             _qualification_definition(conditions=["natural", "baseline", "other"]),
@@ -418,3 +418,166 @@ def test_qualification_requires_candidate_condition(tmp_path):
 def test_qualification_targeted_items_need_contrast(tmp_path):
     with pytest.raises(ValidationError, match="without contrast options"):
         _build(tmp_path, _qualification_definition(drop_contrast_at=5))
+
+
+def test_f07_full_pipeline_isolates_candidate_and_requires_complete_evidence(
+    tmp_path,
+    config_path,
+    write_responses,
+    capsys,
+):
+    import copy
+    import wave
+
+    from rpa_tts.cli import main
+    from rpa_tts.evaluation.pack import qualification_evidence
+    from rpa_tts.evaluation.review import apply_adjudications, apply_paragraph_reviews
+
+    definition = _qualification_definition()
+    from rpa_tts.hashing import sha256_file
+
+    candidate_hashes = {}
+    for item in definition["items"]:
+        for condition, name in item["condition_audio"].items():
+            audio = tmp_path / name
+            audio.parent.mkdir(parents=True, exist_ok=True)
+            with wave.open(str(audio), "wb") as stream:
+                stream.setparams((1, 2, 22050, 0, "NONE", "not compressed"))
+                stream.writeframes(b"\x01\x00" * 32)
+            if condition == "candidate":
+                candidate_hashes[item["script_id"]] = sha256_file(audio)
+    definition["candidate_model"] = {
+        "checkpoint_sha256": "1" * 64,
+        "vocabulary_sha256": "2" * 64,
+        "audio_sha256": candidate_hashes,
+    }
+    _, built = _build(tmp_path, definition)
+    pack = Path(built["output"])
+    manifest = built["manifest"]
+    stage_audio(pack, tmp_path)
+    responses = tmp_path / "responses"
+    # Give all conditions identical correct answers and a passing naturalness rating.
+    write_responses(pack, responses)
+    for sheet in responses.glob("*-phase-a.csv"):
+        _mutate_sheet(
+            sheet,
+            lambda rows: rows.__setitem__(
+                slice(None), [dict(row, naturalness="4") for row in rows]
+            ),
+        )
+    ingest_output = tmp_path / "ingested.json"
+    assert (
+        main(
+            [
+                "evaluate",
+                "ingest",
+                "--pack",
+                str(pack),
+                "--responses",
+                str(responses),
+                "--output",
+                str(ingest_output),
+            ]
+        )
+        == 0
+    )
+    capsys.readouterr()
+    scores = json.loads(ingest_output.read_text())
+    scores["panel_acceptance"] = True
+    paragraphs = tmp_path / "paragraphs.csv"
+    header = "script_id,missing_clauses,repeated_clauses,language_switch,notes\n"
+    paragraphs.write_text(header + "p000,0,0,false,\n")
+    with pytest.raises(ValidationError, match="every paragraph"):
+        apply_paragraph_reviews(scores, paragraphs, pack_dir=pack)
+    paragraphs.write_text(header + "".join(f"p{i:03d},0,0,false,\n" for i in range(20)))
+    scores = apply_paragraph_reviews(scores, paragraphs, pack_dir=pack)
+    scored_path = tmp_path / "scores.json"
+    scored_path.write_text(json.dumps(scores))
+    gate_output = tmp_path / "gate.json"
+
+    def gate(rows):
+        scored_path.write_text(json.dumps(rows))
+        capsys.readouterr()
+        code = main(
+            [
+                "evaluate",
+                "gate",
+                "--scores",
+                str(scored_path),
+                "--pack",
+                str(pack),
+                "--output",
+                str(gate_output),
+                "--config",
+                str(config_path),
+            ]
+        )
+        captured = capsys.readouterr()
+        assert code in (0, 1), captured.err
+        return code, json.loads(gate_output.read_text())
+
+    code, report = gate(scores)
+    assert code == 0 and report["verdict"]["verdict"] == "accepted"
+    assert report["computed"]["natural"]["count"] == 1280
+    assert report["qualification_evidence"]["candidate_model"] == definition["candidate_model"]
+
+    broken = copy.deepcopy(scores)
+    candidate = [x for x in broken["transcriptions"] if x["condition"] == "candidate"]
+    # Spread candidate substitutions across all buckets and leave controls correct.
+    for x in candidate[::8]:
+        words = x["reference"].split()
+        x["hypothesis"] = " ".join(["kuv"] * len(words))
+    contrasts = [x for x in broken["contrasts"] if x["condition"] == "candidate"]
+    for x in contrasts[::10]:
+        x["chosen"] = "nees"
+    with pytest.raises(ValidationError, match="still needs adjudication"):
+        qualification_evidence(pack, broken)
+    adjudication = tmp_path / "adjudication.csv"
+    adjudication.write_text(
+        "code,verdict,confirmed_by,notes\n"
+        + "".join(
+            f"{x['code']},confirmed,ReviewerA|ReviewerB,\n" for x in contrasts[::10] if x["critical"]
+        )
+    )
+    broken = apply_adjudications(broken, adjudication)
+    code, rejected = gate(broken)
+    assert code == 1
+    assert {"pooled_syllable_error", "contrast_accuracy"} <= set(
+        rejected["verdict"]["failed_rules"]
+    )
+    assert rejected["computed"]["contrast"]["accuracy"] == 0.9
+    controls_changed = copy.deepcopy(broken)
+    for x in controls_changed["transcriptions"]:
+        if x["condition"] == "baseline":
+            x["hypothesis"] = ""
+    _, second = gate(controls_changed)
+    assert second["computed"]["syllable"] == rejected["computed"]["syllable"]
+    assert second["computed"]["catastrophic_outputs"] == 0
+    missing = copy.deepcopy(scores)
+    missing["naturalness"].pop()
+    with pytest.raises(ValidationError, match="eligible naturalness"):
+        qualification_evidence(pack, missing)
+    incomplete = copy.deepcopy(scores)
+    incomplete["paragraphs"]["per_item"].pop()
+    with pytest.raises(ValidationError, match="every candidate paragraph"):
+        qualification_evidence(pack, incomplete)
+    partial = copy.deepcopy(scores)
+    next(x for x in partial["transcriptions"] if x["condition"] == "candidate")["condition"] = (
+        "natural"
+    )
+    with pytest.raises(ValidationError, match="differs from its assignment"):
+        qualification_evidence(pack, partial)
+    (pack / manifest["assignments"][0]["blind_audio"]).write_bytes(b"changed")
+    with pytest.raises(ValidationError, match="audio changed"):
+        qualification_evidence(pack, scores)
+
+
+def test_f07_refuses_calibration_even_with_scores(tmp_path, pack_definition, write_responses):
+    from rpa_tts.evaluation.pack import qualification_evidence
+
+    _, built = _build(tmp_path, pack_definition())
+    pack = Path(built["output"])
+    responses = tmp_path / "responses"
+    write_responses(pack, responses)
+    with pytest.raises(ValidationError, match="complete qualification design"):
+        qualification_evidence(pack, load_responses(pack, responses))

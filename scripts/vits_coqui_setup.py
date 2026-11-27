@@ -15,13 +15,14 @@ from pathlib import Path
 
 import torch
 from trainer import Trainer, TrainerArgs
+from trainer.io import get_last_checkpoint
 from TTS.config import load_config
-from TTS.tts.configs.shared_configs import BaseDatasetConfig, CharactersConfig
+from TTS.tts.configs.shared_configs import BaseDatasetConfig
 from TTS.tts.configs.vits_config import VitsConfig
 from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.vits import Vits
 
-from rpa_tts.text.coqui_characters import RpaCharacters
+from rpa_tts.text.coqui_characters import RpaCharacters, verify_checkpoint_tokenizer
 from rpa_tts.text.normalize import normalize_rpa
 
 SOURCE = Path("data/raw/mwwhdv-nt")
@@ -141,10 +142,9 @@ def settings(run: Path, *, epochs: int, batch_size: int) -> VitsConfig:
     config.text_cleaner = None
     config.mixed_precision = False
     config.compute_input_seq_cache = False
-    config.characters = CharactersConfig(
-        characters_class="rpa_tts.text.coqui_characters.RpaCharacters"
-    )
-    config.model_args.num_chars = len(RpaCharacters().vocab)
+    characters = RpaCharacters()
+    config.characters = characters.to_config()
+    config.model_args.num_chars = len(characters.vocab)
     config.datasets = [
         BaseDatasetConfig(
             formatter="ljspeech",
@@ -173,6 +173,19 @@ def load_recipe(config_path: Path) -> tuple:
             raise ValueError(f"Non-reversible tokenizer input: {sample['audio_file']}")
         sample["text"] = text
     return config, model, train, dev
+
+
+def validate_resume_tokenizers(resume: Path, config: VitsConfig) -> None:
+    """Check both the restore checkpoint and historical best selected by Trainer."""
+    restore, best = get_last_checkpoint(str(resume))
+    for path in dict.fromkeys((restore, best)):
+        saved = torch.load(path, map_location="cpu", weights_only=False)
+        try:
+            verify_checkpoint_tokenizer(saved, config)
+        except ValueError as error:
+            raise ValueError(f"{path}: {error}") from error
+        finally:
+            del saved
 
 
 def main() -> None:
@@ -225,6 +238,8 @@ def main() -> None:
     resume = args.continue_path.resolve(strict=True) if args.continue_path else None
     config_path = resume / "config.json" if resume else args.config.resolve(strict=True)
     config, model, train, dev = load_recipe(config_path)
+    if resume is not None:
+        validate_resume_tokenizers(resume, config)
     dataset = Path(config.datasets[0].path)
     receipt = json.loads(dataset.parent.joinpath("readiness.json").read_text(encoding="utf-8"))
     if any(

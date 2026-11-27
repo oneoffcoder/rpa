@@ -412,6 +412,20 @@ LISTENING_PACK: dict[str, Any] = {
     "additionalProperties": False,
     "required": ["schema_version", "pack_id", "design", "seed", "conditions", "items", "listeners"],
     "properties": {
+        "candidate_model": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["checkpoint_sha256", "vocabulary_sha256", "audio_sha256"],
+            "properties": {
+                "audio_sha256": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+                },
+                "checkpoint_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+                "vocabulary_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            },
+        },
         "schema_version": {"type": "integer", "enum": [1]},
         "pack_id": {"type": "string", "pattern": r"^[a-z0-9][a-z0-9._-]{2,63}$"},
         "design": {"type": "string", "enum": ["calibration", "qualification"]},

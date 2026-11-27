@@ -4,6 +4,20 @@
   "additionalProperties": false,
   "description": "Input definition for a counterbalanced listening pack. One condition is assigned per listener and script; contrast alternatives appear only in the separately distributed phase-B sheet.",
   "properties": {
+    "candidate_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkpoint_sha256", "vocabulary_sha256", "audio_sha256"],
+      "properties": {
+        "audio_sha256": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        },
+        "checkpoint_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "vocabulary_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
     "conditions": {
       "items": {
         "pattern": "^[a-z][a-z0-9_-]{1,31}$",

@@ -92,14 +92,21 @@ rpa-tts evaluate ingest --pack <pack-dir> --responses <responses-dir> \
 
 # 5. Score and apply the release gate
 rpa-tts evaluate metrics --scores scores.json --output metrics.json
-rpa-tts evaluate gate --scores scores.json --output gate.json
+rpa-tts evaluate gate --scores scores.json --pack <pack-dir> --output gate.json
 ```
 
-`scores.json` contains `transcriptions`, `naturalness`, `contrasts`,
-`catastrophic_outputs` and the pack manifest hash. `evaluate gate` still needs
-the coordinator-supplied `paragraphs` judgement and adjudicated critical-error
-confirmations before a real verdict; those are human steps, not inferred by the
-tool.
+`scores.json` retains response conditions. The F-07 gate scores candidate transcription,
+contrast, empty outputs, and paragraph judgments. It reads the naturalness anchor
+directly from the natural condition in the same pack. Control responses remain
+available for auditing the instrument.
+
+Freeze `candidate_model` in the qualification definition with the checkpoint digest,
+the ordered vocabulary digest, and an `audio_sha256` object mapping every script ID
+to the hash from its candidate render receipt. Stage all audio before ingestion.
+The gate checks the staged files and render hashes, matches the eligible ratings
+to the pack, and requires every candidate paragraph review and resolution of every
+wrong or uncertain critical candidate judgment. It records model and pack identity
+in the verdict. Retain the F-02 calibration results with the instrument record.
 
 ## Pack contents
 

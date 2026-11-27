@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Any
 
 from ..errors import InputError, ValidationError
+from ..hashing import sha256_file
 
 ADJUDICATION_COLUMNS = ["code", "verdict", "confirmed_by", "notes"]
 PARAGRAPH_COLUMNS = [
@@ -116,15 +117,14 @@ def apply_adjudications(scores: dict[str, Any], adjudications_path: str | Path) 
                 if not ADJUDICATOR_ID.fullmatch(identifier):
                     problems.append(f"line {index}: unsafe adjudicator id {identifier!r}")
                     break
-            else:
-                record["adjudicated"] = True
-                record["confirmed_by"] = adjudicators
         else:
             if adjudicators and verdict == "rejected":
                 problems.append(
                     f"line {index}: a rejected error must not list confirming adjudicators"
                 )
                 continue
+        record["adjudicated"] = verdict == "confirmed"
+        record["confirmed_by"] = adjudicators if verdict == "confirmed" else []
         record["adjudication"] = {
             "verdict": verdict,
             "confirmed_by": adjudicators if verdict == "confirmed" else [],
@@ -184,11 +184,16 @@ def apply_paragraph_reviews(
         raise InputError("paragraph review sheet has no rows")
     result = copy.deepcopy(scores)
     paragraph_ids: set[str] | None = None
+    manifest = {}
     if pack_dir is not None:
         manifest_path = Path(pack_dir) / "pack-manifest.json"
         if not manifest_path.is_file():
             raise InputError(f"pack manifest does not exist: {manifest_path}")
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if scores.get("pack_manifest_sha256") and (
+            scores["pack_manifest_sha256"] != sha256_file(manifest_path)
+        ):
+            raise ValidationError("paragraph reviews belong to a different pack")
         paragraph_ids = {
             str(item["script_id"]) for item in manifest["items"] if item.get("kind") == "paragraph"
         }
@@ -226,12 +231,15 @@ def apply_paragraph_reviews(
         items.append(
             {
                 "script_id": script_id,
+                "condition": "candidate",
                 "missing_clauses": missing,
                 "repeated_clauses": repeated,
                 "language_switch": switch,
                 "notes": row["notes"],
             }
         )
+    if manifest.get("design") == "qualification" and paragraph_ids != seen:
+        problems.append("qualification requires every paragraph to be reviewed")
     if problems:
         raise ValidationError("paragraph review failed validation: " + "; ".join(problems[:12]))
 
