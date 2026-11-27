@@ -437,6 +437,38 @@ this VITS recipe.
     `package inspect`, have a second worker reproduce the benchmark, and only then
     consider authorized lesson-audio integration.
 
+## Inference-time improvement (round 31)
+
+Tested three VITS inference controls on six representative prompts without
+retraining. Each setting was tested independently; torch seed 42 reset before
+each render. Checkpoint: `best_model_35461.pth` (SHA-256
+`2919b47c677d103b8487462024efb468289335ae243d8de3fe18a4b1ed5e593e`).
+
+| Control | Values tested | What it changes |
+|---------|--------------|-----------------|
+| `length_scale` | 0.8, 1.0, 1.2 | Speech pace (longer = slower) |
+| `noise_scale` | 0.5, 0.667, 0.8 | Voice consistency (lower = more consistent) |
+| `noise_scale_dp` | 0.5, 1.0 | Duration randomness (lower = more monotone) |
+
+**Recommended candidate: `length_scale=1.2`** — Slower pace produces more
+distinct phoneme boundaries, which is critical for Hmong tone perception.
+Durations increased ~17% (1.81s → 2.14s → 2.51s avg). No intelligibility
+regression observed on the six prompts.
+
+**Secondary candidate: `noise_scale=0.5`** — More consistent voice quality;
+subtle difference.
+
+**Not recommended: `noise_scale_dp=0.5`** — Reduces prosodic variation, making
+speech sound more monotone. May hurt tone perception.
+
+Full results: `docs/tts/recovery/improvement-results.md`
+Experiment WAVs: `data/runs/vits-inference-improvement/`
+Experiment manifest: `data/runs/vits-inference-improvement/experiment-manifest.json`
+Improvement script: `scripts/vits_inference_improvement.py`
+
+Native listening required to confirm `length_scale=1.2` against baseline before
+adopting. **Keep the branch unmerged.**
+
 ## Checkpoint
 
 - **Implementation checkpoints:**
