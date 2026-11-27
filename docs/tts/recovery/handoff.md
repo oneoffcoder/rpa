@@ -470,6 +470,29 @@ Improvement script: `scripts/vits_inference_improvement.py`
 Native listening required to confirm `length_scale=1.2` against baseline before
 adopting. **Keep the branch unmerged.**
 
+## Validation: length_scale=1.2 on fresh material (round 33)
+
+Owner listened to six emailed A/B pairs and preferred B (`length_scale=1.2`)
+over A (`length_scale=1.0`). Recorded as development feedback.
+
+**Fresh material generated:** 6 prompts (5 sentences + 1 connected paragraph)
+- A/B pairs: `data/artifacts/validation-length-scale-1.2/ab-pairs/` (12 WAVs: 01_1.0.wav through 06_1.2.wav)
+- Regression set: `data/artifacts/validation-length-scale-1.2/regression/` (6 WAVs at 1.2)
+- Additional seeds (42, 12345): `data/artifacts/validation-length-scale-1.2/additional-seeds/` (12 WAVs)
+- Transcript list: `data/artifacts/validation-length-scale-1.2/TRANSCRIPT-LIST.md`
+- Validation manifest: `data/artifacts/validation-length-scale-1.2/validation-manifest.json`
+- Validation script: `scripts/vits_validation_1.2.py`
+- Fresh prompts: `data/raw/mwwhdv-nt/prompts-validation-fresh.txt`
+
+**Duration deltas (A=1.0 vs B=1.2):** +14% to +18% across all prompts.
+Paragraph (clip 06): 8.60s → 9.79s.
+
+**1.0 remains default** until fresh native feedback supports adopting 1.2.
+Owner to judge pace, word/tone accuracy, omissions, repetition, truncation
+(including the paragraph).
+
+**Keep the branch unmerged, leave issue 3 open. Do not train.**
+
 ## Checkpoint
 
 - **Implementation checkpoints:**
