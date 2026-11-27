@@ -7,7 +7,8 @@ Written 2026-11-26 for the next worker. Read
 ## Branch and repository state
 
 - **Repository:** `oneoffcoder/rpa`
-- **Branch:** `feat/white-hmong-tts-recovery`
+- **Branch:** `fix/rpa-deterministic-character-map` (canonical; superseded
+  `feat/white-hmong-tts-recovery` which is kept for reference)
 - **Base:** `origin/main` `5919bb0650737a1534dc5746e191714820039b7d` (verified at
   branch creation; no later main changes were present)
 - **Commit / working tree:** see the "Checkpoint" note at the end of this file
@@ -516,9 +517,14 @@ adopting. **Keep the branch unmerged.**
     CI run 45791014812 passed.
 - **Pushed branch tip at the time of writing:** the child of the checkpoints
   above that records this handoff (verify with `git log -1 --format=%H` and
-  `git ls-remote --heads origin feat/white-hmong-tts-recovery`).
-- **Push:** `git push -u origin feat/white-hmong-tts-recovery`. The PR to `main`
+  `git ls-remote --heads origin fix/rpa-deterministic-character-map`).
+- **Push:** `git push -u origin fix/rpa-deterministic-character-map`. The PR to `main`
   still needs owner authentication (see above).
 - Any later worker must verify `git status --short --branch`, `git worktree list`
-  and `git ls-remote --heads origin main feat/white-hmong-tts-recovery` before
+  and `git ls-remote --heads origin main fix/rpa-deterministic-character-map` before
   changing files, and must not force-push or reset.
+- **Consolidation (round 32):** `feat/white-hmong-tts-recovery` work (inference
+  experiment at `724f9e5`, character maps, checkpoint compatibility) was
+  cherry-picked onto `fix/rpa-deterministic-character-map`. The feature branch
+  is kept for reference. All intended TTS changes are now on the canonical
+  branch. **Keep the branch unmerged, leave issue 3 open.**
