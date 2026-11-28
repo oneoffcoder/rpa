@@ -1,5 +1,16 @@
 # White Hmong VITS training and fine-tuning
 
+## Experiment B closeout
+
+The recovered character map remained correct through the 100-epoch Radiance run. The final step was 55,871 and the trainer selected `best_model_54431.pth` at epoch 98. Owner listening confirmed intelligible Hmong and found warped, slow playback, stretched word endings, and jitter in longer speech.
+
+The `cleaned-v001` corpus is invalid for another fine-tune. Demucs returned audio at its own sample rate and the cleaner saved the stem as 22.05 kHz without resampling. A duration audit matched all 7,933 cleaned clips to their original recordings. Every cleaned clip was exactly twice as long. Correcting the preview playback rate improved speed and pitch. Word timing and jitter remained audible.
+
+Before running the procedure below again, publish a corrected corpus version. Resample each separated stem from its actual rate to 22.05 kHz, verify source-to-clean duration parity, and listen to representative clips. Start a short pilot from the recovered step-35,461 weights and compare short and long held-out prompts before a full run.
+
+See the [Experiment B closeout and sample-rate defect](https://jeepower.atlassian.net/wiki/spaces/RPA/pages/2468970498) in the RPA space.
+
+
 ## Choose how to initialize
 
 - **Train from scratch.** Start from a VITS config with a serialized, ordered RPA character map and use a new output directory. Initialize model, optimizer and scheduler from scratch. Persist the config, tokenizer hash, corpus split and package versions alongside checkpoints.
